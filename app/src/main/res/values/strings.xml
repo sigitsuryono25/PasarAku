@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Pasar Aku</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location">Location</string>
+    <string name="search_city_area_or_neighbourhood">Search city,area, or neighbourhood</string>
+    <string name="use_current_location">Use current Location</string>
+    <string name="choose_state">choose state</string>
+    <string name="all_in_indonesia">All in Indonesia</string>
+    <string name="categories">Categories</string>
+</resources>

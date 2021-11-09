@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="@drawable/home_variant_outline"
+        android:id="@+id/explore"
+        android:title="EXPLORE" />
+
+    <item
+        android:icon="@drawable/chat_outline"
+        android:id="@+id/chat"
+        android:title="CHAT" />
+
+
+    <item
+        android:visible="false"
+        android:id="@+id/sell"
+        android:title="SELL" />
+
+
+    <item
+        android:icon="@drawable/heart_outline"
+        android:id="@+id/ads"
+        android:title="MY ADS" />
+
+
+    <item
+        android:icon="@drawable/account_outline"
+        android:id="@+id/account"
+        android:title="MY ACCOUNT" />
+</menu>

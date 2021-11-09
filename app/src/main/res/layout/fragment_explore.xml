@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.explore.ExploreFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F8F9F9"
+        android:elevation="4dp"
+        android:padding="10dp"
+        app:elevation="4dp">
+
+        <TextView
+            android:id="@+id/wilayah"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:paddingVertical="8dp"
+            android:text="Indonesia"
+            android:textColor="@color/darkblue"
+            android:textSize="18sp"
+            app:drawableEndCompat="@drawable/ic_keyboard_arrow_down"
+            app:drawableStartCompat="@drawable/ic_map_marker" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
+                android:layout_marginEnd="5dp"
+                android:layout_toStartOf="@id/notif"
+                android:background="@drawable/bg_edittext"
+                android:drawableStart="@drawable/ic_search"
+                android:enabled="false"
+                android:hint="Find Cars, Mobile Phones and more..."
+                android:inputType="text"
+                android:padding="8dp"
+                android:singleLine="true"
+                tools:ignore="Autofill" />
+
+            <ImageView
+                android:id="@+id/notif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_bell_outline"
+                app:tint="@color/darkblue" />
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="55dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F7F8F9"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp">
+
+                    <ProgressBar
+                        android:id="@+id/progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:indeterminateTint="@color/darkblue" />
+
+                    <com.synnapps.carouselview.CarouselView
+                        android:id="@+id/carouselView"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="5dp"
+                        android:visibility="gone"
+                        app:fillColor="#FFFFFFFF"
+                        app:indicatorVisibility="visible"
+                        app:indicatorGravity="start|bottom"
+                        app:radius="4dp"
+                        app:slideInterval="3500"
+                        app:strokeColor="@android:color/transparent"
+                        app:strokeWidth="0dp" />
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Browse categories"
+                        android:textColor="@color/darkblue"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/seeAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="See All"
+                        android:textColor="@color/darkblue"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="2dp"
+                        android:layout_below="@id/seeAll"
+                        android:layout_alignStart="@id/seeAll"
+                        android:layout_alignEnd="@id/seeAll"
+                        android:background="@color/darkblue" />
+                </RelativeLayout>
+
+                <!-- RecyclerView Categories -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/kategori"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fresh recommendations"
+                    android:textColor="@color/darkblue"
+                    android:textSize="18sp" />
+
+                <!-- Recyclerview ads -->
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recommendationAds"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

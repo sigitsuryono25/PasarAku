@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="10dp"
+    tools:context=".ui.kategori.adapter.AdapterKategoriVertical">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/account_outline" />
+
+    <TextView
+        android:id="@+id/namaKategori"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@id/arrowRight"
+        android:layout_toEndOf="@id/icon"
+        android:text="@string/hello_blank_fragment"
+        android:textColor="@color/darkblue"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/arrowRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_arrow_right"
+        app:tint="@color/darkblue" />
+</RelativeLayout>
