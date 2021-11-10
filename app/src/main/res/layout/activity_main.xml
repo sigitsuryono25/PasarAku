@@ -26,7 +26,6 @@
             android:layout_height="match_parent"
             app:labelVisibilityMode="labeled"
             android:background="@android:color/transparent"
-            android:elevation="0dp"
             app:elevation="0dp"
             android:layout_marginEnd="16dp"
             app:itemIconTint="@color/bottom_nav_item_state"
@@ -35,7 +34,7 @@
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/pkp"
+        android:id="@+id/sellBtn"
         android:layout_width="wrap_content"
         android:src="@drawable/plus_thick"
         android:layout_height="wrap_content"

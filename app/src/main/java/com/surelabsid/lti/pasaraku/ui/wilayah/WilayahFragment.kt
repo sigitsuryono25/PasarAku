@@ -1,59 +1,148 @@
 package com.surelabsid.lti.pasaraku.ui.wilayah
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.pasaraku.MainActivity
 import com.surelabsid.lti.pasaraku.R
+import com.surelabsid.lti.pasaraku.databinding.FragmentWilayahBinding
+import com.surelabsid.lti.pasaraku.response.DataKabupatenItem
+import com.surelabsid.lti.pasaraku.response.DataKecamatanItem
+import com.surelabsid.lti.pasaraku.response.ResponseKabupaten
+import com.surelabsid.lti.pasaraku.response.ResponseKecamatan
+import com.surelabsid.lti.pasaraku.ui.wilayah.adapter.AdapterWilayah
+import com.surelabsid.lti.pasaraku.utils.Constant
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val IS_KAB_REQ = "param1"
+private const val ID = "param2"
+private const val TITLEBAR = "titlebar"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [WilayahFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class WilayahFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
+    private var isKabReq: Boolean? = null
+    private var id: String? = null
+    private var titleBar: String? = null
+    private lateinit var binding: FragmentWilayahBinding
+    private lateinit var vm: WilayahViewModel
+    private var selectedKab: String? = ""
+    private var selectekec: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            isKabReq = it.getBoolean(IS_KAB_REQ)
+            id = it.getString(ID)
+            titleBar = it.getString(TITLEBAR)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wilayah, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentWilayahBinding.bind(view)
+        vm = ViewModelProvider(this)[WilayahViewModel::class.java]
+
+        binding.toolbarWilayah.apply {
+            title = titleBar
+            navigationIcon = ActivityCompat.getDrawable(requireActivity(), R.drawable.arrow_left)
+            setNavigationOnClickListener {
+                requireActivity().finish()
+            }
+        }
+
+        vm.error.observe(viewLifecycleOwner) {
+            setError(it)
+        }
+
+        binding.selectedLok.text = "All in $titleBar"
+        binding.selectedLok.setOnClickListener {
+            Prefs.remove(Constant.KEC)
+            Prefs.putString(Constant.KAB, titleBar)
+            Prefs.putString(Constant.LOKASI_ID, id)
+            requireActivity().finishAffinity()
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
+        }
+
+        if (isKabReq == true) {
+            vm.getKabupaten(id)
+            vm.kabupaten.observe(viewLifecycleOwner) {
+                setKabupaten(it)
+            }
+        } else {
+            vm.getKecamatan(id)
+            vm.kecamatan.observe(viewLifecycleOwner) {
+                setKecamatan(it)
+            }
+        }
+
+    }
+
+    private fun setKabupaten(responseKabupaten: ResponseKabupaten) {
+        val adapterKabupaten =
+            AdapterWilayah(AdapterWilayah.KABUPATEN_REQ, object : AdapterWilayah.OnItemClick {
+                override fun onKabSelected(dataItemKabupatenItem: DataKabupatenItem?) {
+                    super.onKabSelected(dataItemKabupatenItem)
+                    Prefs.putString(Constant.KAB, dataItemKabupatenItem?.nama)
+                    Intent(requireActivity(), WilayahActivity::class.java).apply {
+                        putExtra(WilayahActivity.KEC_REQ, true)
+                        putExtra(WilayahActivity.KAB_ITEM, dataItemKabupatenItem)
+                        startActivity(this)
+                    }
+                }
+            })
+
+        binding.wilayah.apply {
+            adapter = adapterKabupaten
+            layoutManager = LinearLayoutManager(requireActivity())
+        }
+        val data = responseKabupaten.dataKabupaten
+        data.let {
+            if (it != null) {
+                adapterKabupaten.addItemKab(it)
+            }
+        }
+    }
+
+    private fun setKecamatan(responseKecamatan: ResponseKecamatan) {
+        val adapterKecamatan =
+            AdapterWilayah(AdapterWilayah.KECAMATAN_REQ, object : AdapterWilayah.OnItemClick {
+                override fun onKecSelected(dataKecamatanItem: DataKecamatanItem?) {
+                    super.onKecSelected(dataKecamatanItem)
+                    Prefs.putString(Constant.KEC, dataKecamatanItem?.nama)
+                    Prefs.putString(Constant.LOKASI_ID, dataKecamatanItem?.id)
+
+                    requireActivity().finishAffinity()
+                    startActivity(Intent(requireActivity(), MainActivity::class.java))
+                }
+            })
+
+        binding.wilayah.apply {
+            adapter = adapterKecamatan
+            layoutManager = LinearLayoutManager(requireActivity())
+        }
+        val data = responseKecamatan.dataKecamatan
+        data.let {
+            if (it != null) {
+                adapterKecamatan.addItemKec(it)
+            }
+        }
+    }
+
+    private fun setError(it: Throwable?) {
+        Toast.makeText(requireActivity(), it?.message.toString(), Toast.LENGTH_SHORT).show()
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment WilayahFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(isKabReq: Boolean, id: String?, title: String?) =
             WilayahFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putBoolean(IS_KAB_REQ, isKabReq)
+                    putString(ID, id)
+                    putString(TITLEBAR, title)
                 }
             }
     }

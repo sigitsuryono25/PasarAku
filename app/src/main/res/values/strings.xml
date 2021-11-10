@@ -8,4 +8,10 @@
     <string name="choose_state">choose state</string>
     <string name="all_in_indonesia">All in Indonesia</string>
     <string name="categories">Categories</string>
+    <string name="continue_with_phone">Continue with Phone</string>
+    <string name="continue_with_email">Continue with Email</string>
+    <string name="continue_with_facebook">Continue with Facebook</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="if_you_continue_you_are_accepting">If you continue, you are accepting</string>
+    <string name="pasar_aku_terms"><u>Pasar Aku Terms and Conditions and Privacy Policy</u></string>
 </resources>

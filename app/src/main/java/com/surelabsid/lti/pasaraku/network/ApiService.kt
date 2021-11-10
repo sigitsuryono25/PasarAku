@@ -1,9 +1,6 @@
 package com.surelabsid.lti.pasaraku.network
 
-import com.surelabsid.lti.pasaraku.response.ResponseKategori
-import com.surelabsid.lti.pasaraku.response.ResponseProvinsi
-import com.surelabsid.lti.pasaraku.response.ResponseSlider
-import com.surelabsid.lti.pasaraku.response.ResponseSubKategori
+import com.surelabsid.lti.pasaraku.response.*
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -20,5 +17,11 @@ interface ApiService {
 
     @GET("ApiProvinsi/getListProvinsi")
     suspend fun getProvinsi(): ResponseProvinsi
+
+    @GET("ApiKabupaten/getListKabupaten")
+    suspend fun getKabupaten(@Query("id_provinsi") idProvinsi : String?): ResponseKabupaten
+
+    @GET("ApiKecamatan/getListKecamatan")
+    suspend fun getKecamatan(@Query("id_kabupaten") idKabupaten : String?): ResponseKecamatan
 
 }

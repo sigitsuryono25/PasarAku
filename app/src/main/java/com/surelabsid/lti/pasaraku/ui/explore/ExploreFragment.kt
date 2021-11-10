@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.FragmentExploreBinding
 import com.surelabsid.lti.pasaraku.response.ResponseKategori
@@ -52,8 +53,10 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
 
+
         binding.wilayah.setOnClickListener {
             Intent(requireActivity(), WilayahActivity::class.java).apply {
+                putExtra(WilayahActivity.PROVINSI_REQ, true)
                 startActivity(this)
             }
         }
@@ -63,6 +66,16 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             }
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val lokasi = if (Prefs.getString(Constant.KEC).isNotEmpty() || Prefs.contains(Constant.KEC)) {
+            "${Prefs.getString(Constant.KEC)}, ${Prefs.getString(Constant.KAB)}"
+        } else {
+            Prefs.getString(Constant.KAB)
+        }
+        binding.wilayah.text = lokasi
     }
 
     private fun setSlider(responseSlider: ResponseSlider) {
