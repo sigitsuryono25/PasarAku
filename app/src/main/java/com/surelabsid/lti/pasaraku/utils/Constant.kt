@@ -14,4 +14,10 @@ object Constant {
     const val KEC = "kec"
     const val KAB = "kab"
     const val LOKASI_ID = "idLokasi"
+
+    const val PROV_ID = "provid"
+    const val KAB_ID = "kabid"
+    const val KEC_ID = "kecid"
+
+    const val ADS_PIC_URL = NetworkModule.BASE_URL + "assets/iklan/"
 }

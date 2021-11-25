@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:icon="@drawable/home_variant_outline"
+        android:icon="@drawable/ic_home"
         android:id="@+id/explore"
         android:title="EXPLORE" />
 
     <item
-        android:icon="@drawable/chat_outline"
+        android:icon="@drawable/ic_chat"
         android:id="@+id/chat"
         android:title="CHAT" />
 
@@ -18,13 +18,13 @@
 
 
     <item
-        android:icon="@drawable/heart_outline"
+        android:icon="@drawable/ic_iklan"
         android:id="@+id/ads"
         android:title="MY ADS" />
 
 
     <item
-        android:icon="@drawable/account_outline"
+        android:icon="@drawable/ic_akun"
         android:id="@+id/account"
         android:title="MY ACCOUNT" />
 </menu>

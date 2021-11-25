@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.surelabsid.lti.base.BaseViewModel
 import com.surelabsid.lti.pasaraku.response.ResponseKategori
+import com.surelabsid.lti.pasaraku.response.ResponseListIklan
 import com.surelabsid.lti.pasaraku.response.ResponseSlider
 import com.surelabsid.lti.pasaraku.response.ResponseSubKategori
+import com.surelabsid.lti.pasaraku.utils.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -21,6 +23,9 @@ class ExploreViewModel : BaseViewModel() {
     private val _slider = MutableLiveData<ResponseSlider>()
     val slider: LiveData<ResponseSlider> get() = _slider
 
+    private val _dataIklan = SingleLiveEvent<ResponseListIklan>()
+    val dataIklan: LiveData<ResponseListIklan> get() = _dataIklan
+
 
     fun getKategori() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -34,12 +39,24 @@ class ExploreViewModel : BaseViewModel() {
         }
     }
 
-    fun getSlider(){
-        viewModelScope.launch(Dispatchers.IO){
+    fun getSlider() {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val data = api.getSlider()
                 _slider.postValue(data)
-            }catch (t: Throwable){
+            } catch (t: Throwable) {
+                t.printStackTrace()
+                _error.postValue(t)
+            }
+        }
+    }
+
+    fun getListIklan(page: String = "0", kategori: String? = null) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val api = api.getListIklan(page, kategori)
+                _dataIklan.postValue(api)
+            } catch (t: Throwable) {
                 t.printStackTrace()
                 _error.postValue(t)
             }

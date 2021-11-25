@@ -1,15 +1,18 @@
 package com.surelabsid.lti.pasaraku.ui.kategori
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityKategoriBinding
 import com.surelabsid.lti.pasaraku.response.ResponseKategori
 import com.surelabsid.lti.pasaraku.ui.explore.ExploreViewModel
+import com.surelabsid.lti.pasaraku.ui.iklan.IklanByCategoriActivity
+import com.surelabsid.lti.pasaraku.ui.iklan.TambahIklanActivity
 import com.surelabsid.lti.pasaraku.ui.kategori.adapter.AdapterKategoriVertical
 
 class KategoriActivity : AppCompatActivity() {
@@ -30,7 +33,22 @@ class KategoriActivity : AppCompatActivity() {
 
         vm = ViewModelProvider(this)[ExploreViewModel::class.java]
 
-        adapterKategori = AdapterKategoriVertical { }
+        val makeAds = intent.getBooleanExtra(MAKE_ADS, false)
+
+        adapterKategori = AdapterKategoriVertical {
+            if (makeAds) {
+                Intent(this@KategoriActivity, TambahIklanActivity::class.java).apply {
+                    putExtra(TambahIklanActivity.KATEGORI_DATA, it)
+                    startActivity(this)
+                    finish()
+                }
+            } else {
+                Intent(this@KategoriActivity, IklanByCategoriActivity::class.java).apply {
+                    putExtra(IklanByCategoriActivity.ITEM_KATEGORI, it)
+                    startActivity(this)
+                }
+            }
+        }
         binding.listKategori.apply {
             adapter = adapterKategori
             layoutManager = LinearLayoutManager(this@KategoriActivity)
@@ -41,7 +59,7 @@ class KategoriActivity : AppCompatActivity() {
             setToView(it)
         }
         vm.error.observe(this) {
-
+            Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -60,5 +78,9 @@ class KategoriActivity : AppCompatActivity() {
                 adapterKategori.addItem(it)
             }
         }
+    }
+
+    companion object {
+        const val MAKE_ADS = "makeads"
     }
 }

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.iklan.TambahIklanActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        tools:context=".ui.iklan.TambahIklanActivity">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/lokasi"
+            app:hintTextColor="@color/darkblue">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lokasi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:enabled="false"
+                android:fontFamily="@font/lato" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/judul_iklan"
+            app:hintTextColor="@color/darkblue">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/judulIklan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/lato" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/kondisi"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/rgKondisi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RadioButton
+                android:checked="true"
+                android:id="@+id/baru"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/baru" />
+
+            <RadioButton
+                android:id="@+id/bekas"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/bekas" />
+
+        </RadioGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:hint="@string/deskripsi_iklan"
+            app:hintTextColor="@color/darkblue">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/deskripsiIklan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/lato"
+                android:gravity="top|start" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/harga"
+            app:hintTextColor="@color/darkblue">
+
+            <me.abhinay.input.CurrencyEditText
+                android:id="@+id/harga"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/lato" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/pilihFoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/darkblue"
+            android:text="@string/pilih_foto"
+            android:fontFamily="@font/lato"
+            android:textAllCaps="false"
+            android:textColor="@color/gray" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listFoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+
+        <Button
+            android:id="@+id/pratinjau"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/blue"
+            android:text="@string/pratinjau"
+            android:fontFamily="@font/lato"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

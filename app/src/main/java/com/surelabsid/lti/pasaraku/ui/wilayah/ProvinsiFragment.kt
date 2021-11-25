@@ -43,6 +43,7 @@ class ProvinsiFragment : Fragment(R.layout.fragment_provinsi) {
             AdapterWilayah(AdapterWilayah.PROVINSI_REQ, object : AdapterWilayah.OnItemClick {
                 override fun onProvSelected(dataItemProvinsiItem: DataProvinsiItem?) {
                     super.onProvSelected(dataItemProvinsiItem)
+                    Prefs.putString(Constant.PROV_ID, dataItemProvinsiItem?.id)
                     Intent(requireActivity(), WilayahActivity::class.java).apply {
                         putExtra(WilayahActivity.KAB_REQ, true)
                         putExtra(WilayahActivity.PROVINSI_ITEM, dataItemProvinsiItem)

@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -55,7 +56,10 @@ class LoginBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initViews(view: View) {
-
+        val finish = view.findViewById<ImageView>(R.id.close)
+        finish.setOnClickListener {
+            dismiss()
+        }
     }
 
     private fun getScreenHeight(): Int {

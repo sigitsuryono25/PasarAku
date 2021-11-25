@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Pasar Aku</string>
     <!-- TODO: Remove or change this placeholder text -->
+
+
+    <string name="file_provider" translatable="false">com.surelabsid.lti.pasaraku.fileprovider</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="location">Location</string>
     <string name="search_city_area_or_neighbourhood">Search city,area, or neighbourhood</string>
@@ -14,4 +17,27 @@
     <string name="continue_with_google">Continue with Google</string>
     <string name="if_you_continue_you_are_accepting">If you continue, you are accepting</string>
     <string name="pasar_aku_terms"><u>Pasar Aku Terms and Conditions and Privacy Policy</u></string>
+    <string name="judul_iklan">Judul Iklan</string>
+    <string name="deskripsi_iklan">Deskripsi Iklan</string>
+    <string name="harga">Harga</string>
+    <string name="pilih_foto">Pilih Foto</string>
+    <string name="pratinjau">Pratinjau</string>
+    <string name="lokasi">Lokasi</string>
+    <string name="add_ads">Buat Iklan</string>
+    <string name="details">Details</string>
+    <string name="descriptions">Descriptions</string>
+    <string name="see_profile">see profile</string>
+    <string name="ad_posted_at">Ad Posted at</string>
+    <string name="kondisi">Kondisi</string>
+    <string name="bekas">Bekas</string>
+    <string name="baru">Baru</string>
+    <string name="fresh_recommendations">Fresh recommendations</string>
+    <string name="apikey">AIzaSyAvutzDn4RiVVyUO16HiGBLGIkw8qd2L4w</string>
+    <string name="ads_id">Ads id</string>
+    <string name="report_this_ad">report this ad</string>
+    <string name="call">Call</string>
+    <string name="chat">Chat</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

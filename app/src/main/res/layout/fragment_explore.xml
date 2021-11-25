@@ -37,11 +37,11 @@
                 android:id="@+id/search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawablePadding="8dp"
                 android:layout_marginEnd="5dp"
                 android:layout_toStartOf="@id/notif"
                 android:background="@drawable/bg_edittext"
                 android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="8dp"
                 android:enabled="false"
                 android:hint="Find Cars, Mobile Phones and more..."
                 android:inputType="text"
@@ -156,7 +156,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fresh recommendations"
+                    android:text="@string/fresh_recommendations"
+                    android:layout_marginBottom="8dp"
                     android:textColor="@color/darkblue"
                     android:textSize="18sp" />
 

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:elevation="1dp"
+    app:cardElevation="1dp"
+    tools:context=".ui.explore.adapter.AdapterIklan">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
+        <ImageView
+            android:id="@+id/coverImage"
+            android:layout_width="180dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="5dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo_pasar_aku" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/coverImage"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/harga"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/app_name"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/judulIklan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/app_name" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lokasi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/coverImage"
+            android:layout_toEndOf="@id/coverImage"
+            android:drawablePadding="4dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/lato"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:text="@string/app_name"
+            app:drawableStartCompat="@drawable/ic_loc_outline"
+            app:drawableTint="@color/darkblue" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

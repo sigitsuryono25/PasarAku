@@ -87,6 +87,7 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
                 override fun onKabSelected(dataItemKabupatenItem: DataKabupatenItem?) {
                     super.onKabSelected(dataItemKabupatenItem)
                     Prefs.putString(Constant.KAB, dataItemKabupatenItem?.nama)
+                    Prefs.putString(Constant.KAB_ID, dataItemKabupatenItem?.id)
                     Intent(requireActivity(), WilayahActivity::class.java).apply {
                         putExtra(WilayahActivity.KEC_REQ, true)
                         putExtra(WilayahActivity.KAB_ITEM, dataItemKabupatenItem)
