@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -63,7 +64,14 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         }
 
         binding.pratinjau.setOnClickListener {
-            populateData()
+            if (binding.judulIklan.text.toString()
+                    .isEmpty() || binding.deskripsiIklan.text.toString()
+                    .isEmpty() || binding.harga.text.toString().isEmpty()
+            ) {
+                Toast.makeText(this, "Isi semua informasi yang disediakan", Toast.LENGTH_SHORT)
+                    .show()
+            } else
+                populateData()
         }
 
         binding.rgKondisi.setOnCheckedChangeListener { group, checkedId ->
@@ -121,7 +129,7 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
             harga = harga,
             lat = lat,
             lon = lon,
-            foto = null,
+            foto = multipartTypedOutput,
             added_by = addedBy,
             detail = detail,
             id_kab = idKab,

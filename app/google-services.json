@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "299650544094",
+    "project_id": "pasaraku-df948",
+    "storage_bucket": "pasaraku-df948.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299650544094:android:507274355b1a2c006f2d4f",
+        "android_client_info": {
+          "package_name": "com.surelabsid.lti.pasaraku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299650544094-bluv43h1cur2ef2nn6r3fsraja2j7rq1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.surelabsid.lti.pasaraku",
+            "certificate_hash": "ac913b89e9ca2474246deca362dc5af1a91c8dbf"
+          }
+        },
+        {
+          "client_id": "299650544094-p6oh8iaf5s1t62mgcp3jbnlmnntskmuj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0l77oWBzXhbvnKxL90AScAwtGraylo2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299650544094-p6oh8iaf5s1t62mgcp3jbnlmnntskmuj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
