@@ -1,9 +1,11 @@
 package com.surelabsid.lti.pasaraku.ui.login
 
 import android.app.Dialog
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -11,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.surelabsid.lti.pasaraku.R
+import com.surelabsid.lti.pasaraku.ui.register.RegisterPhoneActivity
 
 
 class LoginBottomSheet : BottomSheetDialogFragment() {
@@ -59,6 +62,12 @@ class LoginBottomSheet : BottomSheetDialogFragment() {
         val finish = view.findViewById<ImageView>(R.id.close)
         finish.setOnClickListener {
             dismiss()
+        }
+
+        view.findViewById<Button>(R.id.continueWithPhone).setOnClickListener {
+            Intent(requireActivity(), RegisterPhoneActivity::class.java).apply {
+                startActivity(this)
+            }
         }
     }
 

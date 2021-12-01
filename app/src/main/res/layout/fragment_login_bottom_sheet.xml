@@ -46,6 +46,7 @@
             android:background="@drawable/bg_button_white"
             android:drawableStart="@drawable/cellphone"
             android:drawablePadding="10dp"
+            android:id="@+id/continueWithPhone"
             android:gravity="center_vertical"
             android:text="@string/continue_with_phone"
             android:textAllCaps="false"

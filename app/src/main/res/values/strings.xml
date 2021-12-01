@@ -40,4 +40,12 @@
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="enter_your_phone">Enter your phone</string>
+    <string name="we_will_send_a_confirmation_code_to_your_phone">We will send a confirmation code to your phone</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="country">Country</string>
+    <string name="next">Next</string>
+    <string name="masukkan_kode_verifikasi">Masukkan Kode Verifikasi</string>
+    <string name="kode_verifikasi_telah_dikirimkan_ke_nomor_telepon">Kode Verifikasi telah dikirimkan ke nomor telepon</string>
+    <string name="verifikasi">Verifikasi</string>
 </resources>
