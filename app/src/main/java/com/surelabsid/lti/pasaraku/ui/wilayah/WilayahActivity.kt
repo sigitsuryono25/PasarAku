@@ -17,24 +17,28 @@ class WilayahActivity : AppCompatActivity() {
         val provinsiItem = intent.getParcelableExtra<DataProvinsiItem?>(PROVINSI_ITEM)
         val kabupatenItem = intent.getParcelableExtra<DataKabupatenItem?>(KAB_ITEM)
 
-        if(reqProv){
-            supportFragmentManager.beginTransaction().replace(
-                R.id.container,
-                ProvinsiFragment()
-            )
-                .commit()
-        }else if(req) {
-            supportFragmentManager.beginTransaction().replace(
-                R.id.container,
-                WilayahFragment.newInstance(req, provinsiItem?.id, provinsiItem?.nama)
-            )
-                .commit()
-        }else if(reqKec){
-            supportFragmentManager.beginTransaction().replace(
-                R.id.container,
-                WilayahFragment.newInstance(req, kabupatenItem?.id, kabupatenItem?.nama)
-            )
-                .commit()
+        when {
+            reqProv -> {
+                supportFragmentManager.beginTransaction().replace(
+                    R.id.container,
+                    ProvinsiFragment()
+                )
+                    .commit()
+            }
+            req -> {
+                supportFragmentManager.beginTransaction().replace(
+                    R.id.container,
+                    WilayahFragment.newInstance(req, provinsiItem?.id, provinsiItem?.nama)
+                )
+                    .commit()
+            }
+            reqKec -> {
+                supportFragmentManager.beginTransaction().replace(
+                    R.id.container,
+                    WilayahFragment.newInstance(req, kabupatenItem?.id, kabupatenItem?.nama)
+                )
+                    .commit()
+            }
         }
     }
 
