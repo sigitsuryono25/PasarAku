@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/loginCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="25dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="@string/tips_transaksi_aman"
+                android:textAlignment="center"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="10dp"
+                android:paddingVertical="8dp"
+                android:text="@string/tips_transaksi_aman"
+                android:textSize="17sp"
+                app:drawableStartCompat="@drawable/ic_flag" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="10dp"
+                android:paddingVertical="8dp"
+                android:text="@string/jangan_pernah_memberikan_uang_atau_produk_terlebih_dahulu"
+                android:textSize="17sp"
+                app:drawableStartCompat="@drawable/ic_money_off" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="10dp"
+                android:paddingVertical="8dp"
+                android:text="@string/laporkan_pengguna_mencurigakan_ke_pasar_aku"
+                android:textSize="17sp"
+                app:drawableStartCompat="@drawable/ic_flag" />
+
+
+            <Button
+                android:id="@+id/startChat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="@string/lanjutkan_untuk_chat" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

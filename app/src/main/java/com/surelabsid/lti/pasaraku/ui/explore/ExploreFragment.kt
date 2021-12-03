@@ -107,7 +107,9 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             } else {
                 Prefs.getString(Constant.KAB)
             }
-        binding.wilayah.text = lokasi
+        if (lokasi.isNotEmpty()) {
+            binding.wilayah.text = lokasi
+        }
     }
 
     private fun setSlider(responseSlider: ResponseSlider) {

@@ -8,8 +8,9 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.databinding.ActivityMainBinding
+import com.surelabsid.lti.pasaraku.ui.akun.LandingAkunFragment
+import com.surelabsid.lti.pasaraku.ui.chat.ChatFragment
 import com.surelabsid.lti.pasaraku.ui.explore.ExploreFragment
-import com.surelabsid.lti.pasaraku.ui.iklan.TambahIklanActivity
 import com.surelabsid.lti.pasaraku.ui.kategori.KategoriActivity
 import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
 import com.surelabsid.lti.pasaraku.utils.Constant
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                         showDialogLogin()
                         return@setOnItemSelectedListener false
                     }
-
+                    changeFragment(ChatFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.ads -> {
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                         showDialogLogin()
                         return@setOnItemSelectedListener false
                     }
-
+                    changeFragment(LandingAkunFragment())
                     return@setOnItemSelectedListener true
                 }
             }
@@ -75,12 +76,20 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun checkPermission(){
-        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED){
-            requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION), 200)
+    private fun checkPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            requestPermissions(
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ), 200
+            )
         }
     }
-
 
 
     private fun showDialogLogin() {

@@ -1,6 +1,7 @@
 package com.surelabsid.lti.pasaraku.ui.register
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -14,7 +15,14 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.mukesh.countrypicker.CountryPicker
+import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.databinding.ActivityRegisterPhoneBinding
+import com.surelabsid.lti.pasaraku.network.NetworkModule
+import com.surelabsid.lti.pasaraku.utils.Constant
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class RegisterPhoneActivity : AppCompatActivity() {
@@ -23,13 +31,12 @@ class RegisterPhoneActivity : AppCompatActivity() {
     private lateinit var countryPicker: CountryPicker
     private var storedVerificationId = ""
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
+    private lateinit var phoneAuthCredential: PhoneAuthCredential
     private var cleanNumber = ""
 
     private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(p0: PhoneAuthCredential) {
-            binding.verifikasiLayout.verifikasiBtn.setOnClickListener {
-                signInWithPhoneCredential(p0)
-            }
+            signInWithPhoneCredential(p0)
         }
 
         override fun onVerificationFailed(p0: FirebaseException) {
@@ -89,7 +96,20 @@ class RegisterPhoneActivity : AppCompatActivity() {
                 }
 
                 cleanNumber = countryCode + number
-                initializePhoneAuth(cleanNumber)
+                checkNumber(cleanNumber)
+            }
+        }
+        binding.verifikasiLayout.verifikasiBtn.setOnClickListener {
+            val credentials = PhoneAuthProvider.getCredential(
+                storedVerificationId,
+                binding.verifikasiLayout.verifikasiKode.text.toString()
+            )
+            Firebase.auth.signInWithCredential(credentials).addOnSuccessListener {
+                Prefs.putString(Constant.UID, it.user?.uid)
+                Prefs.putString(Constant.PHONE, cleanNumber)
+                Intent(this@RegisterPhoneActivity, BasicInfoActivity::class.java).apply {
+                    startActivity(this)
+                }
             }
         }
     }
@@ -104,6 +124,34 @@ class RegisterPhoneActivity : AppCompatActivity() {
             .build()
 
         binding.countryCode.setText("+62")
+    }
+
+    private fun checkNumber(cleanNumber: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    val checkPhoneNumber = NetworkModule.getService().checkPhone("$cleanNumber")
+                    if (checkPhoneNumber.code == 200) {
+                        withContext(Dispatchers.Main) {
+                            Intent(this@RegisterPhoneActivity, PasswordActivity::class.java).apply {
+                                putExtra(PasswordActivity.DATAUSER, checkPhoneNumber.dataUser)
+                                startActivity(this)
+                            }
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            initializePhoneAuth(cleanNumber)
+                        }
+                    }
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                    withContext(Dispatchers.Main) {
+                        initializePhoneAuth(cleanNumber)
+                    }
+                }
+
+            }
+        }
     }
 
 

@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object NetworkModule {
 
         const val BASE_URL = "http://pasaraku.server4111.com/"
-//    const val BASE_URL = "http://192.168.137.1/PasarAkuAdmin/public/"
+//    const val BASE_URL = "http://192.168.18.191/webproject/pasarAkuAdminCI3/"
 
 
     const val FIREBASE_URL = "https://fcm.googleapis.com/"

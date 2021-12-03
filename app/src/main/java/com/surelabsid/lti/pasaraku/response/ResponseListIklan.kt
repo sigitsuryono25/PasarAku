@@ -26,8 +26,8 @@ data class DataIklanItem(
 	@field:SerializedName("iklan_id")
 	val iklanId: String? = null,
 
-	@field:SerializedName("added_on")
-	val addedOn: String? = null,
+	@field:SerializedName("nama_lengkap")
+	val namaLengkap: String? = null,
 
 	@field:SerializedName("kategori")
 	val kategori: String? = null,
@@ -59,12 +59,30 @@ data class DataIklanItem(
 	@field:SerializedName("lokasi")
 	val lokasi: String? = null,
 
+	@field:SerializedName("nomor_telepon")
+	val nomorTelepon: String? = null,
+
 	@field:SerializedName("detail")
 	val detail: String? = null,
+
+	@field:SerializedName("added_on")
+	val addedOn: String? = null,
 
 	@field:SerializedName("lat")
 	val lat: String? = null,
 
+	@field:SerializedName("email")
+	val email: String? = null,
+
 	@field:SerializedName("id_kec")
-	val idKec: String? = null
+	val idKec: String? = null,
+
+	@field:SerializedName("bergabung")
+	val bergabung: String? = null,
+
+	@field:SerializedName("profile_pic")
+	val profilePic: String? = null,
+
+	@field:SerializedName("token")
+	val token: String? = null
 ) : Parcelable

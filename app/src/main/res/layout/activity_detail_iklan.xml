@@ -229,12 +229,13 @@
                     android:orientation="horizontal"
                     android:padding="8dp">
 
-                    <ImageView
+                    <com.rishabhharit.roundedimageview.RoundedImageView
                         android:id="@+id/profilePic"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@string/app_name"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@mipmap/ic_launcher"
+                        app:cornerRadius="64dp" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -374,34 +375,50 @@
             android:orientation="horizontal"
             android:paddingVertical="8dp">
 
-            <Button
-                android:id="@+id/chat"
-
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/wa"
                 style="@style/TextAppearance.MaterialComponents.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginHorizontal="2dp"
                 android:layout_weight="1"
+                android:background="@drawable/bg_button_dark"
+                android:drawableStart="@drawable/whatsapp"
+                android:drawableTint="@color/white"
+                android:paddingHorizontal="8dp"
+                android:text="Whatsapp"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/chat"
+                style="@style/TextAppearance.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_button_dark"
+                android:drawableStart="@drawable/chat_outline"
+                android:drawableTint="@color/white"
+                android:paddingHorizontal="8dp"
                 android:text="@string/chat"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
-                app:icon="@drawable/whatsapp"
-                app:iconGravity="start"
-                app:iconTint="@color/white" />
+                android:textColor="@color/white" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/call"
                 style="@style/TextAppearance.MaterialComponents.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginHorizontal="2dp"
                 android:layout_weight="1"
+                android:background="@drawable/bg_button_dark"
+                android:drawableStart="@drawable/phone_outline"
+                android:drawableTint="@color/white"
+                android:paddingHorizontal="8dp"
                 android:text="@string/call"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
-                app:icon="@drawable/phone_outline"
-                app:iconGravity="start"
-                app:iconTint="@color/white" />
+                android:textColor="@color/white" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

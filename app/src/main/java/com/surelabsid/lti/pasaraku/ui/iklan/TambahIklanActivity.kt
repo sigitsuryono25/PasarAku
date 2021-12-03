@@ -112,7 +112,7 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         val lon = gps.longitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val kondisi = isBaru.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val addedBy = "sigitsuryono25".toRequestBody("text/plain".toMediaTypeOrNull())
+        val addedBy = Prefs.getString(Constant.EMAIL).toRequestBody("text/plain".toMediaTypeOrNull())
         val detail = "detail".toRequestBody("text/plain".toMediaTypeOrNull())
         val idKab = Prefs.getString(Constant.KAB_ID).toRequestBody("text/plain".toMediaTypeOrNull())
         val idKec =

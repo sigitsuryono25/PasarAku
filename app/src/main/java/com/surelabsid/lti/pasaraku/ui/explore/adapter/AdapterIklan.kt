@@ -43,11 +43,14 @@ class AdapterIklan(
             location.longitude = dataIklanItem?.lon.toString().toDouble()
 
             val listAddress = GPSTracker(itemView.context).geocoder(location)
-            val kab = listAddress.iterator().next().subAdminArea
-            val kec = listAddress.iterator().next().locality
-            val prov = listAddress.iterator().next().adminArea
-
-            mItemAdapterIklanBinding.lokasi.text = "$kec, $kab, $prov"
+            if (listAddress.isNotEmpty()) {
+                val kab = listAddress.iterator().next().subAdminArea
+                val kec = listAddress.iterator().next().locality
+                val prov = listAddress.iterator().next().adminArea
+                mItemAdapterIklanBinding.lokasi.text = "$kec, $kab, $prov"
+            }else{
+                mItemAdapterIklanBinding.lokasi.text = "Lokasi tidak diketahui"
+            }
         }
     }
 
@@ -73,11 +76,15 @@ class AdapterIklan(
             location.longitude = dataIklanItem?.lon.toString().toDouble()
 
             val listAddress = GPSTracker(itemView.context).geocoder(location)
-            val kab = listAddress.iterator().next().subAdminArea
-            val kec = listAddress.iterator().next().locality
-            val prov = listAddress.iterator().next().adminArea
+            if(listAddress.isNotEmpty()) {
+                val kab = listAddress.iterator().next().subAdminArea
+                val kec = listAddress.iterator().next().locality
+                val prov = listAddress.iterator().next().adminArea
 
-            mItemAdapterIklanVerticalBinding.lokasi.text = "$kec, $kab, $prov"
+                mItemAdapterIklanVerticalBinding.lokasi.text = "$kec, $kab, $prov"
+            }else{
+                mItemAdapterIklanVerticalBinding.lokasi.text = "Lokasi tidak diketahui"
+            }
         }
     }
 
