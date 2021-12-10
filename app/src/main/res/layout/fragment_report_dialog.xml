@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/root"
+    android:padding="8dp"
+    tools:context=".user.home.detailiklan.report.ReportDialogFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp"
+        tools:context=".user.home.detailiklan.report.ReportDialogFragment">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/laporan_barang"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/rgReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/menyinggung"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/konten_menyinggung" />
+
+            <RadioButton
+                android:id="@+id/penipuan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/penipuan" />
+
+            <RadioButton
+                android:id="@+id/iklanGanda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/iklan_ganda" />
+
+            <RadioButton
+                android:id="@+id/produkSudahTerjual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/produk_sudah_terjual" />
+
+
+            <RadioButton
+                android:id="@+id/lainnya"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lainnya" />
+
+        </RadioGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/komentar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:hint="@string/komentari" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/kirimLaporan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:text="@string/kirim_keluhan" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

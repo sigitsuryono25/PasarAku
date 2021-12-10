@@ -42,9 +42,9 @@
                 android:background="@drawable/bg_edittext"
                 android:drawableStart="@drawable/ic_search"
                 android:drawablePadding="8dp"
-                android:enabled="false"
                 android:hint="Find Cars, Mobile Phones and more..."
                 android:inputType="text"
+                android:imeOptions="actionGo"
                 android:padding="8dp"
                 android:singleLine="true"
                 tools:ignore="Autofill" />

@@ -1,8 +1,10 @@
 package com.surelabsid.lti.pasaraku.network
 
+import com.surelabsid.lti.pasaraku.model.FavoriteRequest
+import com.surelabsid.lti.pasaraku.model.PremiumModel
+import com.surelabsid.lti.pasaraku.model.UserRequest
 import com.surelabsid.lti.pasaraku.model.firebase.model.ChatHeader
 import com.surelabsid.lti.pasaraku.model.firebase.model.FCMModel
-import com.surelabsid.lti.pasaraku.model.UserRequest
 import com.surelabsid.lti.pasaraku.response.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -59,8 +61,23 @@ interface ApiService {
 
 
     @GET("ApiIklan/getListIklan")
-    suspend fun getListIklan(@Query("page") page: String?, @Query("kategori") kategori: String? = null): ResponseListIklan
+    suspend fun getListIklan(
+        @Query("page") page: String?,
+        @Query("kategori") kategori: String? = null,
+        @Query("provinsi") provinsi: String? = null,
+        @Query("kabupaten") kabupaten: String? = null,
+        @Query("kecamatan") kecamatan: String? = null,
+        @Query("userid") userid: String? = null
+    ): ResponseListIklan
 
+
+    @GET("ApiUser/getFavorite")
+    suspend fun getFavIklan(
+        @Query("userid") userid: String? = null
+    ): ResponseListIklan
+
+    @POST("ApiUser/addToFav")
+    suspend fun addToFav(@Body favoriteRequest: FavoriteRequest): GeneralResponse
 
     @POST("ApiUser/index")
     suspend fun registerUser(@Body userRequest: UserRequest): GeneralResponse
@@ -72,9 +89,21 @@ interface ApiService {
     @FormUrlEncoded
     @POST("ApiUser/login")
     suspend fun login(
-        @Field("phone") phone : String?,
+        @Field("phone") phone: String?,
         @Field("password") password: String?
     ): ResponseUser
+
+    @FormUrlEncoded
+    @POST("Apimyads/getMyAds")
+    suspend fun getMyads(@Field("userid") userid: String?): ResponseListIklan
+
+
+    @GET("Apirekening/getListRekening")
+    suspend fun getRekeningList(): ResponseRekening
+
+
+    @POST("Apimyads/proc_premium")
+    suspend fun requestPremium(@Body premiumModel: PremiumModel): GeneralResponse
 
     @FormUrlEncoded
     @POST("update-token")
@@ -82,6 +111,16 @@ interface ApiService {
         @Field("token") token: String?,
         @Field("_id_user") idUser: String?
     ): GeneralResponse
+
+    @FormUrlEncoded
+    @POST("ApiIklan/searchIklan")
+    suspend fun searchIklan(
+        @Field("q") query: String?,
+        @Field("kondisi") kondisi: String?,
+        @Field("provinsi") provinsi: String?,
+        @Field("kecamatan") kecamatan: String?,
+        @Field("kabupaten") kabupaten: String?,
+    ): ResponseListIklan
 
     @GET("chat-list")
     suspend fun getChatList(@Query("q") userId: String?): ResponseChatHeader

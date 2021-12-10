@@ -22,6 +22,7 @@ import com.surelabsid.lti.pasaraku.utils.Constant
 private const val IS_KAB_REQ = "param1"
 private const val ID = "param2"
 private const val TITLEBAR = "titlebar"
+private const val FROM_SEARCH = "fromSearch"
 
 class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
     private var isKabReq: Boolean? = null
@@ -29,8 +30,6 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
     private var titleBar: String? = null
     private lateinit var binding: FragmentWilayahBinding
     private lateinit var vm: WilayahViewModel
-    private var selectedKab: String? = ""
-    private var selectekec: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +43,7 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentWilayahBinding.bind(view)
-        vm = ViewModelProvider(this)[WilayahViewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[WilayahViewModel::class.java]
 
         binding.toolbarWilayah.apply {
             title = titleBar
@@ -63,6 +62,7 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
             Prefs.remove(Constant.KEC)
             Prefs.putString(Constant.KAB, titleBar)
             Prefs.putString(Constant.LOKASI_ID, id)
+
             requireActivity().finishAffinity()
             startActivity(Intent(requireActivity(), MainActivity::class.java))
         }
@@ -89,6 +89,7 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
                     Prefs.putString(Constant.KAB, dataItemKabupatenItem?.nama)
                     Prefs.putString(Constant.KAB_ID, dataItemKabupatenItem?.id)
                     Intent(requireActivity(), WilayahActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         putExtra(WilayahActivity.KEC_REQ, true)
                         putExtra(WilayahActivity.KAB_ITEM, dataItemKabupatenItem)
                         startActivity(this)
@@ -116,8 +117,12 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
                     Prefs.putString(Constant.KEC, dataKecamatanItem?.nama)
                     Prefs.putString(Constant.LOKASI_ID, dataKecamatanItem?.id)
 
-                    requireActivity().finishAffinity()
-                    startActivity(Intent(requireActivity(), MainActivity::class.java))
+//                    if (Prefs.getBoolean(Constant.FROM_SEARCH)) {
+                        requireActivity().finish()
+//                    } else {
+//                        requireActivity().finishAffinity()
+//                        startActivity(Intent(requireActivity(), MainActivity::class.java))
+//                    }
                 }
             })
 
@@ -138,7 +143,11 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
     }
 
     companion object {
-        fun newInstance(isKabReq: Boolean, id: String?, title: String?) =
+        fun newInstance(
+            isKabReq: Boolean,
+            id: String?,
+            title: String?
+        ) =
             WilayahFragment().apply {
                 arguments = Bundle().apply {
                     putBoolean(IS_KAB_REQ, isKabReq)

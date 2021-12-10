@@ -3,6 +3,7 @@ package com.surelabsid.lti.pasaraku.ui.explore.adapter
 import android.location.Location
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.surelabsid.lti.pasaraku.R
@@ -15,7 +16,8 @@ import com.surelabsid.lti.pasaraku.utils.GPSTracker
 
 class AdapterIklan(
     private val isGrid: Boolean = true,
-    private val onClick: (DataIklanItem?) -> Unit
+    private val onClick: (DataIklanItem?) -> Unit,
+    private val onFavClick: (DataIklanItem?, ImageView) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -35,6 +37,16 @@ class AdapterIklan(
             itemView.setOnClickListener {
                 onClick(dataIklanItem)
             }
+            mItemAdapterIklanBinding.favorite.setOnClickListener {
+                onFavClick(dataIklanItem, mItemAdapterIklanBinding.favorite)
+            }
+
+            if (dataIklanItem?.fav == true) {
+                Glide.with(itemView.context)
+                    .load(R.drawable.ic_baseline_favorite)
+                    .into(mItemAdapterIklanBinding.favorite)
+            }
+
             mItemAdapterIklanBinding.judulIklan.text = dataIklanItem?.judulIklan
             mItemAdapterIklanBinding.harga.text = dataIklanItem?.harga
 
@@ -48,7 +60,7 @@ class AdapterIklan(
                 val kec = listAddress.iterator().next().locality
                 val prov = listAddress.iterator().next().adminArea
                 mItemAdapterIklanBinding.lokasi.text = "$kec, $kab, $prov"
-            }else{
+            } else {
                 mItemAdapterIklanBinding.lokasi.text = "Lokasi tidak diketahui"
             }
         }
@@ -76,13 +88,13 @@ class AdapterIklan(
             location.longitude = dataIklanItem?.lon.toString().toDouble()
 
             val listAddress = GPSTracker(itemView.context).geocoder(location)
-            if(listAddress.isNotEmpty()) {
+            if (listAddress.isNotEmpty()) {
                 val kab = listAddress.iterator().next().subAdminArea
                 val kec = listAddress.iterator().next().locality
                 val prov = listAddress.iterator().next().adminArea
 
                 mItemAdapterIklanVerticalBinding.lokasi.text = "$kec, $kab, $prov"
-            }else{
+            } else {
                 mItemAdapterIklanVerticalBinding.lokasi.text = "Lokasi tidak diketahui"
             }
         }

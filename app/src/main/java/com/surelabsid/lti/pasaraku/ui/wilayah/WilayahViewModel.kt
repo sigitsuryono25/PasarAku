@@ -25,6 +25,14 @@ class WilayahViewModel : BaseViewModel() {
     private val _selectedKec = MutableLiveData<DataKecamatanItem>()
     val selectedKec: LiveData<DataKecamatanItem> get() = _selectedKec
 
+    private val _fromSearch = MutableLiveData<Boolean>()
+    val fromSearch : LiveData<Boolean> get() = _fromSearch
+
+
+    fun setFromSearch(fromSearch: Boolean){
+        _fromSearch.postValue(fromSearch)
+    }
+
     fun getProvinsi() {
         viewModelScope.launch(Dispatchers.IO) {
             try {

@@ -2,16 +2,24 @@ package com.surelabsid.lti.pasaraku.ui.explore
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.FragmentExploreBinding
+import com.surelabsid.lti.pasaraku.model.FavoriteRequest
+import com.surelabsid.lti.pasaraku.network.NetworkModule
+import com.surelabsid.lti.pasaraku.response.GeneralResponse
 import com.surelabsid.lti.pasaraku.response.ResponseKategori
 import com.surelabsid.lti.pasaraku.response.ResponseListIklan
 import com.surelabsid.lti.pasaraku.response.ResponseSlider
@@ -19,9 +27,14 @@ import com.surelabsid.lti.pasaraku.ui.explore.adapter.AdapterIklan
 import com.surelabsid.lti.pasaraku.ui.explore.adapter.AdapterKategori
 import com.surelabsid.lti.pasaraku.ui.iklan.DetailIklanActivity
 import com.surelabsid.lti.pasaraku.ui.iklan.IklanByCategoriActivity
+import com.surelabsid.lti.pasaraku.ui.iklan.PencarianActivity
 import com.surelabsid.lti.pasaraku.ui.kategori.KategoriActivity
 import com.surelabsid.lti.pasaraku.ui.wilayah.WilayahActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
@@ -35,7 +48,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentExploreBinding.bind(view)
 
-        vm = ViewModelProvider(this).get(ExploreViewModel::class.java)
+        vm = ViewModelProvider(this)[ExploreViewModel::class.java]
 
         vm.kategoriList.observe(viewLifecycleOwner) {
             setToKategori(it)
@@ -54,7 +67,6 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
         vm.getKategori()
         vm.getSlider()
-        vm.getListIklan()
 
         adapterKategori = AdapterKategori {
             Intent(requireActivity(), IklanByCategoriActivity::class.java).apply {
@@ -68,12 +80,31 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
 
-        adapterIklan = AdapterIklan {
+        adapterIklan = AdapterIklan(onClick = {
             Intent(requireActivity(), DetailIklanActivity::class.java).apply {
                 putExtra(DetailIklanActivity.DATA_IKLAN, it)
                 startActivity(this)
             }
-        }
+        }, onFavClick = { data, img ->
+            CoroutineScope(Dispatchers.IO).launch {
+                withContext(Dispatchers.IO) {
+                    try {
+                        val favoriteRequest = FavoriteRequest()
+                        favoriteRequest._id_ads = data?.iklanId
+                        favoriteRequest._user_id = Prefs.getString(Constant.EMAIL)
+                        favoriteRequest.is_add = data?.fav != true
+                        val res = NetworkModule.getService().addToFav(favoriteRequest)
+                        withContext(Dispatchers.Main) {
+                            updateUi(res, img, favoriteRequest)
+                        }
+                    } catch (e: Throwable) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+
+        })
         binding.recommendationAds.apply {
             adapter = adapterIklan
             layoutManager = GridLayoutManager(requireActivity(), 2)
@@ -82,6 +113,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
         binding.wilayah.setOnClickListener {
             Intent(requireActivity(), WilayahActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra(WilayahActivity.PROVINSI_REQ, true)
                 startActivity(this)
             }
@@ -92,6 +124,39 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             }
         }
 
+        binding.search.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                Intent(requireActivity(), PencarianActivity::class.java).apply {
+                    putExtra(PencarianActivity.SEARCH_DATA, binding.search.text.toString())
+                    startActivity(this)
+                }
+            }
+            false
+        }
+
+    }
+
+    private fun updateUi(res: GeneralResponse, img: ImageView, favoriteRequest: FavoriteRequest) {
+        val gson = Gson()
+        Log.d("updateUi", "updateUi: "+ gson.toJson(favoriteRequest))
+        when (res.code) {
+            200 -> {
+                if (favoriteRequest.is_add) {
+                    Glide.with(this)
+                        .load(R.drawable.ic_baseline_favorite)
+                        .into(img)
+                } else {
+                    Glide.with(this)
+                        .load(R.drawable.ic_fav)
+                        .into(img)
+                }
+                Toast.makeText(requireActivity(), res.message, Toast.LENGTH_SHORT).show()
+                onResume()
+            }
+            else -> {
+                Toast.makeText(requireActivity(), res.message, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setIklanToView(responseListIklan: ResponseListIklan) {
@@ -109,6 +174,18 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             }
         if (lokasi.isNotEmpty()) {
             binding.wilayah.text = lokasi
+            var user: String? = null
+            if (Prefs.contains(Constant.EMAIL)) {
+                user = Prefs.getString(Constant.EMAIL)
+            }
+            vm.getListIklan(
+                provinsi = Prefs.getString(Constant.PROV_ID),
+                kabupaten = Prefs.getString(Constant.KAB_ID),
+                kecamatan = Prefs.getString(Constant.LOKASI_ID),
+                userid = user
+            )
+        } else {
+            vm.getListIklan()
         }
     }
 

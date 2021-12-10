@@ -77,6 +77,9 @@ data class DataIklanItem(
 	@field:SerializedName("id_kec")
 	val idKec: String? = null,
 
+	@field:SerializedName("is_premium")
+	val isPremium: String? = null,
+
 	@field:SerializedName("bergabung")
 	val bergabung: String? = null,
 
@@ -84,5 +87,8 @@ data class DataIklanItem(
 	val profilePic: String? = null,
 
 	@field:SerializedName("token")
-	val token: String? = null
+	val token: String? = null,
+
+	@field:SerializedName("fav")
+	val fav: Boolean? = null
 ) : Parcelable

@@ -8,8 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkModule {
 
-        const val BASE_URL = "http://pasaraku.server4111.com/"
-//    const val BASE_URL = "http://192.168.18.191/webproject/pasarAkuAdminCI3/"
+        const val BASE_URL = "https://pasaraku.com/mobile/"
+//    const val BASE_URL = "http://192.168.1.18/webproject/pasarAkuAdminCI3/"
 
 
     const val FIREBASE_URL = "https://fcm.googleapis.com/"

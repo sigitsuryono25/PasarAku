@@ -56,6 +56,10 @@
     <string name="jangan_pernah_memberikan_uang_atau_produk_terlebih_dahulu">Jangan pernah memberikan uang atau produk terlebih dahulu</string>
     <string name="laporkan_pengguna_mencurigakan_ke_pasar_aku">Laporkan pengguna mencurigakan ke Pasar Aku</string>
     <string name="lanjutkan_untuk_chat">Lanjutkan untuk Chat</string>
+    <string name="_1_bulan_n50_rb">30 Hari\n50.000</string>
+    <string name="_6_bulan_n250_rb">180 Hari\n250.000</string>
+    <string name="informasi_pembayaran">Informasi Pembayaran</string>
+    <string name="titik_tiga">⋮</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
@@ -92,4 +96,20 @@
     <string name="login">Login</string>
     <string name="enter_your_password">Enter your password</string>
     <string name="forgot_password">Forgot Password</string>
+    <string name="my_ads">My Ads</string>
+    <string name="iklan_yang_terpilih">Iklan yang terpilih</string>
+    <string name="pilihan_paket_iklan">Pilihan Paket Iklan</string>
+    <string name="terapkan">Terapkan</string>
+    <string name="favorite">Favorite</string>
+    <string name="list_of_your_favorite_stuff">List of your Favorite Stuff</string>
+    <string name="semua">Semua</string>
+
+    <string name="laporan_barang">Laporan Iklan</string>
+    <string name="konten_menyinggung">Konten Menyinggung</string>
+    <string name="penipuan">Penipuan</string>
+    <string name="iklan_ganda">Iklan Ganda</string>
+    <string name="produk_sudah_terjual">Produk Sudah Terjual</string>
+    <string name="lainnya">Lainnya</string>
+    <string name="komentari">Komentari</string>
+    <string name="kirim_keluhan">Kirim Keluhan</string>
 </resources>

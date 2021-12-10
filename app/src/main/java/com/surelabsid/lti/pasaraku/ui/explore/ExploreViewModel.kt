@@ -51,10 +51,12 @@ class ExploreViewModel : BaseViewModel() {
         }
     }
 
-    fun getListIklan(page: String = "0", kategori: String? = null) {
+    fun getListIklan(page: String = "0", kategori: String? = null,
+                     provinsi: String? = null, kabupaten: String? = null,
+                     kecamatan: String? = null, userid: String? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val api = api.getListIklan(page, kategori)
+                val api = api.getListIklan(page, kategori, provinsi, kabupaten, kecamatan, userid)
                 _dataIklan.postValue(api)
             } catch (t: Throwable) {
                 t.printStackTrace()

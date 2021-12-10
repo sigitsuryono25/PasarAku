@@ -13,6 +13,7 @@ import com.surelabsid.lti.pasaraku.ui.chat.ChatFragment
 import com.surelabsid.lti.pasaraku.ui.explore.ExploreFragment
 import com.surelabsid.lti.pasaraku.ui.kategori.KategoriActivity
 import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
+import com.surelabsid.lti.pasaraku.ui.myads.MyAdsFragment
 import com.surelabsid.lti.pasaraku.utils.Constant
 
 class MainActivity : AppCompatActivity() {
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                         showDialogLogin()
                         return@setOnItemSelectedListener false
                     }
-
+                    changeFragment(MyAdsFragment())
                     return@setOnItemSelectedListener true
 
                 }

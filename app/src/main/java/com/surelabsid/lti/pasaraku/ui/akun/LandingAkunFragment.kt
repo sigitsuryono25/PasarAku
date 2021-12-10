@@ -12,7 +12,7 @@ import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.FragmentLandingAkunBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.ui.akun.settings.SettingsActivity
-import com.surelabsid.lti.pasaraku.ui.register.PasswordActivity
+import com.surelabsid.lti.pasaraku.ui.favorite.FavoriteActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +28,7 @@ class LandingAkunFragment : Fragment(R.layout.fragment_landing_akun) {
         binding = FragmentLandingAkunBinding.bind(view)
         binding.namaLengkap.text = Prefs.getString(Constant.NAME)
 
-        if(Prefs.getBoolean(Constant.FROM_REGISTER)) {
+        if (Prefs.getBoolean(Constant.FROM_REGISTER)) {
             CoroutineScope(Dispatchers.IO).launch {
                 withContext(Dispatchers.IO) {
                     val decodeString =
@@ -43,11 +43,17 @@ class LandingAkunFragment : Fragment(R.layout.fragment_landing_akun) {
 
                 }
             }
-        }else{
+        } else {
             checkNumber(Prefs.getString(Constant.PHONE))
         }
         binding.settings.setOnClickListener {
             Intent(requireActivity(), SettingsActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
+
+        binding.favorite.setOnClickListener {
+            Intent(requireActivity(), FavoriteActivity::class.java).apply {
                 startActivity(this)
             }
         }

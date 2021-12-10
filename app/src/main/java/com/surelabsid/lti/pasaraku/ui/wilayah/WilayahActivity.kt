@@ -1,12 +1,19 @@
 package com.surelabsid.lti.pasaraku.ui.wilayah
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.response.DataKabupatenItem
 import com.surelabsid.lti.pasaraku.response.DataProvinsiItem
+import com.surelabsid.lti.pasaraku.utils.Constant
 
 class WilayahActivity : AppCompatActivity() {
+
+    private lateinit var wilayahViewModel: WilayahViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wilayah)
@@ -29,15 +36,13 @@ class WilayahActivity : AppCompatActivity() {
                 supportFragmentManager.beginTransaction().replace(
                     R.id.container,
                     WilayahFragment.newInstance(req, provinsiItem?.id, provinsiItem?.nama)
-                )
-                    .commit()
+                ).commit()
             }
             reqKec -> {
                 supportFragmentManager.beginTransaction().replace(
                     R.id.container,
-                    WilayahFragment.newInstance(req, kabupatenItem?.id, kabupatenItem?.nama)
-                )
-                    .commit()
+                    WilayahFragment.newInstance(req, kabupatenItem?.id, kabupatenItem?.nama,)
+                ).commit()
             }
         }
     }
@@ -48,5 +53,6 @@ class WilayahActivity : AppCompatActivity() {
         const val PROVINSI_ITEM = "provinsItem"
         const val KAB_ITEM = "kabupatenItem"
         const val PROVINSI_REQ = "reqProv"
+        const val FROM_SEARCH= "fromSearch"
     }
 }

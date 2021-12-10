@@ -4,10 +4,9 @@ import android.content.Intent
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.bumptech.glide.util.Util
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.LatLng
@@ -19,6 +18,7 @@ import com.surelabsid.lti.pasaraku.model.firebase.model.ChatHeader
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.response.DataIklanItem
 import com.surelabsid.lti.pasaraku.ui.chat.BottomSheetMessage
+import com.surelabsid.lti.pasaraku.ui.iklan.report.ReportDialogFragment
 import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.GPSTracker
 import com.surelabsid.lti.pasaraku.utils.Utils
@@ -36,6 +36,10 @@ class DetailIklanActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         dataIklanItem = intent.getParcelableExtra(DATA_IKLAN)
+        val isMyAds = intent.getBooleanExtra(MY_ADS, false)
+        if (isMyAds) {
+            binding.bottomBar.visibility = View.GONE
+        }
 
         with(binding.mapLokasi) {
             onCreate(savedInstanceState)
@@ -85,13 +89,13 @@ class DetailIklanActivity : AppCompatActivity() {
         location.longitude = dataIklanItem?.lon.toString().toDouble()
 
         val listAddress = GPSTracker(this).geocoder(location)
-        if(listAddress.isNotEmpty()) {
+        if (listAddress.isNotEmpty()) {
             val kab = listAddress.iterator().next().subAdminArea
             val kec = listAddress.iterator().next().locality
             val prov = listAddress.iterator().next().adminArea
 
             binding.lokasi.text = "$kec, $kab, $prov"
-        }else{
+        } else {
             binding.lokasi.text = "Lokasi tidak diketahui"
         }
 
@@ -122,6 +126,11 @@ class DetailIklanActivity : AppCompatActivity() {
             startActivity(callDialer)
         }
 
+        binding.report.setOnClickListener {
+            val dialog = ReportDialogFragment.newInstance(dataIklanItem?.iklanId)
+            dialog.show(supportFragmentManager, "report")
+        }
+
     }
 
     override fun onResume() {
@@ -142,6 +151,7 @@ class DetailIklanActivity : AppCompatActivity() {
 
     companion object {
         const val DATA_IKLAN = "dataIklan"
+        const val MY_ADS = "myAds"
     }
 
 }

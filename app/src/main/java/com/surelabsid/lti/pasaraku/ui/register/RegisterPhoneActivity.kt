@@ -139,17 +139,35 @@ class RegisterPhoneActivity : AppCompatActivity() {
                             }
                         }
                     } else {
+//                        withContext(Dispatchers.Main) {
+//                            initializePhoneAuth(cleanNumber)
+//                        }
                         withContext(Dispatchers.Main) {
-                            initializePhoneAuth(cleanNumber)
+                            Prefs.putString(Constant.PHONE, cleanNumber)
+                            Intent(
+                                this@RegisterPhoneActivity,
+                                BasicInfoActivity::class.java
+                            ).apply {
+                                startActivity(this)
+                            }
                         }
                     }
                 } catch (e: Throwable) {
                     e.printStackTrace()
+//                    withContext(Dispatchers.Main) {
+//                        initializePhoneAuth(cleanNumber)
+//                    }
+
                     withContext(Dispatchers.Main) {
-                        initializePhoneAuth(cleanNumber)
+                        Prefs.putString(Constant.PHONE, cleanNumber)
+                        Intent(
+                            this@RegisterPhoneActivity,
+                            BasicInfoActivity::class.java
+                        ).apply {
+                            startActivity(this)
+                        }
                     }
                 }
-
             }
         }
     }
