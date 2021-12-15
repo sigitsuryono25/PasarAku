@@ -6,6 +6,7 @@ import com.surelabsid.lti.pasaraku.model.UserRequest
 import com.surelabsid.lti.pasaraku.model.firebase.model.ChatHeader
 import com.surelabsid.lti.pasaraku.model.firebase.model.FCMModel
 import com.surelabsid.lti.pasaraku.response.*
+import com.surelabsid.lti.pasaraku.ui.iklan.report.ReportModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -133,4 +134,13 @@ interface ApiService {
 
     @POST("delete-chat")
     suspend fun deleteChat(@Body chatHeader: ChatHeader?): GeneralResponse
+
+    @GET("Apiwilayah/getWilayah")
+    suspend fun getWilayahByPostalCode(@Query("postal_code") postalCode : String?): ResponseWilayahByPostalCode
+
+    @POST("Apireport/index")
+    suspend fun sendReport(@Body reportModel: ReportModel): GeneralResponse
+
+    @POST("Appsettings")
+    suspend fun appSettings(): ResponseAppSettings
 }

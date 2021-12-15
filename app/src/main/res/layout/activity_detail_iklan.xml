@@ -313,11 +313,31 @@
                         android:text="@string/ad_posted_at"
                         android:textStyle="bold" />
 
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
                     <com.google.android.gms.maps.MapView
                         android:id="@+id/mapLokasi"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:layout_marginTop="8dp" />
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentBottom="true"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:paddingBottom="20dp"
+                            android:visibility="gone"
+                            android:id="@+id/noLokasi"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:text="@string/lokasi_tidak_disertakan"/>
+                    </RelativeLayout>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

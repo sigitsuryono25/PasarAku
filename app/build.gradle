@@ -101,5 +101,7 @@ dependencies {
     //rounded imageview
     implementation 'com.rishabhharit.roundedimageview:RoundedImageView:0.8.4'
 
+    //stfalcon
+    implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
 
 }

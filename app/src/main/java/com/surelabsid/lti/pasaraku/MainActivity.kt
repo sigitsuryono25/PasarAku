@@ -27,9 +27,13 @@ class MainActivity : AppCompatActivity() {
         changeFragment(ExploreFragment())
 
         binding.sellBtn.setOnClickListener {
-            Intent(this@MainActivity, KategoriActivity::class.java).apply {
-                putExtra(KategoriActivity.MAKE_ADS, true)
-                startActivity(this)
+            if (!Prefs.contains(Constant.EMAIL)) {
+                showDialogLogin()
+            } else {
+                Intent(this@MainActivity, KategoriActivity::class.java).apply {
+                    putExtra(KategoriActivity.MAKE_ADS, true)
+                    startActivity(this)
+                }
             }
         }
 

@@ -12,6 +12,7 @@ import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.pixplicity.easyprefs.library.Prefs
+import com.stfalcon.imageviewer.StfalconImageViewer
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityDetailIklanBinding
 import com.surelabsid.lti.pasaraku.model.firebase.model.ChatHeader
@@ -20,7 +21,6 @@ import com.surelabsid.lti.pasaraku.response.DataIklanItem
 import com.surelabsid.lti.pasaraku.ui.chat.BottomSheetMessage
 import com.surelabsid.lti.pasaraku.ui.iklan.report.ReportDialogFragment
 import com.surelabsid.lti.pasaraku.utils.Constant
-import com.surelabsid.lti.pasaraku.utils.GPSTracker
 import com.surelabsid.lti.pasaraku.utils.Utils
 import java.util.*
 
@@ -40,21 +40,25 @@ class DetailIklanActivity : AppCompatActivity() {
         if (isMyAds) {
             binding.bottomBar.visibility = View.GONE
         }
-
-        with(binding.mapLokasi) {
-            onCreate(savedInstanceState)
-            getMapAsync { p0 ->
-                MapsInitializer.initialize(this@DetailIklanActivity)
-                val latLng = LatLng(
-                    dataIklanItem?.lat.toString().toDouble(),
-                    dataIklanItem?.lon.toString().toDouble()
-                )
-                p0.addMarker(
-                    MarkerOptions().position(
-                        latLng
+        if (dataIklanItem?.lat?.isEmpty() == true || dataIklanItem?.lon?.isEmpty() == true) {
+            binding.mapLokasi.visibility = View.GONE
+            binding.noLokasi.visibility = View.VISIBLE
+        }else {
+            with(binding.mapLokasi) {
+                onCreate(savedInstanceState)
+                getMapAsync { p0 ->
+                    MapsInitializer.initialize(this@DetailIklanActivity)
+                    val latLng = LatLng(
+                        dataIklanItem?.lat.toString().toDouble(),
+                        dataIklanItem?.lon.toString().toDouble()
                     )
-                )
-                p0.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
+                    p0.addMarker(
+                        MarkerOptions().position(
+                            latLng
+                        )
+                    )
+                    p0.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
+                }
             }
         }
 
@@ -67,6 +71,17 @@ class DetailIklanActivity : AppCompatActivity() {
                     )
                 )
                 .into(imageView)
+        }
+
+        binding.carouselView.setImageClickListener {
+            StfalconImageViewer.Builder<String>(
+                this@DetailIklanActivity,
+                dataIklanItem?.foto
+            ) { imageView, image ->
+                Glide.with(this)
+                    .load(Constant.ADS_PIC_URL + dataIklanItem?.iklanId + "/" + image)
+                    .into(imageView)
+            }.withStartPosition(it).show(true)
         }
 
         binding.finish.setOnClickListener { finish() }
@@ -87,17 +102,34 @@ class DetailIklanActivity : AppCompatActivity() {
         val location = Location(getString(R.string.app_name))
         location.latitude = dataIklanItem?.lat.toString().toDouble()
         location.longitude = dataIklanItem?.lon.toString().toDouble()
-
-        val listAddress = GPSTracker(this).geocoder(location)
-        if (listAddress.isNotEmpty()) {
-            val kab = listAddress.iterator().next().subAdminArea
-            val kec = listAddress.iterator().next().locality
-            val prov = listAddress.iterator().next().adminArea
-
-            binding.lokasi.text = "$kec, $kab, $prov"
-        } else {
+        if (dataIklanItem?.prov?.isEmpty() == true && dataIklanItem?.kab?.isEmpty() == true && dataIklanItem?.kec?.isEmpty() == true) {
             binding.lokasi.text = "Lokasi tidak diketahui"
+        } else {
+            var lokasi = ""
+            if (dataIklanItem?.kec?.isNotEmpty() == true) {
+                lokasi += "${dataIklanItem?.kec}, "
+            }
+            if (dataIklanItem?.kab?.isNotEmpty() == true) {
+                lokasi += "${dataIklanItem?.kab}, "
+            }
+            if (dataIklanItem?.prov?.isNotEmpty() == true) {
+                lokasi += "${dataIklanItem?.prov}"
+            }
+            binding.lokasi.text =
+                lokasi.trim()
+
         }
+
+//        val listAddress = GPSTracker(this).geocoder(location)
+//        if (listAddress.isNotEmpty()) {
+//            val kab = listAddress.iterator().next().subAdminArea
+//            val kec = listAddress.iterator().next().locality
+//            val prov = listAddress.iterator().next().adminArea
+//
+//            binding.lokasi.text = "$kec, $kab, $prov"
+//        } else {
+//            binding.lokasi.text = "Lokasi tidak diketahui"
+//        }
 
         binding.wa.setOnClickListener {
             val message = "Halo, saya mau tanya tentang iklan ${dataIklanItem?.judulIklan}"

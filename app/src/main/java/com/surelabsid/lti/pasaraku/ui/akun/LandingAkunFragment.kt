@@ -13,6 +13,7 @@ import com.surelabsid.lti.pasaraku.databinding.FragmentLandingAkunBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.ui.akun.settings.SettingsActivity
 import com.surelabsid.lti.pasaraku.ui.favorite.FavoriteActivity
+import com.surelabsid.lti.pasaraku.ui.help.HelpActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -54,6 +55,11 @@ class LandingAkunFragment : Fragment(R.layout.fragment_landing_akun) {
 
         binding.favorite.setOnClickListener {
             Intent(requireActivity(), FavoriteActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
+        binding.help.setOnClickListener {
+            Intent(requireActivity(), HelpActivity::class.java).apply {
                 startActivity(this)
             }
         }

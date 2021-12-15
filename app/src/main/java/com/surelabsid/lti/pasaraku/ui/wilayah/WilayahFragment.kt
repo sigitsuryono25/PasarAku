@@ -58,14 +58,7 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
         }
 
         binding.selectedLok.text = "All in $titleBar"
-        binding.selectedLok.setOnClickListener {
-            Prefs.remove(Constant.KEC)
-            Prefs.putString(Constant.KAB, titleBar)
-            Prefs.putString(Constant.LOKASI_ID, id)
 
-            requireActivity().finishAffinity()
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
-        }
 
         if (isKabReq == true) {
             vm.getKabupaten(id)
@@ -82,6 +75,16 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
     }
 
     private fun setKabupaten(responseKabupaten: ResponseKabupaten) {
+        binding.selectedLok.setOnClickListener {
+            Prefs.remove(Constant.KEC)
+            Prefs.putString(Constant.PROV, titleBar)
+            Prefs.putString(Constant.PROV_ID, id)
+            Prefs.remove(Constant.KAB)
+            Prefs.remove(Constant.KAB_ID)
+
+            requireActivity().finishAffinity()
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
+        }
         val adapterKabupaten =
             AdapterWilayah(AdapterWilayah.KABUPATEN_REQ, object : AdapterWilayah.OnItemClick {
                 override fun onKabSelected(dataItemKabupatenItem: DataKabupatenItem?) {
@@ -110,6 +113,15 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
     }
 
     private fun setKecamatan(responseKecamatan: ResponseKecamatan) {
+        binding.selectedLok.setOnClickListener {
+            Prefs.putString(Constant.KAB, titleBar)
+            Prefs.putString(Constant.KAB_ID, id)
+
+            Prefs.remove(Constant.KEC)
+            Prefs.remove(Constant.LOKASI_ID)
+            requireActivity().finishAffinity()
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
+        }
         val adapterKecamatan =
             AdapterWilayah(AdapterWilayah.KECAMATAN_REQ, object : AdapterWilayah.OnItemClick {
                 override fun onKecSelected(dataKecamatanItem: DataKecamatanItem?) {

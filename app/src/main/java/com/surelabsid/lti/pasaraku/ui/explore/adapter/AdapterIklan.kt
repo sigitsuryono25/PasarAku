@@ -54,15 +54,32 @@ class AdapterIklan(
             location.latitude = dataIklanItem?.lat.toString().toDouble()
             location.longitude = dataIklanItem?.lon.toString().toDouble()
 
-            val listAddress = GPSTracker(itemView.context).geocoder(location)
-            if (listAddress.isNotEmpty()) {
-                val kab = listAddress.iterator().next().subAdminArea
-                val kec = listAddress.iterator().next().locality
-                val prov = listAddress.iterator().next().adminArea
-                mItemAdapterIklanBinding.lokasi.text = "$kec, $kab, $prov"
-            } else {
+//            val listAddress = GPSTracker(itemView.context).geocoder(location)
+//            if (listAddress.isNotEmpty()) {
+//                val kab = listAddress.iterator().next().subAdminArea
+//                val kec = listAddress.iterator().next().locality
+//                val prov = listAddress.iterator().next().adminArea
+//                mItemAdapterIklanBinding.lokasi.text = "$kec, $kab, $prov"
+//            } else {
+//                mItemAdapterIklanBinding.lokasi.text = "Lokasi tidak diketahui"
+            if (dataIklanItem?.prov?.isEmpty() == true && dataIklanItem.kab?.isEmpty() == true && dataIklanItem.kec?.isEmpty() == true) {
                 mItemAdapterIklanBinding.lokasi.text = "Lokasi tidak diketahui"
+            } else {
+                var lokasi = ""
+                if(dataIklanItem?.kec?.isNotEmpty() == true){
+                    lokasi += "${dataIklanItem.kec}, "
+                }
+                if(dataIklanItem?.kab?.isNotEmpty() == true){
+                    lokasi += "${dataIklanItem.kab}, "
+                }
+                if(dataIklanItem?.prov?.isNotEmpty() == true){
+                    lokasi += "${dataIklanItem.prov}"
+                }
+                mItemAdapterIklanBinding.lokasi.text =
+                    lokasi.trim()
+
             }
+//            }
         }
     }
 
@@ -87,16 +104,32 @@ class AdapterIklan(
             location.latitude = dataIklanItem?.lat.toString().toDouble()
             location.longitude = dataIklanItem?.lon.toString().toDouble()
 
-            val listAddress = GPSTracker(itemView.context).geocoder(location)
-            if (listAddress.isNotEmpty()) {
-                val kab = listAddress.iterator().next().subAdminArea
-                val kec = listAddress.iterator().next().locality
-                val prov = listAddress.iterator().next().adminArea
-
-                mItemAdapterIklanVerticalBinding.lokasi.text = "$kec, $kab, $prov"
-            } else {
+//            val listAddress = GPSTracker(itemView.context).geocoder(location)
+//            if (listAddress.isNotEmpty()) {
+//                val kab = listAddress.iterator().next().subAdminArea
+//                val kec = listAddress.iterator().next().locality
+//                val prov = listAddress.iterator().next().adminArea
+//
+            if (dataIklanItem?.prov?.isEmpty() == true && dataIklanItem.kab?.isEmpty() == true && dataIklanItem.kec?.isEmpty() == true) {
                 mItemAdapterIklanVerticalBinding.lokasi.text = "Lokasi tidak diketahui"
+            } else {
+                var lokasi = ""
+                if(dataIklanItem?.kec?.isNotEmpty() == true){
+                    lokasi += "${dataIklanItem.kec}, "
+                }
+                if(dataIklanItem?.kab?.isNotEmpty() == true){
+                    lokasi += "${dataIklanItem.kab}, "
+                }
+                if(dataIklanItem?.prov?.isNotEmpty() == true){
+                    lokasi += "${dataIklanItem.prov}"
+                }
+                mItemAdapterIklanVerticalBinding.lokasi.text =
+                      lokasi.trim()
+
             }
+//            } else {
+//                mItemAdapterIklanVerticalBinding.lokasi.text = "Lokasi tidak diketahui"
+//            }
         }
     }
 

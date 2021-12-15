@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/root"
-    android:padding="8dp"
-    tools:context=".user.home.detailiklan.report.ReportDialogFragment">
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,6 +19,7 @@
             android:layout_height="wrap_content"
             android:text="@string/laporan_barang"
             android:textColor="@color/black"
+            android:fontFamily="@font/lato"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -32,11 +32,13 @@
             <RadioButton
                 android:id="@+id/menyinggung"
                 android:layout_width="match_parent"
+                android:fontFamily="@font/lato"
                 android:layout_height="wrap_content"
                 android:text="@string/konten_menyinggung" />
 
             <RadioButton
                 android:id="@+id/penipuan"
+                android:fontFamily="@font/lato"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/penipuan" />
@@ -44,18 +46,21 @@
             <RadioButton
                 android:id="@+id/iklanGanda"
                 android:layout_width="match_parent"
+                android:fontFamily="@font/lato"
                 android:layout_height="wrap_content"
                 android:text="@string/iklan_ganda" />
 
             <RadioButton
                 android:id="@+id/produkSudahTerjual"
                 android:layout_width="match_parent"
+                android:fontFamily="@font/lato"
                 android:layout_height="wrap_content"
                 android:text="@string/produk_sudah_terjual" />
 
 
             <RadioButton
                 android:id="@+id/lainnya"
+                android:fontFamily="@font/lato"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/lainnya" />
@@ -65,6 +70,7 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
+            android:fontFamily="@font/lato"
             android:layout_height="150dp"
             android:layout_marginTop="10dp">
 
@@ -73,6 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="top|start"
+                android:fontFamily="@font/lato"
                 android:hint="@string/komentari" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -82,6 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
+            android:fontFamily="@font/lato"
             android:layout_marginTop="10dp"
             android:text="@string/kirim_keluhan" />
 

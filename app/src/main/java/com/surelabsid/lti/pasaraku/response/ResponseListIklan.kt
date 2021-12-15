@@ -90,5 +90,14 @@ data class DataIklanItem(
 	val token: String? = null,
 
 	@field:SerializedName("fav")
-	val fav: Boolean? = null
+	val fav: Boolean? = null,
+
+	@field:SerializedName("prov")
+	val prov: String? = "",
+
+	@field:SerializedName("kec")
+	val kec: String? = "",
+
+	@field:SerializedName("kab")
+	val kab: String? = ""
 ) : Parcelable

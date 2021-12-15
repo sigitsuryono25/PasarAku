@@ -169,8 +169,10 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         val lokasi =
             if (Prefs.getString(Constant.KEC).isNotEmpty() || Prefs.contains(Constant.KEC)) {
                 "${Prefs.getString(Constant.KEC)}, ${Prefs.getString(Constant.KAB)}"
-            } else {
+            } else if (Prefs.getString(Constant.KAB).isNotEmpty() || Prefs.contains(Constant.KAB)) {
                 Prefs.getString(Constant.KAB)
+            }else{
+                Prefs.getString(Constant.PROV)
             }
         if (lokasi.isNotEmpty()) {
             binding.wilayah.text = lokasi
@@ -185,6 +187,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                 userid = user
             )
         } else {
+            binding.wilayah.text = "Indonesia"
             vm.getListIklan()
         }
     }

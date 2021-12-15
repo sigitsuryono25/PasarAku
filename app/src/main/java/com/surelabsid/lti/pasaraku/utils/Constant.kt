@@ -23,6 +23,7 @@ object Constant {
 
     const val KEC = "kec"
     const val KAB = "kab"
+    const val PROV = "prov"
     const val LOKASI_ID = "idLokasi"
 
     const val PROV_ID = "provid"

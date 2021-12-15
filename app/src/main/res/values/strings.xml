@@ -112,4 +112,6 @@
     <string name="lainnya">Lainnya</string>
     <string name="komentari">Komentari</string>
     <string name="kirim_keluhan">Kirim Keluhan</string>
+    <string name="lokasi_tidak_disertakan">Lokasi Tidak disertakan</string>
+    <string name="reach_us_on">Reach Us on</string>
 </resources>

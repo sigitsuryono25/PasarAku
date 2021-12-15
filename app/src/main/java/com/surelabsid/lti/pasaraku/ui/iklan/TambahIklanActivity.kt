@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kroegerama.imgpicker.BottomSheetImagePicker
+import com.kroegerama.imgpicker.ButtonType
 import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityTambahIklanBinding
@@ -23,6 +24,7 @@ import com.surelabsid.lti.pasaraku.ui.iklan.adapter.AdapterSelectedImage
 import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.FileUtils
 import com.surelabsid.lti.pasaraku.utils.GPSTracker
+import kotlinx.coroutines.*
 import me.abhinay.input.CurrencySymbols
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -112,7 +114,8 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         val lon = gps.longitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val kondisi = isBaru.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val addedBy = Prefs.getString(Constant.EMAIL).toRequestBody("text/plain".toMediaTypeOrNull())
+        val addedBy =
+            Prefs.getString(Constant.EMAIL).toRequestBody("text/plain".toMediaTypeOrNull())
         val detail = "detail".toRequestBody("text/plain".toMediaTypeOrNull())
         val idKab = Prefs.getString(Constant.KAB_ID).toRequestBody("text/plain".toMediaTypeOrNull())
         val idKec =
@@ -188,12 +191,15 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         ) {
             requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1000)
         } else {
+
             BottomSheetImagePicker
                 .Builder(getString(R.string.file_provider))
+                .cameraButton(ButtonType.Button)
+                .galleryButton(ButtonType.Button)
                 .multiSelect(
                     1,
                     10
-                )                  //size of the columns (will be changed a little to fit)
+                )              //size of the columns (will be changed a little to fit)
                 .requestTag("multi")                //tag can be used if multiple pickers are used
                 .show(supportFragmentManager)
         }
@@ -214,26 +220,36 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
 
     override fun onImagesSelected(uris: List<Uri>, tag: String?) {
         multipartTypedOutput = arrayOfNulls(uris.size)
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.IO) {
+                uris.forEachIndexed { i, it ->
+                    val file2 = File(FileUtils.getPath(this@TambahIklanActivity, it)).path
 
-        uris.forEachIndexed { i, it ->
-            val file2 = File(FileUtils.getPath(this, it)).path
+                    val bmp = BitmapFactory.decodeFile(file2)
+                    val byteArrayOutputStream = ByteArrayOutputStream()
+                    bmp.compress(Bitmap.CompressFormat.WEBP, 70, byteArrayOutputStream)
+                    //createbody
+                    val photo = byteArrayOutputStream.toByteArray()
+                        .toRequestBody(
+                            "image/*".toMediaTypeOrNull(),
+                            0,
+                            byteArrayOutputStream.size()
+                        )
 
-            val bmp = BitmapFactory.decodeFile(file2)
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bmp.compress(Bitmap.CompressFormat.WEBP, 70, byteArrayOutputStream)
-            //createbody
-            val photo = byteArrayOutputStream.toByteArray()
-                .toRequestBody("image/*".toMediaTypeOrNull(), 0, byteArrayOutputStream.size())
+                    //create image input
+                    val body = MultipartBody.Part.createFormData(
+                        "imageFiles[]",
+                        File(FileUtils.getPath(this@TambahIklanActivity, it)).name,
+                        photo
+                    )
+                    multipartTypedOutput[i] = body
+                    MainScope().launch {
+                        adapterSelectedImage.addItem(uris, true)
+                    }
+                }
+            }
 
-            //create image input
-            val body = MultipartBody.Part.createFormData(
-                "imageFiles[]",
-                File(FileUtils.getPath(this, it)).name,
-                photo
-            )
-            multipartTypedOutput[i] = body
         }
-        adapterSelectedImage.addItem(uris, true)
     }
 
     companion object {

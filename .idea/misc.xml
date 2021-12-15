@@ -78,6 +78,8 @@
         <entry key="app/src/main/res/layout/activity_chat_fragment.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_detail_iklan.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_favorite.xml" value="0.165625" />
+        <entry key="app/src/main/res/layout/activity_help.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/activity_iklan_by_categori.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_invoice.xml" value="0.3125" />
         <entry key="app/src/main/res/layout/activity_landin_akun.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_landing_akun.xml" value="0.22" />
@@ -87,6 +89,7 @@
         <entry key="app/src/main/res/layout/activity_register_phone.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_web_view.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/activity_wilayah.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/fragment_adapter_my_ads.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/fragment_add_account.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/fragment_add_email.xml" value="0.3265625" />
@@ -100,10 +103,12 @@
         <entry key="app/src/main/res/layout/fragment_login_bottom_sheet.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/fragment_my_ads.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/fragment_password.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/fragment_provinsi.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/fragment_report_dialog.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/item_adapter_chat.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/item_adapter_chat_header.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/item_adapter_iklan.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/item_adapter_iklan_vertical.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/item_adapter_selected_image.xml" value="0.16168478260869565" />
         <entry key="app/src/main/res/layout/message_bottom_sheets.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/verify_code.xml" value="0.36277173913043476" />
