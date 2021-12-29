@@ -67,7 +67,6 @@
     <string name="type_your_name_here">Type your name here</string>
     <string name="please_type_your_password">Please type your password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="password">Password</string>
     <string name="add_a_picture_profile">Add a picture profile</string>
     <string name="what_s_your_email">What\'s your email?</string>
     <string name="we_ll_use_it_for_logging_in_and_usual_stuff">We\'ll use it for logging in and usual stuff</string>
@@ -85,7 +84,7 @@
     <string name="help_support"><![CDATA[Help & support]]></string>
     <string name="help_center_and_legal_terms">Help center and legal terms</string>
     <string name="logout">Logout</string>
-    <string name="privacy">Privacy</string>
+    <string name="privacy">Privacy Policy</string>
     <string name="phone_number_visibility">Phone number visibility</string>
     <string name="lampirkan_berkas">Lampirkan Berkas</string>
     <string name="lokasi_anda">Lokasi Anda</string>
@@ -114,4 +113,17 @@
     <string name="kirim_keluhan">Kirim Keluhan</string>
     <string name="lokasi_tidak_disertakan">Lokasi Tidak disertakan</string>
     <string name="reach_us_on">Reach Us on</string>
+    <string name="premium">Premium</string>
+    <string name="iklan"><u>Iklan</u></string>
+    <string name="nama_lengkap">Nama Lengkap</string>
+    <string name="email">Email</string>
+    <string name="nomor_telepon">Nomor Telepon</string>
+    <string name="simpan">Simpan</string>
+    <string name="password">Password</string>
+    <string name="kosongkan_bila_tidak_ingin_mengganti_password">Kosongkan bila tidak ingin mengganti password</string>
+
+    <string-array name="kind">
+        <item>Diterima</item>
+        <item>Dikirim</item>
+    </string-array>
 </resources>

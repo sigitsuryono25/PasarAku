@@ -1,27 +1,39 @@
 package com.surelabsid.lti.pasaraku.ui.iklan
 
 import android.content.Intent
+import android.graphics.Color
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityDetailIklanBinding
+import com.surelabsid.lti.pasaraku.model.FavoriteRequest
 import com.surelabsid.lti.pasaraku.model.firebase.model.ChatHeader
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.response.DataIklanItem
+import com.surelabsid.lti.pasaraku.response.GeneralResponse
 import com.surelabsid.lti.pasaraku.ui.chat.BottomSheetMessage
 import com.surelabsid.lti.pasaraku.ui.iklan.report.ReportDialogFragment
+import com.surelabsid.lti.pasaraku.ui.profile.ProfileViewActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 
@@ -43,7 +55,7 @@ class DetailIklanActivity : AppCompatActivity() {
         if (dataIklanItem?.lat?.isEmpty() == true || dataIklanItem?.lon?.isEmpty() == true) {
             binding.mapLokasi.visibility = View.GONE
             binding.noLokasi.visibility = View.VISIBLE
-        }else {
+        } else {
             with(binding.mapLokasi) {
                 onCreate(savedInstanceState)
                 getMapAsync { p0 ->
@@ -163,6 +175,70 @@ class DetailIklanActivity : AppCompatActivity() {
             dialog.show(supportFragmentManager, "report")
         }
 
+        if (dataIklanItem?.fav == true) {
+            binding.fav.setColorFilter(Color.parseColor("#F44336"))
+            Glide.with(this)
+                .load(R.drawable.ic_baseline_favorite)
+                .into(binding.fav)
+        } else {
+            binding.fav.setColorFilter(Color.parseColor("#FF000000"))
+            Glide.with(this)
+                .load(R.drawable.ic_fav)
+                .into(binding.fav)
+        }
+
+        binding.profileView.setOnClickListener {
+            Intent(this@DetailIklanActivity, ProfileViewActivity::class.java).apply {
+                putExtra(ProfileViewActivity.USERID, dataIklanItem?.addedBy)
+                startActivity(this)
+            }
+        }
+
+        binding.fav.setOnClickListener {
+            if (Prefs.contains(Constant.EMAIL)) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.IO) {
+                        try {
+                            val favoriteRequest = FavoriteRequest()
+                            favoriteRequest._id_ads = dataIklanItem?.iklanId
+                            favoriteRequest._user_id = Prefs.getString(Constant.EMAIL)
+                            favoriteRequest.is_add = dataIklanItem?.fav != true
+                            val res = NetworkModule.getService().addToFav(favoriteRequest)
+                            withContext(Dispatchers.Main) {
+                                updateUi(res, binding.fav, favoriteRequest)
+                            }
+                        } catch (e: Throwable) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            } else {
+                Utils.showDialogLogin(supportFragmentManager)
+            }
+        }
+
+    }
+
+    private fun updateUi(res: GeneralResponse, img: ImageView, favoriteRequest: FavoriteRequest) {
+        val gson = Gson()
+        Log.d("updateUi", "updateUi: " + gson.toJson(favoriteRequest))
+        when (res.code) {
+            200 -> {
+                if (favoriteRequest.is_add) {
+                    Glide.with(this)
+                        .load(R.drawable.ic_baseline_favorite)
+                        .into(img)
+                } else {
+                    Glide.with(this)
+                        .load(R.drawable.ic_fav)
+                        .into(img)
+                }
+                Toast.makeText(this, res.message, Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                Toast.makeText(this, res.message, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onResume() {

@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.pasaraku.MainActivity
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.FragmentExploreBinding
 import com.surelabsid.lti.pasaraku.model.FavoriteRequest
@@ -29,8 +30,10 @@ import com.surelabsid.lti.pasaraku.ui.iklan.DetailIklanActivity
 import com.surelabsid.lti.pasaraku.ui.iklan.IklanByCategoriActivity
 import com.surelabsid.lti.pasaraku.ui.iklan.PencarianActivity
 import com.surelabsid.lti.pasaraku.ui.kategori.KategoriActivity
+import com.surelabsid.lti.pasaraku.ui.notification.NotificationActivity
 import com.surelabsid.lti.pasaraku.ui.wilayah.WilayahActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
+import com.surelabsid.lti.pasaraku.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -86,28 +89,37 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                 startActivity(this)
             }
         }, onFavClick = { data, img ->
-            CoroutineScope(Dispatchers.IO).launch {
-                withContext(Dispatchers.IO) {
-                    try {
-                        val favoriteRequest = FavoriteRequest()
-                        favoriteRequest._id_ads = data?.iklanId
-                        favoriteRequest._user_id = Prefs.getString(Constant.EMAIL)
-                        favoriteRequest.is_add = data?.fav != true
-                        val res = NetworkModule.getService().addToFav(favoriteRequest)
-                        withContext(Dispatchers.Main) {
-                            updateUi(res, img, favoriteRequest)
+            if (Prefs.contains(Constant.EMAIL)) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.IO) {
+                        try {
+                            val favoriteRequest = FavoriteRequest()
+                            favoriteRequest._id_ads = data?.iklanId
+                            favoriteRequest._user_id = Prefs.getString(Constant.EMAIL)
+                            favoriteRequest.is_add = data?.fav != true
+                            val res = NetworkModule.getService().addToFav(favoriteRequest)
+                            withContext(Dispatchers.Main) {
+                                updateUi(res, img, favoriteRequest)
+                            }
+                        } catch (e: Throwable) {
+                            e.printStackTrace()
                         }
-                    } catch (e: Throwable) {
-                        e.printStackTrace()
                     }
                 }
+            }else{
+                Utils.showDialogLogin((requireActivity().supportFragmentManager))
             }
-
 
         })
         binding.recommendationAds.apply {
             adapter = adapterIklan
             layoutManager = GridLayoutManager(requireActivity(), 2)
+        }
+
+        binding.notif.setOnClickListener {
+            Intent(requireActivity(), NotificationActivity::class.java).apply {
+                startActivity(this)
+            }
         }
 
 
@@ -174,12 +186,13 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             }else{
                 Prefs.getString(Constant.PROV)
             }
+        var user: String? = null
+        if (Prefs.contains(Constant.EMAIL)) {
+            user = Prefs.getString(Constant.EMAIL)
+        }
         if (lokasi.isNotEmpty()) {
             binding.wilayah.text = lokasi
-            var user: String? = null
-            if (Prefs.contains(Constant.EMAIL)) {
-                user = Prefs.getString(Constant.EMAIL)
-            }
+
             vm.getListIklan(
                 provinsi = Prefs.getString(Constant.PROV_ID),
                 kabupaten = Prefs.getString(Constant.KAB_ID),
@@ -188,7 +201,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             )
         } else {
             binding.wilayah.text = "Indonesia"
-            vm.getListIklan()
+            vm.getListIklan(userid = user)
         }
     }
 

@@ -77,6 +77,7 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
     private fun setKabupaten(responseKabupaten: ResponseKabupaten) {
         binding.selectedLok.setOnClickListener {
             Prefs.remove(Constant.KEC)
+            Prefs.remove(Constant.LOKASI_ID)
             Prefs.putString(Constant.PROV, titleBar)
             Prefs.putString(Constant.PROV_ID, id)
             Prefs.remove(Constant.KAB)

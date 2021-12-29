@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.surelabsid.lti.pasaraku.databinding.ActivitySplashScreenBinding
+import com.surelabsid.lti.pasaraku.service.TokenService
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -92,6 +93,9 @@ class SplashScreenActivity : AppCompatActivity() {
             startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
             finish()
         }, 3000)
+
+
+        startService(Intent(this@SplashScreenActivity, TokenService::class.java))
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

@@ -2,6 +2,7 @@ package com.surelabsid.lti.pasaraku.ui.explore.adapter
 
 import android.location.Location
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +46,10 @@ class AdapterIklan(
                 Glide.with(itemView.context)
                     .load(R.drawable.ic_baseline_favorite)
                     .into(mItemAdapterIklanBinding.favorite)
+            }
+
+            if(dataIklanItem?.isPremium.equals("Y", true)){
+                mItemAdapterIklanBinding.isPremium.visibility = View.VISIBLE
             }
 
             mItemAdapterIklanBinding.judulIklan.text = dataIklanItem?.judulIklan

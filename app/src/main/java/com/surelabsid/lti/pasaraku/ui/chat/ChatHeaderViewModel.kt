@@ -19,10 +19,10 @@ class ChatHeaderViewModel : ViewModel() {
     val error = SingleLiveEvent<String>()
 
 
-    fun getChatList(userId: String?) {
+    fun getChatList(userId: String?, kind: String?) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = mRoutes.getChatList(userId)
+                val result = mRoutes.getChatList(userId, kind)
                 response.postValue(result)
             } catch (throwable: Throwable) {
                 throwable.printStackTrace()

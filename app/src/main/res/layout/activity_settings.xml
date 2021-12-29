@@ -28,12 +28,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textSize="18sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/lato"
-                android:text="@string/phone_number_visibility"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
         </LinearLayout>
 
         <ImageView

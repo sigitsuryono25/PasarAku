@@ -15,6 +15,7 @@ import com.surelabsid.lti.pasaraku.ui.kategori.KategoriActivity
 import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
 import com.surelabsid.lti.pasaraku.ui.myads.MyAdsFragment
 import com.surelabsid.lti.pasaraku.utils.Constant
+import com.surelabsid.lti.pasaraku.utils.Utils
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.sellBtn.setOnClickListener {
             if (!Prefs.contains(Constant.EMAIL)) {
-                showDialogLogin()
+                Utils.showDialogLogin(supportFragmentManager)
             } else {
                 Intent(this@MainActivity, KategoriActivity::class.java).apply {
                     putExtra(KategoriActivity.MAKE_ADS, true)
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.chat -> {
                     if (!Prefs.contains(Constant.EMAIL)) {
-                        showDialogLogin()
+                        Utils.showDialogLogin(supportFragmentManager)
                         return@setOnItemSelectedListener false
                     }
                     changeFragment(ChatFragment())
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.ads -> {
 
                     if (!Prefs.contains(Constant.EMAIL)) {
-                        showDialogLogin()
+                        Utils.showDialogLogin(supportFragmentManager)
                         return@setOnItemSelectedListener false
                     }
                     changeFragment(MyAdsFragment())
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.account -> {
                     if (!Prefs.contains(Constant.EMAIL)) {
-                        showDialogLogin()
+                        Utils.showDialogLogin(supportFragmentManager)
                         return@setOnItemSelectedListener false
                     }
                     changeFragment(LandingAkunFragment())
@@ -97,8 +98,5 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun showDialogLogin() {
-        val loginDialog = LoginBottomSheet()
-        loginDialog.show(supportFragmentManager, "dialogLogin")
-    }
+
 }

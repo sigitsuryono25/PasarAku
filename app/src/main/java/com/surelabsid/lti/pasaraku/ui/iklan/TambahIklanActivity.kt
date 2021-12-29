@@ -1,5 +1,7 @@
 package com.surelabsid.lti.pasaraku.ui.iklan
 
+import android.app.ProgressDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -21,6 +23,7 @@ import com.surelabsid.lti.pasaraku.databinding.ActivityTambahIklanBinding
 import com.surelabsid.lti.pasaraku.response.DataKategoriItem
 import com.surelabsid.lti.pasaraku.response.GeneralResponse
 import com.surelabsid.lti.pasaraku.ui.iklan.adapter.AdapterSelectedImage
+import com.surelabsid.lti.pasaraku.ui.wilayah.WilayahActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.FileUtils
 import com.surelabsid.lti.pasaraku.utils.GPSTracker
@@ -41,6 +44,7 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
     private lateinit var vm: IklanViewModel
     private var isBaru = "Y"
     private var datakategori: DataKategoriItem? = null
+    private lateinit var pd: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +65,15 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
             setDisplayHomeAsUpEnabled(true)
         }
 
+
+        binding.lokasi.setOnClickListener {
+            Intent(this@TambahIklanActivity, WilayahActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                putExtra(WilayahActivity.PROVINSI_REQ, true)
+                startActivity(this)
+            }
+        }
+
         binding.pilihFoto.setOnClickListener {
             checkPermission()
         }
@@ -68,7 +81,8 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         binding.pratinjau.setOnClickListener {
             if (binding.judulIklan.text.toString()
                     .isEmpty() || binding.deskripsiIklan.text.toString()
-                    .isEmpty() || binding.harga.text.toString().isEmpty()
+                    .isEmpty() || binding.harga.text.toString().isEmpty() ||
+                        binding.lokasi.text.toString().isEmpty()
             ) {
                 Toast.makeText(this, "Isi semua informasi yang disediakan", Toast.LENGTH_SHORT)
                     .show()
@@ -77,21 +91,26 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         }
 
         binding.rgKondisi.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId == R.id.baru) {
-                isBaru = "Y"
+            isBaru = if (checkedId == R.id.baru) {
+                "Y"
             } else {
-                isBaru = "N"
+                "N"
             }
         }
 
         val lokasi =
             if (Prefs.getString(Constant.KEC).isNotEmpty() || Prefs.contains(Constant.KEC)) {
                 "${Prefs.getString(Constant.KEC)}, ${Prefs.getString(Constant.KAB)}"
-            } else {
+            } else if (Prefs.getString(Constant.KAB).isNotEmpty() || Prefs.contains(Constant.KAB)) {
                 Prefs.getString(Constant.KAB)
+            }else{
+                Prefs.getString(Constant.PROV)
             }
-        binding.lokasi.setText(lokasi)
-
+        if(lokasi.isEmpty()){
+         binding.lokasi.text = "--Pilih Lokasi Terlebih Dahulu--"
+        }else {
+            binding.lokasi.text = lokasi
+        }
         adapterSelectedImage = AdapterSelectedImage()
         binding.listFoto.apply {
             adapter = adapterSelectedImage
@@ -220,6 +239,7 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
 
     override fun onImagesSelected(uris: List<Uri>, tag: String?) {
         multipartTypedOutput = arrayOfNulls(uris.size)
+        pd = ProgressDialog.show(this@TambahIklanActivity, "", "Mengkonversi gambar...", false, false)
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 uris.forEachIndexed { i, it ->
@@ -244,6 +264,7 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
                     )
                     multipartTypedOutput[i] = body
                     MainScope().launch {
+                        pd.dismiss()
                         adapterSelectedImage.addItem(uris, true)
                     }
                 }

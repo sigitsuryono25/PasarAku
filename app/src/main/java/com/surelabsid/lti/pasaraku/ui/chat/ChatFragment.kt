@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Adapter
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
@@ -29,18 +30,27 @@ class ChatFragment : Fragment(R.layout.activity_chat_fragment) {
     private lateinit var vm: ChatHeaderViewModel
     private lateinit var binding: ActivityChatFragmentBinding
     private lateinit var adapterChatHeader : AdapterChatHeader
+    private var kind: String? = "diterima"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         vm = ViewModelProvider(this).get(ChatHeaderViewModel::class.java)
         binding = ActivityChatFragmentBinding.bind(view)
-        getChatHeader()
 
         binding.refreshLayout.setOnRefreshListener {
-            getChatHeader()
+            getChatHeader(kind)
             binding.refreshLayout.isRefreshing = false
         }
+
+        vm.response.observe(viewLifecycleOwner, {
+            setList(it.data)
+        })
+        vm.error.observe(this, {
+            adapterChatHeader.addItemChatHeader(listOf(), clearAll = true)
+        })
+
+
 
         adapterChatHeader = AdapterChatHeader({chatHeader ->
             startActivity(
@@ -72,17 +82,25 @@ class ChatFragment : Fragment(R.layout.activity_chat_fragment) {
             layoutManager = LinearLayoutManager(requireActivity())
         }
 
+        binding.kind.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                kind = binding.kind.selectedItem.toString()
+                getChatHeader(kind)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
     }
 
-    private fun getChatHeader() {
-        vm.getChatList(Prefs.getString(Constant.EMAIL, null))
-        vm.response.observe(viewLifecycleOwner, {
-            setList(it.data)
-        })
-        vm.error.observe(this, {
-            adapterChatHeader.addItemChatHeader(listOf(), clearAll = true)
-        })
-
+    private fun getChatHeader(kind: String?) {
+        vm.getChatList(Prefs.getString(Constant.EMAIL, null), kind)
     }
 
     private fun setList(data: List<ChatHeaderDataItem?>?) {
@@ -106,7 +124,7 @@ class ChatFragment : Fragment(R.layout.activity_chat_fragment) {
                 val delete = NetworkModule.getService().deleteChat(chatHeader)
                 if (delete.code == 200) {
                     withContext(Dispatchers.Main) {
-                        getChatHeader()
+                        getChatHeader(kind)
                     }
                 } else {
                     withContext(Dispatchers.Main) {

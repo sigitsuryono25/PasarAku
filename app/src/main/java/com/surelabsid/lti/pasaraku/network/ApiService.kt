@@ -17,7 +17,7 @@ interface ApiService {
     //firebase
     @Headers(
         "Content-Type:application/json",
-        "Authorization:key=AAAAHC5PL4w:APA91bFky0k98D3-M5XaAHMv0fEYYPsqzscnrh7HumspltJz5S_1V_ii9pECaNPgJc4ITU5Mu45Jl2UhYZRKAnHbJSPBeC0U4UQW8z1HSSiurX7CLJMiPHUDt1q3T6uLA_fdQkeD-r6x"
+        "Authorization:key=AAAAQ_ThfeQ:APA91bGf1TJukEGAZdnHKXI1JtMzRtjTp6d0I_iPA2e1tD8eMDtkXPCSL0hPHBclW5-Q_YL4CjDuOZBmGhdhPFJJMu8QUmD4fbbnxB0cH1McY91FYu7Js2knIm6tkOruCCgUUrZVzFBk"
     )
     @POST("fcm/send")
     suspend fun actionSendService(@Body notificationService: FCMModel): ResponseBody
@@ -124,7 +124,7 @@ interface ApiService {
     ): ResponseListIklan
 
     @GET("chat-list")
-    suspend fun getChatList(@Query("q") userId: String?): ResponseChatHeader
+    suspend fun getChatList(@Query("q") userId: String?, @Query("kind") kind: String?): ResponseChatHeader
 
     @GET("chat-item")
     suspend fun getChatItem(@Query("q") _id: String?): ResponseItemChat
@@ -143,4 +143,8 @@ interface ApiService {
 
     @POST("Appsettings")
     suspend fun appSettings(): ResponseAppSettings
+
+    @GET("ApiUser/getProfile")
+    suspend fun getProfile(@Query("userid") userid: String?): ResponseProfileView
+
 }

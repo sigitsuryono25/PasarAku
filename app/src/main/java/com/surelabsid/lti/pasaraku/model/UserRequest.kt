@@ -9,4 +9,6 @@ class UserRequest {
     var nama_lengkap: String? = null
     var facebook_token : String? = null
     var google_token: String? = null
+    var mode : String? = "register"
+    var old_email : String? = null
 }

@@ -59,6 +59,7 @@
         <entry key="app/src/main/res/drawable/bg_black_2.xml" value="0.34270833333333334" />
         <entry key="app/src/main/res/drawable/bg_button_dark.xml" value="0.34270833333333334" />
         <entry key="app/src/main/res/drawable/bg_button_white.xml" value="0.34270833333333334" />
+        <entry key="app/src/main/res/drawable/bg_edittext.xml" value="0.34270833333333334" />
         <entry key="app/src/main/res/drawable/bg_imgview.xml" value="0.34270833333333334" />
         <entry key="app/src/main/res/drawable/bg_rounded.xml" value="0.18177083333333333" />
         <entry key="app/src/main/res/drawable/bg_toolbar.xml" value="0.34270833333333334" />
@@ -77,17 +78,21 @@
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_chat_fragment.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_detail_iklan.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/activity_edit_profile.xml" value="0.3125" />
         <entry key="app/src/main/res/layout/activity_favorite.xml" value="0.165625" />
         <entry key="app/src/main/res/layout/activity_help.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_iklan_by_categori.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_invoice.xml" value="0.3125" />
         <entry key="app/src/main/res/layout/activity_landin_akun.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_landing_akun.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_notification.xml" value="0.3125" />
         <entry key="app/src/main/res/layout/activity_password.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_pembayaran.xml" value="0.23020833333333332" />
         <entry key="app/src/main/res/layout/activity_pencarian.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/activity_profile_view.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_register_phone.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/activity_tambah_iklan.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_web_view.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_wilayah.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/fragment_adapter_my_ads.xml" value="0.3265625" />
@@ -105,13 +110,16 @@
         <entry key="app/src/main/res/layout/fragment_password.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/fragment_provinsi.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/fragment_report_dialog.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/fragment_wilayah.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/item_adapter_chat.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/item_adapter_chat_header.xml" value="0.3265625" />
-        <entry key="app/src/main/res/layout/item_adapter_iklan.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/item_adapter_iklan.xml" value="0.5" />
         <entry key="app/src/main/res/layout/item_adapter_iklan_vertical.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/item_adapter_notification.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/item_adapter_selected_image.xml" value="0.16168478260869565" />
         <entry key="app/src/main/res/layout/message_bottom_sheets.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/verify_code.xml" value="0.36277173913043476" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.3265625" />
         <entry key="app/src/main/res/menu/options_menu.xml" value="0.3265625" />
       </map>
     </option>

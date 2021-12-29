@@ -5,6 +5,7 @@ import com.surelabsid.lti.pasaraku.network.NetworkModule
 object Constant {
     const val TOKEN = "TOKEN"
     const val LOCATION_DATA = "locationData"
+    const val DB_NAME = "db_notification"
     const val CHAT_HEADER = "chatHeader"
     const val URL_IMAGE = "/assets/img/"
     const val URL_IMAGE_USER = "/assets/user/"

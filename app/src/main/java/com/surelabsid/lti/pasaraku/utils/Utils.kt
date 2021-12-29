@@ -6,6 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
+import androidx.fragment.app.FragmentManager
+import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
 import java.net.URLEncoder
 
 object Utils {
@@ -51,5 +53,10 @@ object Utils {
                     startActivity(context, playStore, null)
                 }.create().show()
         }
+    }
+
+    fun showDialogLogin(supportFragmentManager: FragmentManager) {
+        val loginDialog = LoginBottomSheet()
+        loginDialog.show(supportFragmentManager, "dialogLogin")
     }
 }

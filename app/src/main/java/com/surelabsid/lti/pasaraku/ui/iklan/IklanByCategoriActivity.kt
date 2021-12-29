@@ -66,14 +66,17 @@ class IklanByCategoriActivity : AppCompatActivity() {
         val lokasi =
             if (Prefs.getString(Constant.KEC).isNotEmpty() || Prefs.contains(Constant.KEC)) {
                 "${Prefs.getString(Constant.KEC)}, ${Prefs.getString(Constant.KAB)}"
-            } else {
+            } else if (Prefs.getString(Constant.KAB).isNotEmpty() || Prefs.contains(Constant.KAB)) {
                 Prefs.getString(Constant.KAB)
+            }else{
+                Prefs.getString(Constant.PROV)
             }
+        var user: String? = null
+        if (Prefs.contains(Constant.EMAIL)) {
+            user = Prefs.getString(Constant.EMAIL)
+        }
         if (lokasi.isNotEmpty()) {
-            var user: String? = null
-            if (Prefs.contains(Constant.EMAIL)) {
-                user = Prefs.getString(Constant.EMAIL)
-            }
+
             vm.getListIklan(
                 kategori = kategori?.idKategori,
                 provinsi = Prefs.getString(Constant.PROV_ID),
@@ -82,7 +85,7 @@ class IklanByCategoriActivity : AppCompatActivity() {
                 userid = user
             )
         } else {
-            vm.getListIklan()
+            vm.getListIklan(userid = user, kategori = kategori?.idKategori)
         }
     }
 

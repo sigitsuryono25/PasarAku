@@ -14,21 +14,17 @@
         android:padding="10dp"
         tools:context=".ui.iklan.TambahIklanActivity">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/lokasi"
-            app:hintTextColor="@color/darkblue">
+            android:textSize="16sp"
+            android:paddingVertical="14dp"
+            android:id="@+id/lokasi"
+            android:text="@string/lokasi"
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/lokasi"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
-                android:enabled="false"
-                android:fontFamily="@font/lato" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginBottom="10dp"
+            android:paddingHorizontal="15dp"
+            android:background="@drawable/bg_edittext"/>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"

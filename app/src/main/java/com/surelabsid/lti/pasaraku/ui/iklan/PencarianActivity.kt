@@ -95,8 +95,10 @@ class PencarianActivity : AppCompatActivity() {
         val lokasi =
             if (Prefs.getString(Constant.KEC).isNotEmpty() || Prefs.contains(Constant.KEC)) {
                 "${Prefs.getString(Constant.KEC)}, ${Prefs.getString(Constant.KAB)}"
-            } else {
+            } else if (Prefs.getString(Constant.KAB).isNotEmpty() || Prefs.contains(Constant.KAB)) {
                 Prefs.getString(Constant.KAB)
+            }else{
+                Prefs.getString(Constant.PROV)
             }
         if (lokasi.isNotEmpty()) {
             binding.lokasi.text = lokasi

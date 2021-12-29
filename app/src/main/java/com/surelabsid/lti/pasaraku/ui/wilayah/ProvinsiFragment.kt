@@ -39,6 +39,7 @@ class ProvinsiFragment : Fragment(R.layout.fragment_provinsi) {
             Prefs.remove(Constant.LOKASI_ID)
             Prefs.remove(Constant.KAB)
             Prefs.remove(Constant.KEC)
+            Prefs.remove(Constant.PROV)
             requireActivity().finish()
         }
 

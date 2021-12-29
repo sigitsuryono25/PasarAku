@@ -44,6 +44,8 @@ class LandingAkunFragment : Fragment(R.layout.fragment_landing_akun) {
 
                 }
             }
+
+            checkNumber(Prefs.getString(Constant.PHONE))
         } else {
             checkNumber(Prefs.getString(Constant.PHONE))
         }
@@ -76,6 +78,15 @@ class LandingAkunFragment : Fragment(R.layout.fragment_landing_akun) {
                                 .asBitmap()
                                 .load(NetworkModule.BASE_URL + Constant.URL_IMAGE_USER + checkPhoneNumber.dataUser?.foto)
                                 .into(binding.imageUser)
+                            binding.viewAndEdit.setOnClickListener {
+                                Intent(requireActivity(), EditProfileActivity::class.java).apply {
+                                    putExtra(
+                                        EditProfileActivity.USERDATA,
+                                        checkPhoneNumber.dataUser
+                                    )
+                                    startActivity(this)
+                                }
+                            }
                         }
                     }
                 } catch (e: Throwable) {
