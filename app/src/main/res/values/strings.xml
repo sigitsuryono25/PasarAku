@@ -121,6 +121,12 @@
     <string name="simpan">Simpan</string>
     <string name="password">Password</string>
     <string name="kosongkan_bila_tidak_ingin_mengganti_password">Kosongkan bila tidak ingin mengganti password</string>
+    <string name="hapus_iklan">Hapus Iklan</string>
+    <string name="edit_iklan">Edit Iklan</string>
+    <string name="foto_sebelumnya">Foto Sebelumnya</string>
+    <string name="forgot_your_password">Forgot your password?</string>
+    <string name="tidak_akses_ke_email_hubungi_admin_klik_disini">Tidak akses ke email? hubungi admin. <b>Klik Disini</b></string>
+    <string name="kirim_email">Kirim Email</string>
 
     <string-array name="kind">
         <item>Diterima</item>

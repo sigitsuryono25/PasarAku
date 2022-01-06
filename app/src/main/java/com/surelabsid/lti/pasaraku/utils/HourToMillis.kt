@@ -12,14 +12,13 @@ object HourToMillis {
     }
 
     fun addExpired(expiredOn: Int?, unit: Int = Calendar.HOUR): Long {
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDateandTime = sdf.format(Date())
 
         val date = sdf.parse(currentDateandTime)
         val calendar = Calendar.getInstance()
         calendar.time = date!!
         expiredOn?.let { calendar.add(unit, it) }
-        println("Time here " + calendar.time)
         return calendar.timeInMillis
     }
 

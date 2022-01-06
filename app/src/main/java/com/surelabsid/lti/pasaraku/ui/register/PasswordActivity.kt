@@ -11,6 +11,7 @@ import com.surelabsid.lti.pasaraku.MainActivity
 import com.surelabsid.lti.pasaraku.databinding.ActivityPasswordBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.response.DataUser
+import com.surelabsid.lti.pasaraku.ui.forgotpass.ForgotPasswordBottomSheet
 import com.surelabsid.lti.pasaraku.utils.Constant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,7 +62,10 @@ class PasswordActivity : AppCompatActivity() {
             title = "Login"
         }
 
-
+        binding.forgotPassword.setOnClickListener {
+            val forgot = ForgotPasswordBottomSheet()
+            forgot.show(supportFragmentManager, "forgot")
+        }
     }
 
     private fun doLogin(dataUser: DataUser?) {

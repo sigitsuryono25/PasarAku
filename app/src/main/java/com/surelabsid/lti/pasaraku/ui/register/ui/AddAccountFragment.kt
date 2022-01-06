@@ -14,18 +14,22 @@ class AddAccountFragment : Fragment(R.layout.fragment_add_account) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAddAccountBinding.bind(view)
-        binding.addFacebook.setOnClickListener {
 
-        }
+        requireActivity().supportFragmentManager.beginTransaction().replace(R.id.containerBasicInfo, AdditionalInfoFragment())
+            .commit()
 
-        binding.addGoogle.setOnClickListener {
-
-        }
-
-        binding.next.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.containerBasicInfo, AdditionalInfoFragment())
-                .commit()
-        }
+//        binding.addFacebook.setOnClickListener {
+//
+//        }
+//
+//        binding.addGoogle.setOnClickListener {
+//
+//        }
+//
+//        binding.next.setOnClickListener {
+//            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.containerBasicInfo, AdditionalInfoFragment())
+//                .commit()
+//        }
     }
 
 }

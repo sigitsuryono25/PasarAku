@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.login.LoginBottomSheet">
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/close" />
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/close"
+        android:gravity="center_horizontal"
+        android:padding="8dp"
+        android:text="@string/forgot_your_password"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/sendMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="@string/kirim_email"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/hubungiAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/tidak_akses_ke_email_hubungi_admin_klik_disini"
+            android:textColor="@color/darkblue" />
+    </LinearLayout>
+</RelativeLayout>

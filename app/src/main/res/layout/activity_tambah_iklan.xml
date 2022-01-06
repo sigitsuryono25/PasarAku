@@ -15,16 +15,16 @@
         tools:context=".ui.iklan.TambahIklanActivity">
 
         <TextView
+            android:id="@+id/lokasi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:paddingVertical="14dp"
-            android:id="@+id/lokasi"
-            android:text="@string/lokasi"
-
             android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_edittext"
             android:paddingHorizontal="15dp"
-            android:background="@drawable/bg_edittext"/>
+
+            android:paddingVertical="14dp"
+            android:text="@string/lokasi"
+            android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -56,11 +56,11 @@
             android:weightSum="2">
 
             <RadioButton
-                android:checked="true"
                 android:id="@+id/baru"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:checked="true"
                 android:text="@string/baru" />
 
             <RadioButton
@@ -109,10 +109,40 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/darkblue"
-            android:text="@string/pilih_foto"
             android:fontFamily="@font/lato"
+            android:text="@string/pilih_foto"
             android:textAllCaps="false"
             android:textColor="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/fotoSebelumnya"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:text="@string/foto_sebelumnya"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:layout_marginBottom="8dp"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:id="@+id/previousFoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/containerPrevious"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listFoto"
@@ -127,8 +157,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/blue"
-            android:text="@string/pratinjau"
             android:fontFamily="@font/lato"
+            android:text="@string/pratinjau"
             android:textColor="@color/white"
             android:textStyle="bold" />
     </LinearLayout>

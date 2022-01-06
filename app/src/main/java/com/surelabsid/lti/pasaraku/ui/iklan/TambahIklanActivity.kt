@@ -7,7 +7,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,11 +19,14 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.kroegerama.imgpicker.BottomSheetImagePicker
 import com.kroegerama.imgpicker.ButtonType
 import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityTambahIklanBinding
+import com.surelabsid.lti.pasaraku.model.FotoIklan
+import com.surelabsid.lti.pasaraku.response.DataIklanItem
 import com.surelabsid.lti.pasaraku.response.DataKategoriItem
 import com.surelabsid.lti.pasaraku.response.GeneralResponse
 import com.surelabsid.lti.pasaraku.ui.iklan.adapter.AdapterSelectedImage
@@ -31,6 +38,7 @@ import kotlinx.coroutines.*
 import me.abhinay.input.CurrencySymbols
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -40,11 +48,20 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
     private lateinit var adapterSelectedImage: AdapterSelectedImage
     private var isChanged = false
     private lateinit var binding: ActivityTambahIklanBinding
-    private lateinit var multipartTypedOutput: Array<MultipartBody.Part?>
+    private var multipartTypedOutput: MutableList<MultipartBody.Part?>? = null
+    private var previousFotoDelete: MutableList<RequestBody> = mutableListOf()
+    private var reImgPrevBody: RequestBody? = null
     private lateinit var vm: IklanViewModel
     private var isBaru = "Y"
     private var datakategori: DataKategoriItem? = null
     private lateinit var pd: ProgressDialog
+    private var PROVID: String? = null
+    private var KABID: String? = null
+    private var KECID: String? = null
+    private var isEdit: Boolean = false
+    private var kategori: String? = null
+    private var mode: RequestBody? = null
+    private var iklanId: RequestBody? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +72,8 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         vm = ViewModelProvider(this).get(IklanViewModel::class.java)
 
         datakategori = intent.getParcelableExtra(KATEGORI_DATA)
+        kategori = datakategori?.idKategori
+        mode = "add".toRequestBody("text/plain".toMediaTypeOrNull())
 
         binding.harga.setCurrency(CurrencySymbols.INDONESIA)
         binding.harga.setDecimals(false)
@@ -65,6 +84,12 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
             setDisplayHomeAsUpEnabled(true)
         }
 
+        val adsItem = intent.getParcelableExtra<DataIklanItem?>(ADS_DATA)
+        if (adsItem != null) {
+            isEdit = true
+            mode = "edit".toRequestBody("text/plain".toMediaTypeOrNull())
+            updateUIForEdit(adsItem)
+        }
 
         binding.lokasi.setOnClickListener {
             Intent(this@TambahIklanActivity, WilayahActivity::class.java).apply {
@@ -82,7 +107,7 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
             if (binding.judulIklan.text.toString()
                     .isEmpty() || binding.deskripsiIklan.text.toString()
                     .isEmpty() || binding.harga.text.toString().isEmpty() ||
-                        binding.lokasi.text.toString().isEmpty()
+                binding.lokasi.text.toString().isEmpty()
             ) {
                 Toast.makeText(this, "Isi semua informasi yang disediakan", Toast.LENGTH_SHORT)
                     .show()
@@ -103,12 +128,12 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
                 "${Prefs.getString(Constant.KEC)}, ${Prefs.getString(Constant.KAB)}"
             } else if (Prefs.getString(Constant.KAB).isNotEmpty() || Prefs.contains(Constant.KAB)) {
                 Prefs.getString(Constant.KAB)
-            }else{
+            } else {
                 Prefs.getString(Constant.PROV)
             }
-        if(lokasi.isEmpty()){
-         binding.lokasi.text = "--Pilih Lokasi Terlebih Dahulu--"
-        }else {
+        if (lokasi.isEmpty()) {
+            binding.lokasi.text = "--Pilih Lokasi Terlebih Dahulu--"
+        } else {
             binding.lokasi.text = lokasi
         }
         adapterSelectedImage = AdapterSelectedImage()
@@ -117,6 +142,61 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
             layoutManager =
                 LinearLayoutManager(this@TambahIklanActivity, RecyclerView.HORIZONTAL, false)
         }
+    }
+
+    private fun updateUIForEdit(adsItem: DataIklanItem) {
+        binding.fotoSebelumnya.visibility = View.VISIBLE
+        binding.deskripsiIklan.setText(adsItem.deskripsiIklan)
+        binding.harga.setText(adsItem.harga?.replace("Rp", "")?.replace(".", ""))
+        binding.judulIklan.setText(adsItem.judulIklan)
+        binding.lokasi.text = adsItem.lokasi
+        kategori = adsItem.kategori
+        iklanId = adsItem.iklanId?.toRequestBody("text/plain".toMediaTypeOrNull())
+        PROVID = adsItem.idProv
+        KECID = adsItem.idKec
+        KABID = adsItem.idKab
+
+        if (adsItem.kondisi?.equals("N", true) == true) {
+            binding.bekas.isChecked = true
+        } else {
+            binding.baru.isChecked = true
+        }
+        if (adsItem.foto?.isNotEmpty() == true) {
+            adsItem.foto.map { file ->
+                var toDelete = false
+                val img = ImageView(this)
+                val lParams = LinearLayout.LayoutParams(750, 700)
+                lParams.setMargins(0, 0, 20, 0)
+                img.layoutParams = lParams
+                val urlGambar = Constant.ADS_PIC_URL + adsItem.iklanId + "/" + file
+                Glide.with(this)
+                    .load(urlGambar)
+                    .centerCrop()
+                    .into(img)
+                var index = 0
+                img.setOnClickListener {
+                    if (!toDelete) {
+                        val photo = file!!.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                        previousFotoDelete.add(index, photo)
+                        toDelete = true
+                        index++
+                    } else if (toDelete) {
+                        val fotoIklan = FotoIklan()
+                        fotoIklan.file = file
+                        previousFotoDelete.removeAt(--index)
+                        toDelete = false
+                    }
+                }
+
+
+                Log.d("updateUIForEdit", "updateUIForEdit: ${previousFotoDelete.size}")
+
+                binding.containerPrevious.addView(img, -1)
+            }
+        }
+
+
     }
 
     private fun populateData() {
@@ -136,12 +216,17 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         val addedBy =
             Prefs.getString(Constant.EMAIL).toRequestBody("text/plain".toMediaTypeOrNull())
         val detail = "detail".toRequestBody("text/plain".toMediaTypeOrNull())
-        val idKab = Prefs.getString(Constant.KAB_ID).toRequestBody("text/plain".toMediaTypeOrNull())
+        if (!isEdit) {
+            PROVID = Prefs.getString(Constant.PROV_ID)
+            KABID = Prefs.getString(Constant.KAB_ID)
+            KECID = Prefs.getString(Constant.LOKASI_ID)
+        }
+        val idKab = KABID?.toRequestBody("text/plain".toMediaTypeOrNull())
         val idKec =
-            Prefs.getString(Constant.LOKASI_ID).toRequestBody("text/plain".toMediaTypeOrNull())
+            KECID?.toRequestBody("text/plain".toMediaTypeOrNull())
         val idProv =
-            Prefs.getString(Constant.PROV_ID).toRequestBody("text/plain".toMediaTypeOrNull())
-        val kategori = datakategori?.idKategori?.toRequestBody("text/plain".toMediaTypeOrNull())
+            PROVID?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val kategoriS = kategori?.toRequestBody("text/plain".toMediaTypeOrNull())
 
 
         vm.sendIklan(
@@ -157,8 +242,11 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
             id_kab = idKab,
             id_kec = idKec,
             id_prov = idProv,
-            kategori = kategori!!,
-            kondisi = kondisi
+            kategori = kategoriS!!,
+            kondisi = kondisi,
+            previousDelete = previousFotoDelete,
+            mode = mode!!,
+            iklanId = iklanId
         )
 
         vm.data.observe(this) {
@@ -224,6 +312,22 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val lokasi =
+            if (Prefs.getString(Constant.KEC).isNotEmpty() || Prefs.contains(Constant.KEC)) {
+                "${Prefs.getString(Constant.KEC)}, ${Prefs.getString(Constant.KAB)}"
+            } else if (Prefs.getString(Constant.KAB).isNotEmpty() || Prefs.contains(Constant.KAB)) {
+                Prefs.getString(Constant.KAB)
+            } else {
+                Prefs.getString(Constant.PROV)
+            }
+        if (lokasi.isNotEmpty())
+            binding.lokasi.text = lokasi
+        else
+            binding.lokasi.text = "Indonesia"
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -238,8 +342,14 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
     }
 
     override fun onImagesSelected(uris: List<Uri>, tag: String?) {
-        multipartTypedOutput = arrayOfNulls(uris.size)
-        pd = ProgressDialog.show(this@TambahIklanActivity, "", "Mengkonversi gambar...", false, false)
+        multipartTypedOutput = mutableListOf()
+        pd = ProgressDialog.show(
+            this@TambahIklanActivity,
+            "",
+            "Mengkonversi gambar...",
+            false,
+            false
+        )
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 uris.forEachIndexed { i, it ->
@@ -262,7 +372,8 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
                         File(FileUtils.getPath(this@TambahIklanActivity, it)).name,
                         photo
                     )
-                    multipartTypedOutput[i] = body
+//                    multipartTypedOutput!![i] = body
+                    multipartTypedOutput?.add(i, body)
                     MainScope().launch {
                         pd.dismiss()
                         adapterSelectedImage.addItem(uris, true)
@@ -275,5 +386,6 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
 
     companion object {
         const val KATEGORI_DATA = "kategoriData"
+        const val ADS_DATA = "adsData"
     }
 }

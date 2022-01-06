@@ -49,12 +49,14 @@
             android:id="@+id/continueWithPhone"
             android:gravity="center_vertical"
             android:text="@string/continue_with_phone"
+            android:layout_marginBottom="10dp"
             android:textAllCaps="false"
             android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/loginGoogle"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_button_white"
@@ -69,6 +71,7 @@
             android:id="@+id/loginFacebook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_button_white"
             android:drawableStart="@drawable/facebook"
@@ -82,6 +85,7 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_button_white"
             android:drawableStart="@drawable/email_outline"

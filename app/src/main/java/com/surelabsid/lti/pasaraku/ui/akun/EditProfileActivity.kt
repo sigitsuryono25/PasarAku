@@ -31,6 +31,7 @@ class EditProfileActivity : AppCompatActivity(),
     BottomSheetImagePicker.OnImagesSelectedListener {
     private lateinit var binding: ActivityEditProfileBinding
     private lateinit var pd: ProgressDialog
+    private var isPickingUpPict = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +60,8 @@ class EditProfileActivity : AppCompatActivity(),
             userRequest.email = binding.email.text.toString()
             userRequest.nomor_telepon = binding.nomorTelepon.text.toString()
             userRequest.password = Prefs.getString(Constant.PASSWORD)
-            userRequest.foto = Prefs.getString(Constant.PHOTO)
+            if (isPickingUpPict)
+                userRequest.foto = Prefs.getString(Constant.PHOTO)
             userRequest.nama_lengkap = binding.namaLengkap.text.toString()
             userRequest.facebook_token = Prefs.getString(Constant.FACEBOOK_TOKEN)
             userRequest.google_token = Prefs.getString(Constant.GOOGLE_TOKEN)
@@ -85,6 +87,12 @@ class EditProfileActivity : AppCompatActivity(),
                     withContext(Dispatchers.Main) {
                         pd.dismiss()
                         ToastUtils.showToast(this@EditProfileActivity, data.message)
+                        Prefs.putString(Constant.PHONE, binding.nomorTelepon.text.toString())
+                        Prefs.putString(Constant.EMAIL, binding.email.text.toString())
+                        if (binding.password.text.toString().isNotEmpty()) {
+                            Prefs.putString(Constant.PASSWORD, binding.password.text.toString())
+                        }
+
                     }
                 } catch (t: Throwable) {
                     t.printStackTrace()

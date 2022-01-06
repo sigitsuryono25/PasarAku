@@ -1,5 +1,6 @@
 package com.surelabsid.lti.pasaraku.network
 
+import com.surelabsid.lti.pasaraku.model.EmailRequest
 import com.surelabsid.lti.pasaraku.model.FavoriteRequest
 import com.surelabsid.lti.pasaraku.model.PremiumModel
 import com.surelabsid.lti.pasaraku.model.UserRequest
@@ -44,22 +45,30 @@ interface ApiService {
     @Multipart
     @POST("ApiIklan/index")
     suspend fun sendIklan(
+        @Part("mode") mode: RequestBody,
         @Part("judul_iklan") judulIklan: RequestBody,
         @Part("deskripsi_iklan") deskripsiIklan: RequestBody,
         @Part("lokasi") lokasi: RequestBody,
-        @Part foto: Array<MultipartBody.Part?>?,
+        @Part foto: MutableList<MultipartBody.Part?>?,
         @Part("harga") harga: RequestBody,
         @Part("detail") detail: RequestBody,
         @Part("kategori") kategori: RequestBody,
         @Part("lat") lat: RequestBody,
         @Part("lon") lon: RequestBody,
         @Part("added_by") added_by: RequestBody,
-        @Part("id_kab") id_kab: RequestBody,
-        @Part("id_kec") id_kec: RequestBody,
-        @Part("id_prov") id_prov: RequestBody,
+        @Part("id_kab") id_kab: RequestBody?,
+        @Part("id_kec") id_kec: RequestBody?,
+        @Part("id_prov") id_prov: RequestBody?,
         @Part("kondisi") kondisi: RequestBody,
+        @Part("previousDelete[]") previousDelete: MutableList<RequestBody>,
+        @Part("iklan_id") iklanId: RequestBody?,
     ): GeneralResponse
 
+    @GET("ApiUser/checkEmail")
+    suspend fun checkedEmail(@Query("email") email: String?): GeneralResponse
+
+    @POST("Sendmail/insertRequestEmail")
+    suspend fun sendEmail(@Body emailRequest: EmailRequest): GeneralResponse
 
     @GET("ApiIklan/getListIklan")
     suspend fun getListIklan(
@@ -146,5 +155,8 @@ interface ApiService {
 
     @GET("ApiUser/getProfile")
     suspend fun getProfile(@Query("userid") userid: String?): ResponseProfileView
+
+    @GET("ApiIklan/deleteIklan")
+    suspend fun hapusIklan(@Query("id-iklan") idIklan: String?) : GeneralResponse
 
 }

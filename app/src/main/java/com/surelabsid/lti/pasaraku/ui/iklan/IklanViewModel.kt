@@ -17,24 +17,28 @@ class IklanViewModel : BaseViewModel() {
 
 
     fun sendIklan(
+        mode: RequestBody,
         judulIklan: RequestBody,
         deskripsiIklan: RequestBody,
         lokasi: RequestBody,
-        foto: Array<MultipartBody.Part?>?,
+        foto: MutableList<MultipartBody.Part?>?,
         harga: RequestBody,
         detail: RequestBody,
         kategori: RequestBody,
         lat: RequestBody,
         lon: RequestBody,
         added_by: RequestBody,
-        id_kab: RequestBody,
-        id_kec: RequestBody,
-        id_prov: RequestBody,
-        kondisi : RequestBody
+        id_kab: RequestBody?,
+        id_kec: RequestBody?,
+        id_prov: RequestBody?,
+        kondisi: RequestBody,
+        previousDelete: MutableList<RequestBody>,
+        iklanId: RequestBody?
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val api = api.sendIklan(
+                    mode,
                     judulIklan,
                     deskripsiIklan,
                     lokasi,
@@ -48,7 +52,9 @@ class IklanViewModel : BaseViewModel() {
                     id_kab,
                     id_kec,
                     id_prov,
-                    kondisi
+                    kondisi,
+                    previousDelete,
+                    iklanId
                 )
                 _data.postValue(api)
             } catch (e: Throwable) {

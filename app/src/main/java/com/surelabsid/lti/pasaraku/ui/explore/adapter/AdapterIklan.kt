@@ -12,7 +12,6 @@ import com.surelabsid.lti.pasaraku.databinding.ItemAdapterIklanBinding
 import com.surelabsid.lti.pasaraku.databinding.ItemAdapterIklanVerticalBinding
 import com.surelabsid.lti.pasaraku.response.DataIklanItem
 import com.surelabsid.lti.pasaraku.utils.Constant
-import com.surelabsid.lti.pasaraku.utils.GPSTracker
 
 
 class AdapterIklan(
@@ -48,7 +47,7 @@ class AdapterIklan(
                     .into(mItemAdapterIklanBinding.favorite)
             }
 
-            if(dataIklanItem?.isPremium.equals("Y", true)){
+            if (dataIklanItem?.isPremium.equals("Y", true)) {
                 mItemAdapterIklanBinding.isPremium.visibility = View.VISIBLE
             }
 
@@ -68,16 +67,16 @@ class AdapterIklan(
 //            } else {
 //                mItemAdapterIklanBinding.lokasi.text = "Lokasi tidak diketahui"
             if (dataIklanItem?.prov?.isEmpty() == true && dataIklanItem.kab?.isEmpty() == true && dataIklanItem.kec?.isEmpty() == true) {
-                mItemAdapterIklanBinding.lokasi.text = "Lokasi tidak diketahui"
+                mItemAdapterIklanBinding.lokasi.text = "Indonesia"
             } else {
                 var lokasi = ""
-                if(dataIklanItem?.kec?.isNotEmpty() == true){
+                if (dataIklanItem?.kec?.isNotEmpty() == true) {
                     lokasi += "${dataIklanItem.kec}, "
                 }
-                if(dataIklanItem?.kab?.isNotEmpty() == true){
+                if (dataIklanItem?.kab?.isNotEmpty() == true) {
                     lokasi += "${dataIklanItem.kab}, "
                 }
-                if(dataIklanItem?.prov?.isNotEmpty() == true){
+                if (dataIklanItem?.prov?.isNotEmpty() == true) {
                     lokasi += "${dataIklanItem.prov}"
                 }
                 mItemAdapterIklanBinding.lokasi.text =
@@ -116,20 +115,20 @@ class AdapterIklan(
 //                val prov = listAddress.iterator().next().adminArea
 //
             if (dataIklanItem?.prov?.isEmpty() == true && dataIklanItem.kab?.isEmpty() == true && dataIklanItem.kec?.isEmpty() == true) {
-                mItemAdapterIklanVerticalBinding.lokasi.text = "Lokasi tidak diketahui"
+                mItemAdapterIklanVerticalBinding.lokasi.text = "Indonesia"
             } else {
                 var lokasi = ""
-                if(dataIklanItem?.kec?.isNotEmpty() == true){
+                if (dataIklanItem?.kec?.isNotEmpty() == true) {
                     lokasi += "${dataIklanItem.kec}, "
                 }
-                if(dataIklanItem?.kab?.isNotEmpty() == true){
+                if (dataIklanItem?.kab?.isNotEmpty() == true) {
                     lokasi += "${dataIklanItem.kab}, "
                 }
-                if(dataIklanItem?.prov?.isNotEmpty() == true){
+                if (dataIklanItem?.prov?.isNotEmpty() == true) {
                     lokasi += "${dataIklanItem.prov}"
                 }
                 mItemAdapterIklanVerticalBinding.lokasi.text =
-                      lokasi.trim()
+                    lokasi.trim()
 
             }
 //            } else {

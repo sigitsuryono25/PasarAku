@@ -96,6 +96,19 @@
                     android:textStyle="bold" />
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/judulIklan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lato"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="8dp"
+                android:text="@string/app_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textSize="16sp"
+                app:drawableTint="@color/darkblue" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -320,24 +333,24 @@
                         android:layout_height="wrap_content">
 
 
-                    <com.google.android.gms.maps.MapView
-                        android:id="@+id/mapLokasi"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginTop="8dp" />
+                        <com.google.android.gms.maps.MapView
+                            android:id="@+id/mapLokasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_marginTop="8dp" />
 
 
                         <TextView
+                            android:id="@+id/noLokasi"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_alignParentBottom="true"
-                            android:textStyle="bold"
                             android:gravity="center"
                             android:paddingBottom="20dp"
-                            android:visibility="gone"
-                            android:id="@+id/noLokasi"
+                            android:text="@string/lokasi_tidak_disertakan"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:text="@string/lokasi_tidak_disertakan"/>
+                            android:textStyle="bold"
+                            android:visibility="gone" />
                     </RelativeLayout>
                 </LinearLayout>
 

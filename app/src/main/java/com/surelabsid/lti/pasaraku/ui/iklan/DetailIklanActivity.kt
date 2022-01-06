@@ -104,6 +104,8 @@ class DetailIklanActivity : AppCompatActivity() {
         binding.kondisi.text = dataIklanItem?.kondisi
         binding.postOn.text = dataIklanItem?.addedOn
 
+        binding.judulIklan.text = dataIklanItem?.judulIklan
+
         binding.namaUser.text = dataIklanItem?.namaLengkap
         Glide.with(this)
             .load(NetworkModule.BASE_URL + Constant.URL_IMAGE_USER + dataIklanItem?.profilePic)

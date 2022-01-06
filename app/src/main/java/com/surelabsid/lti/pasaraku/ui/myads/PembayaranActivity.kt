@@ -70,7 +70,7 @@ class PembayaranActivity : AppCompatActivity() {
             val prov = listAddress.iterator().next().adminArea
             binding.wilayahkerja.text = "$kec, $kab, $prov"
         } else {
-            binding.wilayahkerja.text = "Lokasi tidak diketahui"
+            binding.wilayahkerja.text = "Indonesia"
         }
 
         binding.lanjut.setOnClickListener {

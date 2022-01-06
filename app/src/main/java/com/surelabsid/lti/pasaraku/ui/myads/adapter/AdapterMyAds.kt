@@ -1,17 +1,24 @@
 package com.surelabsid.lti.pasaraku.ui.myads.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ItemMyAdsBinding
 import com.surelabsid.lti.pasaraku.response.DataIklanItem
+import com.surelabsid.lti.pasaraku.ui.iklan.TambahIklanActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
+
 
 class AdapterMyAds(
     private val onRootClick: (DataIklanItem?) -> Unit,
-    private val onPremiumClick: (DataIklanItem?) -> Unit
+    private val onPremiumClick: (DataIklanItem?) -> Unit,
+    private val hapusIklan: (DataIklanItem?) -> Unit,
+    private val editIklan: (DataIklanItem?) -> Unit
 ) : RecyclerView.Adapter<AdapterMyAds.ViewHolder>() {
 
     private val listIklan = mutableListOf<DataIklanItem?>()
@@ -30,7 +37,7 @@ class AdapterMyAds(
                     .into(mItemMyAdsBinding.coverImage)
             }
 
-            if(dataIklanItem?.isPremium == "Y"){
+            if (dataIklanItem?.isPremium == "Y") {
                 mItemMyAdsBinding.premium.visibility = View.GONE
             }
 
@@ -41,6 +48,31 @@ class AdapterMyAds(
             mItemMyAdsBinding.root.setOnClickListener {
                 onRootClick(dataIklanItem)
             }
+
+            mItemMyAdsBinding.more.setOnClickListener {
+                initiatePopupMenu(dataIklanItem)
+            }
+        }
+
+
+        private fun initiatePopupMenu(dataIklanItem: DataIklanItem?) {
+            val popup = PopupMenu(itemView.context, mItemMyAdsBinding.more)
+            popup.inflate(R.menu.options_menu_my_ads)
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.hapusAds -> {
+                        hapusIklan(dataIklanItem)
+                        return@setOnMenuItemClickListener true
+                    }
+                    R.id.editAds -> {
+                        editIklan(dataIklanItem)
+                        return@setOnMenuItemClickListener true
+                    }
+
+                }
+                return@setOnMenuItemClickListener false
+            }
+            popup.show()
         }
 
     }

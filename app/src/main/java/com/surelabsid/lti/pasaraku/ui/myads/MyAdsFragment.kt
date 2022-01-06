@@ -1,23 +1,23 @@
 package com.surelabsid.lti.pasaraku.ui.myads
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.FragmentMyAdsBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
+import com.surelabsid.lti.pasaraku.response.DataIklanItem
 import com.surelabsid.lti.pasaraku.response.ResponseListIklan
-import com.surelabsid.lti.pasaraku.ui.explore.adapter.AdapterIklan
 import com.surelabsid.lti.pasaraku.ui.iklan.DetailIklanActivity
+import com.surelabsid.lti.pasaraku.ui.iklan.TambahIklanActivity
 import com.surelabsid.lti.pasaraku.ui.myads.adapter.AdapterMyAds
 import com.surelabsid.lti.pasaraku.utils.Constant
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
 
@@ -30,7 +30,7 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
 
         getMyADs(Prefs.getString(Constant.EMAIL))
 
-        adapterIklan = AdapterMyAds (onRootClick = {
+        adapterIklan = AdapterMyAds(onRootClick = {
             Intent(requireActivity(), DetailIklanActivity::class.java).apply {
                 putExtra(DetailIklanActivity.MY_ADS, true)
                 putExtra(DetailIklanActivity.DATA_IKLAN, it)
@@ -38,7 +38,25 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
             }
         }, onPremiumClick = {
             Intent(requireActivity(), PembayaranActivity::class.java).apply {
-            putExtra(DetailIklanActivity.DATA_IKLAN, it)
+                putExtra(DetailIklanActivity.DATA_IKLAN, it)
+                startActivity(this)
+            }
+        }, hapusIklan = {
+            AlertDialog.Builder(requireActivity())
+                .setMessage("Hapus iklan ini?")
+                .setTitle("Konfirmasi")
+                .setPositiveButton("Ya, Hapus") { d, _ ->
+                    d.dismiss()
+                    hapusIklan(it)
+                }
+                .setNegativeButton("Batal") { d, _ ->
+                    d.dismiss()
+                }
+                .create().show()
+
+        }, editIklan = { dataIklanItem ->
+            Intent(requireActivity(), TambahIklanActivity::class.java).apply {
+                putExtra(TambahIklanActivity.ADS_DATA, dataIklanItem)
                 startActivity(this)
             }
         })
@@ -55,6 +73,31 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
 
     }
 
+    private fun hapusIklan(dataIklanItem: DataIklanItem?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    val data = NetworkModule.getService().hapusIklan(dataIklanItem?.iklanId)
+                    if (data.code == 200) {
+                        MainScope().launch {
+                            getMyADs(Prefs.getString(Constant.EMAIL))
+                        }
+                    } else {
+                        MainScope().launch {
+                            Toast.makeText(requireActivity(), data.message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                    MainScope().launch {
+                        Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
     private fun getMyADs(userid: String?) {
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
@@ -64,6 +107,10 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
                         updateUI(myads)
                     }
                 } catch (e: Throwable) {
+                    MainScope().launch {
+                        binding.rvIklanSaya.adapter = null
+//                        Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
+                    }
                     e.printStackTrace()
                 }
             }
