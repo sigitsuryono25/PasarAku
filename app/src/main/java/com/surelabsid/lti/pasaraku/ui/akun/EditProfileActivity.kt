@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -56,10 +57,12 @@ class EditProfileActivity : AppCompatActivity(),
                 .show(supportFragmentManager)
         }
         binding.save.setOnClickListener {
+            Log.d("onCreate", "onCreate: $isPickingUpPict")
             val userRequest = UserRequest()
             userRequest.email = binding.email.text.toString()
             userRequest.nomor_telepon = binding.nomorTelepon.text.toString()
-            userRequest.password = Prefs.getString(Constant.PASSWORD)
+            if (binding.password.text.toString().isNotEmpty())
+                userRequest.password = binding.password.text.toString()
             if (isPickingUpPict)
                 userRequest.foto = Prefs.getString(Constant.PHOTO)
             userRequest.nama_lengkap = binding.namaLengkap.text.toString()
@@ -92,7 +95,7 @@ class EditProfileActivity : AppCompatActivity(),
                         if (binding.password.text.toString().isNotEmpty()) {
                             Prefs.putString(Constant.PASSWORD, binding.password.text.toString())
                         }
-
+                        finish()
                     }
                 } catch (t: Throwable) {
                     t.printStackTrace()
@@ -147,7 +150,7 @@ class EditProfileActivity : AppCompatActivity(),
                             .circleCrop()
                             .into(binding.imageUser)
                     }
-
+                    isPickingUpPict = true
                     pd.dismiss()
                 }
 

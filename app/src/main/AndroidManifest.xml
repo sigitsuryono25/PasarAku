@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.surelabsid.lti.pasaraku">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -16,8 +17,13 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        tools:replace="android:theme"
         android:theme="@style/Theme.PasarAku"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.WebBrowserActivity"
+            android:theme="@style/Theme.PasarAku.NoActionBar"
+            android:exported="false" />
         <activity
             android:name=".ui.akun.EditProfileActivity"
             android:exported="false" />
@@ -61,7 +67,7 @@
             android:theme="@style/Theme.PasarAku.NoActionBar" />
         <activity
             android:name=".ui.register.PasswordActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.PasarAku.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
@@ -88,16 +94,16 @@
         </activity>
         <activity
             android:name=".ui.iklan.IklanByCategoriActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.PasarAku.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".ui.iklan.TambahIklanActivity"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".ui.iklan.DetailIklanActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.PasarAku.NoActionBar" />
         <activity
             android:name=".ui.kategori.KategoriActivity"
@@ -110,12 +116,12 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.PasarAku.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".model.firebase.messaging.ChatActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.PasarAku.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 

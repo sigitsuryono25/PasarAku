@@ -17,6 +17,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.model.EmailRequest
 import com.surelabsid.lti.pasaraku.network.NetworkModule
+import com.surelabsid.lti.pasaraku.response.ResponseUser
 import com.surelabsid.lti.pasaraku.utils.HourToMillis
 import com.vanillaplacepicker.utils.ToastUtils
 import kotlinx.coroutines.*
@@ -24,9 +25,29 @@ import retrofit2.HttpException
 import java.util.*
 
 
+const val NOTEL = "notel"
 class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
     private var behavior: BottomSheetBehavior<View>? = null
     private var pd: ProgressDialog? = null
+
+    private var notel: String? = null
+    companion object {
+        fun newInstance(
+            notel : String?
+        ) =
+            ForgotPasswordBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putString(NOTEL, notel)
+                }
+            }
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            notel = it.getString(NOTEL)
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val bottomSheets = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
@@ -60,8 +81,30 @@ class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
         }
 
         initViews(view)
+        getMail(notel, view)
 
         return bottomSheets
+    }
+
+    private fun getMail(notel: String?, view: View) {
+        pd = ProgressDialog.show(requireActivity(), "", "Mendapatkan email...", true, false)
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.IO){
+                try {
+                    var response = NetworkModule.getService().getEmail(notel)
+                    if(response.code == 200){
+                        updateUI(response, view)
+                    }
+                }catch (t: Throwable){
+                    t.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private fun updateUI(response: ResponseUser, view: View) {
+        pd?.dismiss()
+        view.findViewById<TextInputEditText>(R.id.email).setText(response.dataUser?.email)
     }
 
     private fun initViews(view: View) {
@@ -83,7 +126,7 @@ class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun checkedEmail(email: String) {
-        pd = ProgressDialog.show(requireActivity(), "", "Mengecek data....", true, false)
+        pd = ProgressDialog.show(requireActivity(), "", "Mengecek data....", true, true)
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {

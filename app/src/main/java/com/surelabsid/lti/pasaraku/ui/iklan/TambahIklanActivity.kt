@@ -177,15 +177,18 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
                 img.setOnClickListener {
                     if (!toDelete) {
                         val photo = file!!.toRequestBody("text/plain".toMediaTypeOrNull())
-
+                        img.alpha = 0.4F
                         previousFotoDelete.add(index, photo)
                         toDelete = true
                         index++
+                        Toast.makeText(this@TambahIklanActivity, "Selected", Toast.LENGTH_SHORT).show()
                     } else if (toDelete) {
                         val fotoIklan = FotoIklan()
                         fotoIklan.file = file
+                        img.alpha = 1F
                         previousFotoDelete.removeAt(--index)
                         toDelete = false
+                        Toast.makeText(this@TambahIklanActivity, "Unselected", Toast.LENGTH_SHORT).show()
                     }
                 }
 

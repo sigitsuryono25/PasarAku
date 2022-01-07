@@ -117,7 +117,7 @@ class DetailIklanActivity : AppCompatActivity() {
         location.latitude = dataIklanItem?.lat.toString().toDouble()
         location.longitude = dataIklanItem?.lon.toString().toDouble()
         if (dataIklanItem?.prov?.isEmpty() == true && dataIklanItem?.kab?.isEmpty() == true && dataIklanItem?.kec?.isEmpty() == true) {
-            binding.lokasi.text = "Lokasi tidak diketahui"
+            binding.lokasi.text = "Indonesia"
         } else {
             var lokasi = ""
             if (dataIklanItem?.kec?.isNotEmpty() == true) {

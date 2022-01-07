@@ -63,7 +63,7 @@ class PasswordActivity : AppCompatActivity() {
         }
 
         binding.forgotPassword.setOnClickListener {
-            val forgot = ForgotPasswordBottomSheet()
+            val forgot = ForgotPasswordBottomSheet.newInstance(dataUser?.nomorTelepon)
             forgot.show(supportFragmentManager, "forgot")
         }
     }

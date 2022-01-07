@@ -159,4 +159,6 @@ interface ApiService {
     @GET("ApiIklan/deleteIklan")
     suspend fun hapusIklan(@Query("id-iklan") idIklan: String?) : GeneralResponse
 
+    @GET("ApiUser/getmailwithphone")
+    suspend fun getEmail(@Query("phone") phone: String?): ResponseUser
 }

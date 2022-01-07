@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.MainActivity
 import com.surelabsid.lti.pasaraku.databinding.ActivitySettingsBinding
+import com.surelabsid.lti.pasaraku.network.NetworkModule
+import com.surelabsid.lti.pasaraku.ui.WebBrowserActivity
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
@@ -20,6 +22,14 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.apply {
             title = "Settings"
             setDisplayHomeAsUpEnabled(true)
+        }
+
+        binding.privacy.setOnClickListener {
+            val url = NetworkModule.BASE_URL + "index.php/welcome/privacy"
+            Intent(this@SettingsActivity, WebBrowserActivity::class.java).apply {
+                putExtra(WebBrowserActivity.URL, url)
+                startActivity(this)
+            }
         }
 
         binding.logout.setOnClickListener {
