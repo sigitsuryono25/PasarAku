@@ -21,12 +21,31 @@ import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.GPSTracker
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
-
+private var ISEDIT = "isEdit"
 class ProvinsiFragment : Fragment(R.layout.fragment_provinsi) {
 
     private lateinit var binding: FragmentProvinsiBinding
     private lateinit var vm: WilayahViewModel
     private lateinit var adapterWilayah: AdapterWilayah
+    private var isEdit: Boolean = false
+
+    companion object {
+        fun newInstance(
+            isEdit : Boolean
+        ) =
+            WilayahFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(ISEDIT, isEdit)
+                }
+            }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            isEdit = it.getBoolean(ISEDIT)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

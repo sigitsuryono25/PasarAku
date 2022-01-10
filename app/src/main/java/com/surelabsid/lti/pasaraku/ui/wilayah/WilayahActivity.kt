@@ -54,5 +54,7 @@ class WilayahActivity : AppCompatActivity() {
         const val KAB_ITEM = "kabupatenItem"
         const val PROVINSI_REQ = "reqProv"
         const val FROM_SEARCH= "fromSearch"
+
+        const val ISEDIT =  "isedit"
     }
 }

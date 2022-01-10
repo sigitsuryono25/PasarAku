@@ -12,6 +12,7 @@ import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.FragmentLandingAkunBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.ui.akun.settings.SettingsActivity
+import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransaksiActivity
 import com.surelabsid.lti.pasaraku.ui.favorite.FavoriteActivity
 import com.surelabsid.lti.pasaraku.ui.help.HelpActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
@@ -51,6 +52,12 @@ class LandingAkunFragment : Fragment(R.layout.fragment_landing_akun) {
         }
         binding.settings.setOnClickListener {
             Intent(requireActivity(), SettingsActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
+
+        binding.transaksi.setOnClickListener {
+            Intent(requireActivity(), TransaksiActivity::class.java).apply {
                 startActivity(this)
             }
         }

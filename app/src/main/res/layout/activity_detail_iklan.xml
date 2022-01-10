@@ -214,6 +214,7 @@
                         android:id="@+id/profilePic"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
+                        android:scaleType="centerCrop"
                         android:contentDescription="@string/app_name"
                         android:src="@mipmap/ic_launcher"
                         app:cornerRadius="64dp" />

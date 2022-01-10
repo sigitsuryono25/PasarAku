@@ -161,4 +161,7 @@ interface ApiService {
 
     @GET("ApiUser/getmailwithphone")
     suspend fun getEmail(@Query("phone") phone: String?): ResponseUser
+
+    @GET("Apimyads/get_trans")
+    suspend fun getTransaksi(@Query("userid") userid: String?) : ResponseTransaksi
 }

@@ -46,14 +46,12 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     private lateinit var vm: ExploreViewModel
     private lateinit var adapterIklan: AdapterIklan
     private var clearAll = true
-    var pastVisiblesItems: Int = 0
     private var position = 0
-    var visibleItemCount: Int = 0
-    var totalItemCount: Int = 0
     private lateinit var adapterKategori: AdapterKategori
     private lateinit var gridLayoutManager: GridLayoutManager
     var countLoadMore by Delegates.notNull<Int>()
     var isLoading by Delegates.notNull<Boolean>()
+    private var isNotFromScroll = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -163,20 +161,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
         binding.recommendationAds.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                if (dy > 0) { //check for scroll down
-//                    visibleItemCount = gridLayoutManager.childCount
-//                    totalItemCount = gridLayoutManager.itemCount
-//                    pastVisiblesItems = gridLayoutManager.findFirstVisibleItemPosition()
-//                    if (isLoading) {
-//                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-//                            isLoading = false
-//                            ++countLoadMore
-//                            clearAll = false
-//                            getData()
-//                            isLoading = true
-//                        }
-//                    }
-//                }
+                isNotFromScroll = false
                 val lms = recyclerView.layoutManager
                 var lastVisiblePosition = 0
                 when (lms) {
@@ -237,6 +222,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     override fun onResume() {
         super.onResume()
         countLoadMore = 0
+        clearAll = true
         getData()
     }
 

@@ -29,8 +29,6 @@ object Constant {
 
     const val PROV_ID = "provid"
     const val KAB_ID = "kabid"
-    const val KEC_ID = "kecid"
-    const val FROM_SEARCH = "fromSearch"
 
     const val ADS_PIC_URL = NetworkModule.BASE_URL + "assets/iklan/"
 }

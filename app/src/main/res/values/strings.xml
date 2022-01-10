@@ -127,6 +127,8 @@
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="tidak_akses_ke_email_hubungi_admin_klik_disini">Tidak akses ke email? hubungi admin. <b>Klik Disini</b></string>
     <string name="kirim_email">Kirim Email</string>
+    <string name="transaction">Transaction</string>
+    <string name="your_transaction_in_here">Your transaction in here</string>
 
     <string-array name="kind">
         <item>Diterima</item>

@@ -48,6 +48,7 @@ class DetailIklanActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         dataIklanItem = intent.getParcelableExtra(DATA_IKLAN)
+        Log.d("onCreate", "onCreate: $dataIklanItem")
         val isMyAds = intent.getBooleanExtra(MY_ADS, false)
         if (isMyAds) {
             binding.bottomBar.visibility = View.GONE
@@ -116,7 +117,7 @@ class DetailIklanActivity : AppCompatActivity() {
         val location = Location(getString(R.string.app_name))
         location.latitude = dataIklanItem?.lat.toString().toDouble()
         location.longitude = dataIklanItem?.lon.toString().toDouble()
-        if (dataIklanItem?.prov?.isEmpty() == true && dataIklanItem?.kab?.isEmpty() == true && dataIklanItem?.kec?.isEmpty() == true) {
+        if (dataIklanItem?.idProv?.isEmpty() == true && dataIklanItem?.idKab?.isEmpty() == true && dataIklanItem?.idKec?.isEmpty() == true) {
             binding.lokasi.text = "Indonesia"
         } else {
             var lokasi = ""

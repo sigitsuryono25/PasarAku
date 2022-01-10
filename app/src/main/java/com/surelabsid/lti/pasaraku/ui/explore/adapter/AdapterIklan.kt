@@ -66,7 +66,7 @@ class AdapterIklan(
 //                mItemAdapterIklanBinding.lokasi.text = "$kec, $kab, $prov"
 //            } else {
 //                mItemAdapterIklanBinding.lokasi.text = "Lokasi tidak diketahui"
-            if (dataIklanItem?.prov?.isEmpty() == true && dataIklanItem.kab?.isEmpty() == true && dataIklanItem.kec?.isEmpty() == true) {
+            if (dataIklanItem?.idProv?.isEmpty() == true && dataIklanItem.idKab?.isEmpty() == true && dataIklanItem.idKec?.isEmpty() == true) {
                 mItemAdapterIklanBinding.lokasi.text = "Indonesia"
             } else {
                 var lokasi = ""
