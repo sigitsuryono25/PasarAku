@@ -1,5 +1,6 @@
 package com.surelabsid.lti.pasaraku.ui.iklan
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.location.Location
@@ -35,6 +36,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+import com.google.android.gms.maps.model.CircleOptions
+
+import com.google.android.gms.maps.model.Circle
+
+
+
 
 
 class DetailIklanActivity : AppCompatActivity() {
@@ -42,6 +49,7 @@ class DetailIklanActivity : AppCompatActivity() {
     private var dataIklanItem: DataIklanItem? = null
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailIklanBinding.inflate(layoutInflater)
@@ -65,10 +73,18 @@ class DetailIklanActivity : AppCompatActivity() {
                         dataIklanItem?.lat.toString().toDouble(),
                         dataIklanItem?.lon.toString().toDouble()
                     )
-                    p0.addMarker(
-                        MarkerOptions().position(
-                            latLng
-                        )
+//                    p0.addMarker(
+//                        MarkerOptions().position(
+//                            latLng
+//                        )
+//                    )
+                    p0.uiSettings.isScrollGesturesEnabled = false
+                    p0.addCircle(
+                        CircleOptions()
+                            .center(latLng)
+                            .radius(1000.0)
+                            .strokeColor(Color.parseColor("#8100B0FF"))
+                            .fillColor(Color.parseColor("#8100B0FF"))
                     )
                     p0.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
                 }
