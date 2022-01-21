@@ -5,6 +5,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.databinding.ActivityProfileViewBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.response.ResponseProfileView
@@ -12,7 +13,7 @@ import com.surelabsid.lti.pasaraku.ui.explore.adapter.AdapterIklan
 import com.surelabsid.lti.pasaraku.utils.Constant
 import kotlinx.coroutines.*
 
-class ProfileViewActivity : AppCompatActivity() {
+class ProfileViewActivity : Baseapp() {
     private lateinit var binding: ActivityProfileViewBinding
     private lateinit var adapterIklan: AdapterIklan
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,15 +50,20 @@ class ProfileViewActivity : AppCompatActivity() {
     }
 
     private fun getDetailProfile(userid: String?) {
+        showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
                     val res = NetworkModule.getService().getProfile(userid)
                     MainScope().launch {
+                        dismissLoading()
                         updateUI(res)
                     }
                 } catch (e: Throwable) {
                     e.printStackTrace()
+                    MainScope().launch {
+                        dismissLoading()
+                    }
                 }
             }
         }

@@ -82,9 +82,11 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
             Prefs.putString(Constant.PROV_ID, id)
             Prefs.remove(Constant.KAB)
             Prefs.remove(Constant.KAB_ID)
+//
+//            requireActivity().finishAffinity()
+//            startActivity(Intent(requireActivity(), MainActivity::class.java))
 
-            requireActivity().finishAffinity()
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
+            requireActivity().finish()
         }
         val adapterKabupaten =
             AdapterWilayah(AdapterWilayah.KABUPATEN_REQ, object : AdapterWilayah.OnItemClick {
@@ -93,11 +95,13 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
                     Prefs.putString(Constant.KAB, dataItemKabupatenItem?.nama)
                     Prefs.putString(Constant.KAB_ID, dataItemKabupatenItem?.id)
                     Intent(requireActivity(), WilayahActivity::class.java).apply {
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         putExtra(WilayahActivity.KEC_REQ, true)
                         putExtra(WilayahActivity.KAB_ITEM, dataItemKabupatenItem)
                         startActivity(this)
                     }
+                    requireActivity().finish()
                 }
             })
 
@@ -120,8 +124,10 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
 
             Prefs.remove(Constant.KEC)
             Prefs.remove(Constant.LOKASI_ID)
-            requireActivity().finishAffinity()
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
+//            requireActivity().finishAffinity()
+//            startActivity(Intent(requireActivity(), MainActivity::class.java))
+
+            requireActivity().finish()
         }
         val adapterKecamatan =
             AdapterWilayah(AdapterWilayah.KECAMATAN_REQ, object : AdapterWilayah.OnItemClick {

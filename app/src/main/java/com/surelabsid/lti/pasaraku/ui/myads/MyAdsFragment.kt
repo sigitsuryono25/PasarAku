@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.FragmentMyAdsBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
@@ -56,6 +57,7 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
 
         }, editIklan = { dataIklanItem ->
             Intent(requireActivity(), TambahIklanActivity::class.java).apply {
+                putExtra("title", "Edit Iklan")
                 putExtra(TambahIklanActivity.ADS_DATA, dataIklanItem)
                 startActivity(this)
             }
@@ -64,6 +66,7 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
 
         binding.refreshLayout.setOnRefreshListener {
             getMyADs(Prefs.getString(Constant.EMAIL))
+            binding.refreshLayout.isRefreshing = false
         }
 
         binding.rvIklanSaya.apply {
@@ -74,16 +77,19 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
     }
 
     private fun hapusIklan(dataIklanItem: DataIklanItem?) {
+        (requireActivity() as Baseapp).showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
                     val data = NetworkModule.getService().hapusIklan(dataIklanItem?.iklanId)
                     if (data.code == 200) {
                         MainScope().launch {
+                            (requireActivity() as Baseapp).dismissLoading()
                             getMyADs(Prefs.getString(Constant.EMAIL))
                         }
                     } else {
                         MainScope().launch {
+                            (requireActivity() as Baseapp).dismissLoading()
                             Toast.makeText(requireActivity(), data.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -91,6 +97,7 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
                 } catch (e: Throwable) {
                     e.printStackTrace()
                     MainScope().launch {
+                        (requireActivity() as Baseapp).dismissLoading()
                         Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -99,6 +106,7 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
     }
 
     private fun getMyADs(userid: String?) {
+        (requireActivity() as Baseapp).showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -109,6 +117,7 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
                 } catch (e: Throwable) {
                     MainScope().launch {
                         binding.rvIklanSaya.adapter = null
+                        (requireActivity() as Baseapp).dismissLoading()
 //                        Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
                     }
                     e.printStackTrace()
@@ -118,7 +127,7 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
     }
 
     private fun updateUI(responseListIklan: ResponseListIklan) {
-        binding.refreshLayout.isRefreshing = false
+        (requireActivity() as Baseapp).dismissLoading()
         responseListIklan.dataIklan?.let { adapterIklan.addItem(it, true) }
     }
 

@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.MainActivity
 import com.surelabsid.lti.pasaraku.databinding.ActivityPasswordBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
@@ -18,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PasswordActivity : AppCompatActivity() {
+class PasswordActivity : Baseapp() {
 
     private lateinit var binding: ActivityPasswordBinding
     private lateinit var pd: ProgressDialog
@@ -40,13 +41,7 @@ class PasswordActivity : AppCompatActivity() {
 
         binding.login.setOnClickListener {
             if (binding.password.text.toString().isNotEmpty()) {
-                pd = ProgressDialog.show(
-                    this@PasswordActivity,
-                    "silahkan tunggu",
-                    "memverifikasi data...",
-                    true,
-                    false
-                )
+                showLoading()
                 doLogin(dataUser)
             } else {
                 Toast.makeText(
@@ -83,7 +78,7 @@ class PasswordActivity : AppCompatActivity() {
                     Prefs.putString(Constant.GOOGLE_TOKEN, login.dataUser?.googleToken)
                     Prefs.putBoolean(Constant.FROM_REGISTER, false)
                     withContext(Dispatchers.Main) {
-                        pd.dismiss()
+                        dismissLoading()
                         Intent(this@PasswordActivity, MainActivity::class.java).apply {
                             startActivity(this)
                         }
@@ -92,7 +87,7 @@ class PasswordActivity : AppCompatActivity() {
 
                 } catch (e: Throwable) {
                     e.printStackTrace()
-                    pd.dismiss()
+                    dismissLoading()
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             this@PasswordActivity,

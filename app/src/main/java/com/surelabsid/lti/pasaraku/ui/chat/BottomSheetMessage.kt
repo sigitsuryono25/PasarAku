@@ -10,9 +10,12 @@ import android.widget.RelativeLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.model.firebase.messaging.ChatActivity
 import com.surelabsid.lti.pasaraku.model.firebase.model.ChatHeader
+import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
+import com.surelabsid.lti.pasaraku.ui.messages.MessageActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
 
 private const val chatHeader = "chatHeader"
@@ -43,10 +46,17 @@ class BottomSheetMessage : BottomSheetDialogFragment() {
 
         val startChat = view.findViewById<Button>(R.id.startChat)
 
+
         Log.d("CHATHEADER", param1.toString())
         startChat.setOnClickListener {
-            Intent(activity, ChatActivity::class.java).apply {
-                putExtra(Constant.CHAT_HEADER, param1)
+            if(!Prefs.contains(Constant.EMAIL)){
+                val loginSheets = LoginBottomSheet()
+                loginSheets.show(requireActivity().supportFragmentManager, "loginSheets")
+                return@setOnClickListener
+            }
+            Intent(activity, MessageActivity::class.java).apply {
+                putExtra("email", param1?.user_id)
+                putExtra("nama", param1?.nama)
                 startActivity(this)
             }
             bottomSheets.dismiss()

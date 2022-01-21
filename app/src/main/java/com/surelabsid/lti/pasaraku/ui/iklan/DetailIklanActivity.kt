@@ -1,6 +1,7 @@
 package com.surelabsid.lti.pasaraku.ui.iklan
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
 import android.location.Location
@@ -39,9 +40,7 @@ import java.util.*
 import com.google.android.gms.maps.model.CircleOptions
 
 import com.google.android.gms.maps.model.Circle
-
-
-
+import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
 
 
 class DetailIklanActivity : AppCompatActivity() {
@@ -85,8 +84,24 @@ class DetailIklanActivity : AppCompatActivity() {
                             .radius(1000.0)
                             .strokeColor(Color.parseColor("#8100B0FF"))
                             .fillColor(Color.parseColor("#8100B0FF"))
+                            .clickable(true)
                     )
                     p0.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
+                    p0.setOnCircleClickListener {
+                        val uri = java.lang.String.format(
+                            Locale.ENGLISH,
+                            "geo:%f,%f",
+                            latLng.latitude,
+                            latLng.longitude
+                        )
+                        try {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                            context.startActivity(intent)
+                        }catch (e: ActivityNotFoundException){
+                            Toast.makeText(this@DetailIklanActivity, "No activity can handle this", Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
                 }
             }
         }
@@ -170,6 +185,7 @@ class DetailIklanActivity : AppCompatActivity() {
         }
 
         binding.chat.setOnClickListener {
+
             val chatHeader = ChatHeader()
             chatHeader._id = System.currentTimeMillis()
             chatHeader.added_by = Prefs.getString(Constant.EMAIL)

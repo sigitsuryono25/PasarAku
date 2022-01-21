@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityKategoriBinding
 import com.surelabsid.lti.pasaraku.response.ResponseKategori
@@ -15,7 +16,7 @@ import com.surelabsid.lti.pasaraku.ui.iklan.IklanByCategoriActivity
 import com.surelabsid.lti.pasaraku.ui.iklan.TambahIklanActivity
 import com.surelabsid.lti.pasaraku.ui.kategori.adapter.AdapterKategoriVertical
 
-class KategoriActivity : AppCompatActivity() {
+class KategoriActivity : Baseapp() {
     private lateinit var binding: ActivityKategoriBinding
     private lateinit var vm: ExploreViewModel
     private lateinit var adapterKategori: AdapterKategoriVertical
@@ -39,6 +40,7 @@ class KategoriActivity : AppCompatActivity() {
             if (makeAds) {
                 Intent(this@KategoriActivity, TambahIklanActivity::class.java).apply {
                     putExtra(TambahIklanActivity.KATEGORI_DATA, it)
+                    putExtra("title", "Buat Iklan")
                     startActivity(this)
                     finish()
                 }
@@ -54,11 +56,14 @@ class KategoriActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@KategoriActivity)
         }
 
+        showLoading()
+
         vm.getKategori()
         vm.kategoriList.observe(this) {
             setToView(it)
         }
         vm.error.observe(this) {
+            dismissLoading()
             Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT).show()
         }
 
@@ -72,6 +77,7 @@ class KategoriActivity : AppCompatActivity() {
     }
 
     private fun setToView(responseKategori: ResponseKategori) {
+        dismissLoading()
         val data = responseKategori.dataKategori
         data.let {
             if (it != null) {

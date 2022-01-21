@@ -6,15 +6,17 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.databinding.ActivityFavoriteBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.response.ResponseListIklan
 import com.surelabsid.lti.pasaraku.ui.explore.adapter.AdapterIklan
 import com.surelabsid.lti.pasaraku.ui.iklan.DetailIklanActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
+import com.vanillaplacepicker.utils.ToastUtils
 import kotlinx.coroutines.*
 
-class FavoriteActivity : AppCompatActivity() {
+class FavoriteActivity : Baseapp() {
 
     private lateinit var binding: ActivityFavoriteBinding
     private lateinit var adapterIklan: AdapterIklan
@@ -49,15 +51,21 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     private fun getFavList(userid: String?) {
+        showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
                     val data = NetworkModule.getService().getFavIklan(userid)
                     MainScope().launch {
+                        dismissLoading()
                         updateUI(data)
                     }
                 } catch (e: Throwable) {
                     e.printStackTrace()
+                    MainScope().launch {
+                        dismissLoading()
+                        ToastUtils.showToast(this@FavoriteActivity, e.message)
+                    }
                 }
             }
         }

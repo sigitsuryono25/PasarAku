@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.databinding.ActivityTransaksiBinding
 import com.surelabsid.lti.pasaraku.model.PremiumModel
 import com.surelabsid.lti.pasaraku.network.NetworkModule
@@ -19,10 +20,9 @@ import com.surelabsid.lti.pasaraku.utils.Constant
 import com.vanillaplacepicker.utils.ToastUtils
 import kotlinx.coroutines.*
 
-class TransaksiActivity : AppCompatActivity() {
+class TransaksiActivity : Baseapp() {
     private lateinit var binding: ActivityTransaksiBinding
     private lateinit var mAdapterTransaksi: AdapterTransaksi
-    private lateinit var pd: ProgressDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTransaksiBinding.inflate(layoutInflater)
@@ -65,18 +65,18 @@ class TransaksiActivity : AppCompatActivity() {
     }
 
     private fun getTrans(userid: String?) {
-        pd = ProgressDialog.show(this, "", "Downloading data...", true, false)
+        showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
                     val resp = NetworkModule.getService().getTransaksi(userid)
                     MainScope().launch {
-                        pd.dismiss()
+                        dismissLoading()
                         updateUI(resp)
                     }
                 } catch (e: Throwable) {
                     MainScope().launch {
-                        pd.dismiss()
+                        dismissLoading()
                         ToastUtils.showToast(this@TransaksiActivity, e.message)
                     }
                     e.printStackTrace()

@@ -34,7 +34,7 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
-
+        Log.d("onNewToken", "onNewToken: $p0")
         try {
             job.launch(Dispatchers.IO) {
                 mRoutes.updateToken(p0, Prefs.getString(Constant.EMAIL, null))
@@ -57,8 +57,8 @@ class FCMService : FirebaseMessagingService() {
                 val pengirim = data["nama"]
                 val chatHeader = ChatHeader()
                 chatHeader.nama = pengirim
-                chatHeader._id = data["_id_chat"]?.toLong()
-                chatHeader.token = data["token_pengirim"]
+                chatHeader._id = HourToMillis.millis()
+                chatHeader.token = ""
                 chatHeader.user_id = data["user_id"]
                 NotificationHandle(this).makeNotificationStart(pengirim, chatHeader, db)
             }

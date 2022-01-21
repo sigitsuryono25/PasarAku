@@ -14,6 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.model.EmailRequest
 import com.surelabsid.lti.pasaraku.network.NetworkModule
@@ -87,23 +88,27 @@ class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun getMail(notel: String?, view: View) {
-        pd = ProgressDialog.show(requireActivity(), "", "Mendapatkan email...", true, false)
+        (requireActivity() as Baseapp).showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO){
                 try {
-                    var response = NetworkModule.getService().getEmail(notel)
+                    val response = NetworkModule.getService().getEmail(notel)
                     if(response.code == 200){
                         updateUI(response, view)
                     }
                 }catch (t: Throwable){
                     t.printStackTrace()
+                    MainScope().launch {
+                        (requireActivity() as Baseapp).dismissLoading()
+                        ToastUtils.showToast(requireActivity(), t.message)
+                    }
                 }
             }
         }
     }
 
     private fun updateUI(response: ResponseUser, view: View) {
-        pd?.dismiss()
+        (requireActivity() as Baseapp).dismissLoading()
         view.findViewById<TextInputEditText>(R.id.email).setText(response.dataUser?.email)
     }
 
@@ -126,14 +131,14 @@ class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun checkedEmail(email: String) {
-        pd = ProgressDialog.show(requireActivity(), "", "Mengecek data....", true, true)
+        (requireActivity() as Baseapp).showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
                     val res = NetworkModule.getService().checkedEmail(email)
                     if (res.code == 200) {
                         MainScope().launch {
-                            pd?.dismiss()
+                            (requireActivity() as Baseapp).dismissLoading()
                             sendEmailForgotPass(email)
                         }
                     }
@@ -142,16 +147,19 @@ class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
                         is HttpException -> {
                             if (e.code() == 404) {
                                 MainScope().launch {
+                                    (requireActivity() as Baseapp).dismissLoading()
                                     ToastUtils.showToast(requireActivity(), e.message())
                                 }
                             } else if (e.code() == 500) {
                                 MainScope().launch {
+                                    (requireActivity() as Baseapp).dismissLoading()
                                     ToastUtils.showToast(requireActivity(), e.message())
                                 }
                             }
                         }
                         else -> {
                             MainScope().launch {
+                                (requireActivity() as Baseapp).dismissLoading()
                                 ToastUtils.showToast(requireActivity(), e.message)
                             }
                         }
@@ -162,14 +170,7 @@ class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun sendEmailForgotPass(email: String) {
-        pd?.dismiss()
-        pd = ProgressDialog.show(
-            requireActivity(),
-            "",
-            "Mengirimkan permintaan anda...",
-            true,
-            false
-        )
+        (requireActivity() as Baseapp).showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -187,7 +188,7 @@ class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
                     val res = NetworkModule.getService().sendEmail(emailRequest)
                     if (res.code == 200) {
                         MainScope().launch {
-                            pd?.dismiss()
+                            (requireActivity() as Baseapp).dismissLoading()
                             AlertDialog.Builder(requireActivity())
                                 .setMessage(res.message.toString())
                                 .setTitle("Konfirmasi")
@@ -212,7 +213,7 @@ class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
                     }
 
                     MainScope().launch {
-                        pd?.dismiss()
+                        (requireActivity() as Baseapp).dismissLoading()
                         ToastUtils.showToast(requireActivity(), mesg)
                     }
                 }

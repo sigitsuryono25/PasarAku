@@ -2,14 +2,17 @@ package com.surelabsid.lti.pasaraku.ui.help
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.databinding.ActivityHelpBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.response.ResponseAppSettings
 import com.surelabsid.lti.pasaraku.utils.Utils
+import com.vanillaplacepicker.utils.ToastUtils
 import kotlinx.coroutines.*
 
-class HelpActivity : AppCompatActivity() {
+class HelpActivity : Baseapp() {
 
     private lateinit var binding: ActivityHelpBinding
 
@@ -35,15 +38,21 @@ class HelpActivity : AppCompatActivity() {
     }
 
     private fun getAppSettings() {
+        showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
                     val data = NetworkModule.getService().appSettings()
                     MainScope().launch {
+                        dismissLoading()
                         updateUI(data)
                     }
                 } catch (t: Throwable) {
                     t.printStackTrace()
+                    MainScope().launch {
+                        dismissLoading()
+                        ToastUtils.showToast(this@HelpActivity, t.message)
+                    }
                 }
             }
         }

@@ -16,6 +16,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.mukesh.countrypicker.CountryPicker
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.databinding.ActivityRegisterPhoneBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.utils.Constant
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
-class RegisterPhoneActivity : AppCompatActivity() {
+class RegisterPhoneActivity : Baseapp() {
 
     private lateinit var binding: ActivityRegisterPhoneBinding
     private lateinit var countryPicker: CountryPicker
@@ -127,12 +128,14 @@ class RegisterPhoneActivity : AppCompatActivity() {
     }
 
     private fun checkNumber(cleanNumber: String) {
+        showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
                     val checkPhoneNumber = NetworkModule.getService().checkPhone("$cleanNumber")
                     if (checkPhoneNumber.code == 200) {
                         withContext(Dispatchers.Main) {
+                            dismissLoading()
                             Intent(this@RegisterPhoneActivity, PasswordActivity::class.java).apply {
                                 putExtra(PasswordActivity.DATAUSER, checkPhoneNumber.dataUser)
                                 startActivity(this)
@@ -143,6 +146,7 @@ class RegisterPhoneActivity : AppCompatActivity() {
 //                            initializePhoneAuth(cleanNumber)
 //                        }
                         withContext(Dispatchers.Main) {
+                            dismissLoading()
                             Prefs.putString(Constant.PHONE, cleanNumber)
                             Intent(
                                 this@RegisterPhoneActivity,
@@ -159,6 +163,7 @@ class RegisterPhoneActivity : AppCompatActivity() {
 //                    }
 
                     withContext(Dispatchers.Main) {
+                        dismissLoading()
                         Prefs.putString(Constant.PHONE, cleanNumber)
                         Intent(
                             this@RegisterPhoneActivity,

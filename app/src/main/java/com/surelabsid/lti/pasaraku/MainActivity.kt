@@ -7,17 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.databinding.ActivityMainBinding
 import com.surelabsid.lti.pasaraku.ui.akun.LandingAkunFragment
 import com.surelabsid.lti.pasaraku.ui.chat.ChatFragment
 import com.surelabsid.lti.pasaraku.ui.explore.ExploreFragment
 import com.surelabsid.lti.pasaraku.ui.kategori.KategoriActivity
 import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
+import com.surelabsid.lti.pasaraku.ui.messages.MessageFragment
 import com.surelabsid.lti.pasaraku.ui.myads.MyAdsFragment
 import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.Utils
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Baseapp() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                         Utils.showDialogLogin(supportFragmentManager)
                         return@setOnItemSelectedListener false
                     }
-                    changeFragment(ChatFragment())
+                    changeFragment(MessageFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.ads -> {
@@ -74,7 +76,6 @@ class MainActivity : AppCompatActivity() {
             return@setOnItemSelectedListener false
         }
 
-        checkPermission()
     }
 
     private fun changeFragment(fragment: Fragment) {
@@ -82,20 +83,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun checkPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_DENIED
-        ) {
-            requestPermissions(
-                arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-                ), 200
-            )
-        }
-    }
+
 
 
 

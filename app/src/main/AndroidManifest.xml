@@ -21,6 +21,12 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
         <activity
+            android:name=".ui.messages.MessageActivity"
+            android:theme="@style/Theme.PasarAku.NoActionBar"
+            android:exported="true" >
+
+        </activity>
+        <activity
             android:name=".ui.akun.transaksi.TransaksiActivity"
             android:exported="false" />
         <activity

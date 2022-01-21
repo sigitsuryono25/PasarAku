@@ -5,12 +5,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.response.DataKabupatenItem
 import com.surelabsid.lti.pasaraku.response.DataProvinsiItem
 import com.surelabsid.lti.pasaraku.utils.Constant
 
-class WilayahActivity : AppCompatActivity() {
+class WilayahActivity : Baseapp() {
 
     private lateinit var wilayahViewModel: WilayahViewModel
 

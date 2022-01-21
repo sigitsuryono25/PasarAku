@@ -1,12 +1,14 @@
 package com.surelabsid.lti.pasaraku.ui.explore
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -30,14 +32,18 @@ import com.surelabsid.lti.pasaraku.ui.iklan.DetailIklanActivity
 import com.surelabsid.lti.pasaraku.ui.iklan.IklanByCategoriActivity
 import com.surelabsid.lti.pasaraku.ui.iklan.PencarianActivity
 import com.surelabsid.lti.pasaraku.ui.kategori.KategoriActivity
+import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
 import com.surelabsid.lti.pasaraku.ui.notification.NotificationActivity
 import com.surelabsid.lti.pasaraku.ui.wilayah.WilayahActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.Utils
+import com.vanillaplacepicker.utils.ToastUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 import kotlin.properties.Delegates
 
 class ExploreFragment : Fragment(R.layout.fragment_explore) {
@@ -47,11 +53,13 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     private lateinit var adapterIklan: AdapterIklan
     private var clearAll = true
     private var position = 0
+    private var isHasData = false
     private lateinit var adapterKategori: AdapterKategori
     private lateinit var gridLayoutManager: GridLayoutManager
     var countLoadMore by Delegates.notNull<Int>()
     var isLoading by Delegates.notNull<Boolean>()
     private var isNotFromScroll = true
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,7 +79,21 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         }
 
         vm.error.observe(viewLifecycleOwner) {
-
+            when (it) {
+                is HttpException -> {
+                    if (it.code() == 404 && !isHasData) {
+//                        binding.recommendationAds.adapter = null
+                    } else if (it.code() == 500) {
+                        ToastUtils.showToast(requireActivity(), "Internal Server Error")
+                    }
+                }
+                is IOException -> {
+                    ToastUtils.showToast(requireActivity(), "I/O Error")
+                }
+                else -> {
+                    ToastUtils.showToast(requireActivity(), "Unknown Error Occurred")
+                }
+            }
         }
 
         vm.dataIklan.observe(viewLifecycleOwner) {
@@ -130,6 +152,11 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         }
 
         binding.notif.setOnClickListener {
+            if (!Prefs.contains(Constant.EMAIL)) {
+                val loginSheets = LoginBottomSheet()
+                loginSheets.show(requireActivity().supportFragmentManager, "loginSheets")
+                return@setOnClickListener
+            }
             Intent(requireActivity(), NotificationActivity::class.java).apply {
                 startActivity(this)
             }
@@ -187,6 +214,22 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             }
         })
 
+        checkPermission()
+    }
+
+    private fun checkPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            requestPermissions(
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ), 200
+            )
+        }
     }
 
     private fun updateUi(res: GeneralResponse, img: ImageView, favoriteRequest: FavoriteRequest) {
@@ -194,6 +237,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         Log.d("updateUi", "updateUi: " + gson.toJson(favoriteRequest))
         when (res.code) {
             200 -> {
+                isHasData = true
                 if (favoriteRequest.is_add) {
                     Glide.with(this)
                         .load(R.drawable.ic_baseline_favorite)
@@ -222,6 +266,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     override fun onResume() {
         super.onResume()
         countLoadMore = 0
+        adapterIklan.removeAllItems()
         clearAll = true
         getData()
     }

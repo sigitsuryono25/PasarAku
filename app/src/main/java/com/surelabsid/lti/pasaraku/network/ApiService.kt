@@ -164,4 +164,24 @@ interface ApiService {
 
     @GET("Apimyads/get_trans")
     suspend fun getTransaksi(@Query("userid") userid: String?) : ResponseTransaksi
+
+
+    @GET("chats/getConversation")
+    suspend fun getChat(
+        @Query("unique_id") uniqueId: String?,
+        @Query("incoming_id") incomingId: String,
+    ): ResponseMessages
+
+    @FormUrlEncoded()
+    @POST("chats/insertChat")
+    suspend fun insertChat(
+        @Field("unique_id") uniqueId: String?,
+        @Field("incoming_id") incomingId: String,
+        @Field("message") message: String
+    ): GeneralResponse
+
+    @GET("chats/getChatList")
+    suspend fun getMessageList(
+        @Query("incoming_id") incomingId: String?
+    ): ResponseListMessages
 }

@@ -71,6 +71,10 @@ data class DataTransItem(
 	@field:SerializedName("status_premium")
 	val statusPremium: String? = null,
 
+
+	@field:SerializedName("start_at")
+	val startAt: String? = null,
+
 	@field:SerializedName("_id_ads")
 	val idAds: String? = null,
 

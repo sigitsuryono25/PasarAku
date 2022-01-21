@@ -21,7 +21,7 @@ class AdapterIklan(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val mListIklan = mutableListOf<DataIklanItem?>()
+    private var mListIklan = mutableListOf<DataIklanItem?>()
 
     inner class ViewHolderGrid(val mItemAdapterIklanBinding: ItemAdapterIklanBinding) :
         RecyclerView.ViewHolder(mItemAdapterIklanBinding.root) {
@@ -135,6 +135,12 @@ class AdapterIklan(
 //                mItemAdapterIklanVerticalBinding.lokasi.text = "Lokasi tidak diketahui"
 //            }
         }
+    }
+
+
+    fun removeAllItems(){
+        mListIklan = mutableListOf()
+        notifyDataSetChanged()
     }
 
     fun addIklan(adsList: List<DataIklanItem?>, clearIt: Boolean = false) {

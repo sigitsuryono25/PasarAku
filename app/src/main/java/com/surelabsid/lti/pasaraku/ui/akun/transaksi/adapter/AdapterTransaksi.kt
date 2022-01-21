@@ -7,25 +7,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.surelabsid.lti.pasaraku.databinding.ItemAdapterTransaksiBinding
 import com.surelabsid.lti.pasaraku.response.DataTransItem
 
-class AdapterTransaksi(private val clickItem: (DataTransItem?) -> Unit) : RecyclerView.Adapter<AdapterTransaksi.ViewHolder>() {
+class AdapterTransaksi(private val clickItem: (DataTransItem?) -> Unit) :
+    RecyclerView.Adapter<AdapterTransaksi.ViewHolder>() {
     private val mListTrans = mutableListOf<DataTransItem?>()
+
     inner class ViewHolder(private val mItemAdapterTransaksiBinding: ItemAdapterTransaksiBinding) :
         RecyclerView.ViewHolder(mItemAdapterTransaksiBinding.root) {
-        fun onBindItem(dataTransItem: DataTransItem?){
+        fun onBindItem(dataTransItem: DataTransItem?) {
             mItemAdapterTransaksiBinding.judulIklan.text = dataTransItem?.judulIklan
             mItemAdapterTransaksiBinding.nominal.text = "Rp. ${dataTransItem?.nominal}"
             mItemAdapterTransaksiBinding.status.text = dataTransItem?.statusPremium
             mItemAdapterTransaksiBinding.paket.text = "Paket: ${dataTransItem?.paket}"
             mItemAdapterTransaksiBinding.noInvoice.text = dataTransItem?.id
-
+            if (dataTransItem?.isPremium == "Y") {
+                mItemAdapterTransaksiBinding.tanggalPremium.visibility = View.VISIBLE
+                mItemAdapterTransaksiBinding.start.text = "Mulai: ${dataTransItem?.startAt}"
+                mItemAdapterTransaksiBinding.expired.text = "Berakhir: ${dataTransItem?.expired}"
+            }
             mItemAdapterTransaksiBinding.root.setOnClickListener {
                 clickItem(dataTransItem)
             }
         }
     }
 
-    fun addItem(listItem: List<DataTransItem?>, clearAll: Boolean = false){
-        if(clearAll)
+    fun addItem(listItem: List<DataTransItem?>, clearAll: Boolean = false) {
+        if (clearAll)
             mListTrans.removeAll(mListTrans)
 
         mListTrans.addAll(listItem)
@@ -33,15 +39,17 @@ class AdapterTransaksi(private val clickItem: (DataTransItem?) -> Unit) : Recycl
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return  ViewHolder(
-            ItemAdapterTransaksiBinding.inflate(LayoutInflater.from(parent.context),
-            parent,
-            false)
+        return ViewHolder(
+            ItemAdapterTransaksiBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       holder.onBindItem(mListTrans.get(position))
+        holder.onBindItem(mListTrans.get(position))
     }
 
     override fun getItemCount(): Int {

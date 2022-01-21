@@ -32,6 +32,7 @@
         android:drawablePadding="8dp"
         android:hint="@string/search_city_area_or_neighbourhood"
         android:inputType="text"
+        android:imeOptions="actionGo|actionDone"
         android:padding="8dp"
         android:singleLine="true"
         tools:ignore="Autofill" />

@@ -8,13 +8,13 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,12 +23,15 @@ import com.bumptech.glide.Glide
 import com.kroegerama.imgpicker.BottomSheetImagePicker
 import com.kroegerama.imgpicker.ButtonType
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityTambahIklanBinding
 import com.surelabsid.lti.pasaraku.model.FotoIklan
+import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.response.DataIklanItem
 import com.surelabsid.lti.pasaraku.response.DataKategoriItem
 import com.surelabsid.lti.pasaraku.response.GeneralResponse
+import com.surelabsid.lti.pasaraku.ui.WebBrowserActivity
 import com.surelabsid.lti.pasaraku.ui.iklan.adapter.AdapterSelectedImage
 import com.surelabsid.lti.pasaraku.ui.wilayah.WilayahActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
@@ -44,9 +47,10 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 
-class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImagesSelectedListener {
+class TambahIklanActivity : Baseapp(), BottomSheetImagePicker.OnImagesSelectedListener {
     private lateinit var adapterSelectedImage: AdapterSelectedImage
     private var isChanged = false
+    private var isAdded = true
     private lateinit var binding: ActivityTambahIklanBinding
     private var multipartTypedOutput: MutableList<MultipartBody.Part?>? = null
     private var previousFotoDelete: MutableList<RequestBody> = mutableListOf()
@@ -66,9 +70,10 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
     private var provIdTemp: String? = null
     private var kabIdTemp: String? = null
     private var kecIdTemp: String? = null
-    private var provNameTemp : String? = null
-    private var kecNameTemp : String? = null
-    private var kabNameTemp : String? = null
+    private var provNameTemp: String? = null
+    private var kecNameTemp: String? = null
+    private var kabNameTemp: String? = null
+    private var mTitleEdit: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +90,7 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         provNameTemp = Prefs.getString(Constant.PROV)
         kecNameTemp = Prefs.getString(Constant.KEC)
 
-        Toast.makeText(this, "$provIdTemp, $kabIdTemp, $kecIdTemp", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "$provIdTemp, $kabIdTemp, $kecIdTemp", Toast.LENGTH_SHORT).show()
 
         datakategori = intent.getParcelableExtra(KATEGORI_DATA)
         kategori = datakategori?.idKategori
@@ -95,16 +100,23 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         binding.harga.setDecimals(false)
         binding.harga.setDelimiter(false)
 
+        mTitleEdit = intent.getStringExtra("title")
+
         supportActionBar?.apply {
-            title = getString(R.string.add_ads)
+             if (mTitleEdit?.isEmpty() == true) {
+                 title = getString(R.string.add_ads)
+            } else {
+                 title = mTitleEdit
+            }
             setDisplayHomeAsUpEnabled(true)
         }
         binding.lokasi.setOnClickListener {
             isPickPlace = true
             Intent(this@TambahIklanActivity, WilayahActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra(WilayahActivity.PROVINSI_REQ, true)
-                if(isEdit){
+                if (isEdit) {
                     putExtra(WilayahActivity.ISEDIT, true)
                 }
                 startActivity(this)
@@ -150,6 +162,15 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
             mode = "edit".toRequestBody("text/plain".toMediaTypeOrNull())
             updateUIForEdit(adsItem)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if (mTitleEdit?.isNotEmpty() == true)
+            if (isAdded)
+                menu?.add(0, 0, 0, "Help")?.setIcon(R.drawable.ic_help_)
+                    ?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        isAdded = false
+        return super.onCreateOptionsMenu(menu)
     }
 
 
@@ -214,6 +235,7 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
     }
 
     private fun populateData() {
+        showLoading()
         val judul =
             binding.judulIklan.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val lokasi = binding.lokasi.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
@@ -230,11 +252,11 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         val addedBy =
             Prefs.getString(Constant.EMAIL).toRequestBody("text/plain".toMediaTypeOrNull())
         val detail = "detail".toRequestBody("text/plain".toMediaTypeOrNull())
-        if (!isEdit) {
+//        if (!isEdit) {
             PROVID = Prefs.getString(Constant.PROV_ID)
             KABID = Prefs.getString(Constant.KAB_ID)
             KECID = Prefs.getString(Constant.LOKASI_ID)
-        }
+//        }
         val idKab = KABID?.toRequestBody("text/plain".toMediaTypeOrNull())
         val idKec =
             KECID?.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -269,29 +291,39 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
     }
 
     private fun showMessage(generalResponse: GeneralResponse) {
+        dismissLoading()
         if (generalResponse.code == 200) {
             AlertDialog.Builder(this)
                 .setMessage(generalResponse.message)
                 .setTitle("Konfirmasi")
                 .setPositiveButton("Tutup") { _, _ ->
-                    if(isEdit){
-                        Toast.makeText(this, provIdTemp, Toast.LENGTH_SHORT).show()
-                        Prefs.putString(Constant.PROV_ID, provIdTemp)
-                        Prefs.putString(Constant.LOKASI_ID, kecIdTemp)
-                        Prefs.putString(Constant.KAB_ID, kabIdTemp)
-                        Prefs.putString(Constant.PROV, provNameTemp)
-                        Prefs.putString(Constant.KAB, kabNameTemp)
-                        Prefs.putString(Constant.KEC, kecNameTemp)
-                    }
                     finish()
                 }.setCancelable(false)
                 .create().show()
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (isEdit) {
+            Prefs.putString(Constant.PROV_ID, provIdTemp)
+            Prefs.putString(Constant.LOKASI_ID, kecIdTemp)
+            Prefs.putString(Constant.KAB_ID, kabIdTemp)
+            Prefs.putString(Constant.PROV, provNameTemp)
+            Prefs.putString(Constant.KAB, kabNameTemp)
+            Prefs.putString(Constant.KEC, kecNameTemp)
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> confirmQuit()
+            0 -> {
+                Intent(this@TambahIklanActivity, WebBrowserActivity::class.java).apply {
+                    putExtra(WebBrowserActivity.URL, NetworkModule.BASE_URL + "help/index.html")
+                    startActivity(this)
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -342,7 +374,7 @@ class TambahIklanActivity : AppCompatActivity(), BottomSheetImagePicker.OnImages
         }
     }
 
-    private fun getLokasi(){
+    private fun getLokasi() {
         val lokasi =
             if (Prefs.getString(Constant.KEC).isNotEmpty() || Prefs.contains(Constant.KEC)) {
                 "${Prefs.getString(Constant.KEC)}, ${Prefs.getString(Constant.KAB)}"
