@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="10dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_shopping" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/lato"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:text="@string/jual_dan_beli_apapun_dari_aplikasi_pasar_aku"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:layout_width="60dp"
+        android:id="@+id/next1"
+        android:contentDescription="@string/app_name"
+        android:layout_height="60dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_right" />
+</LinearLayout>

@@ -147,6 +147,9 @@ interface ApiService {
     @GET("Apiwilayah/getWilayah")
     suspend fun getWilayahByPostalCode(@Query("postal_code") postalCode : String?): ResponseWilayahByPostalCode
 
+    @GET("Apiwilayah/getWilayahByName")
+    suspend fun getWilayahByName(@Query("name") name : String?): ResponseWilayahByPostalCode
+
     @POST("Apireport/index")
     suspend fun sendReport(@Body reportModel: ReportModel): GeneralResponse
 
@@ -165,6 +168,11 @@ interface ApiService {
     @GET("Apimyads/get_trans")
     suspend fun getTransaksi(@Query("userid") userid: String?) : ResponseTransaksi
 
+    @GET("detail/{slug}")
+    suspend fun getDetailIklan(
+        @Path("slug") slug: String?,
+        @Query("uuid") uuid: String?
+    ): ResponseListIklan
 
     @GET("chats/getConversation")
     suspend fun getChat(

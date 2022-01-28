@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:visibility="visible"
     android:layout_height="match_parent"
     tools:context=".ui.iklan.DetailIklanActivity">
-
-
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -214,8 +213,8 @@
                         android:id="@+id/profilePic"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:scaleType="centerCrop"
                         android:contentDescription="@string/app_name"
+                        android:scaleType="centerCrop"
                         android:src="@mipmap/ic_launcher"
                         app:cornerRadius="64dp" />
 
@@ -359,19 +358,51 @@
 
             </androidx.cardview.widget.CardView>
 
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="2dp"
+                android:layout_marginTop="4dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_marginBottom="4dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:text="@string/iklan_terkait"
+                        android:textAllCaps="true"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/iklanTerkait"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        app:elevation="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent">
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:elevation="0dp"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize">
+            android:layout_height="?actionBarSize"
+            android:elevation="0dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -380,24 +411,24 @@
                 <ImageView
                     android:id="@+id/finish"
                     android:layout_width="32dp"
-                    android:background="@drawable/bg_circle"
                     android:layout_height="32dp"
-                    android:padding="4dp"
                     android:layout_centerVertical="true"
+                    android:background="@drawable/bg_circle"
                     android:contentDescription="@string/app_name"
+                    android:padding="4dp"
                     android:src="@drawable/ic_back"
                     app:tint="@color/black" />
 
                 <ImageView
                     android:id="@+id/share"
                     android:layout_width="24dp"
-                    android:visibility="invisible"
                     android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="15dp"
                     android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_share" />
+                    android:src="@drawable/ic_share"
+                    android:visibility="visible" />
             </RelativeLayout>
 
         </androidx.appcompat.widget.Toolbar>

@@ -23,6 +23,9 @@ data class DataIklanItem(
 	@field:SerializedName("kondisi")
 	val kondisi: String? = null,
 
+	@field:SerializedName("slug")
+	val slug: String? = null,
+
 	@field:SerializedName("iklan_id")
 	val iklanId: String? = null,
 

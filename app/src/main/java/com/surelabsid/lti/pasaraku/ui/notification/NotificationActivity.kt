@@ -1,16 +1,15 @@
 package com.surelabsid.lti.pasaraku.ui.notification
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Adapter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import com.google.firebase.crashlytics.internal.breadcrumbs.DisabledBreadcrumbSource
 import com.surelabsid.lti.pasaraku.database.AppDatabase
 import com.surelabsid.lti.pasaraku.database.Notifications
 import com.surelabsid.lti.pasaraku.databinding.ActivityNotificationBinding
+import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransaksiActivity
 import com.surelabsid.lti.pasaraku.ui.notification.adapter.AdapterNotification
 import com.surelabsid.lti.pasaraku.utils.Constant
 import kotlinx.coroutines.*
@@ -31,20 +30,25 @@ class NotificationActivity : AppCompatActivity() {
 
         val db = Room.databaseBuilder(this, AppDatabase::class.java, Constant.DB_NAME).build()
 
-        adapterNotification = AdapterNotification()
+        adapterNotification = AdapterNotification {
+            Intent(this@NotificationActivity, TransaksiActivity::class.java).apply {
+                startActivity(this)
+            }
+            finish()
+        }
         binding.rvNotification.apply {
             adapter = adapterNotification
             layoutManager = LinearLayoutManager(this@NotificationActivity)
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            withContext(Dispatchers.IO){
-                try{
+            withContext(Dispatchers.IO) {
+                try {
                     val data = db.notificationDao().getAll()
                     MainScope().launch {
                         updateUI(data)
                     }
-                }catch (e: Throwable){
+                } catch (e: Throwable) {
                     e.printStackTrace()
                 }
             }
@@ -53,8 +57,8 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            android.R.id.home->finish()
+        when (item.itemId) {
+            android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
     }

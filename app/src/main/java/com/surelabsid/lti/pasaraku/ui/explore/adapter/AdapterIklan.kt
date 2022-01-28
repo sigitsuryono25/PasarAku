@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.surelabsid.lti.pasaraku.R
@@ -17,7 +18,8 @@ import com.surelabsid.lti.pasaraku.utils.Constant
 class AdapterIklan(
     private val isGrid: Boolean = true,
     private val onClick: (DataIklanItem?) -> Unit,
-    private val onFavClick: (DataIklanItem?, ImageView) -> Unit
+    private val onFavClick: (DataIklanItem?, ImageView) -> Unit,
+    private val width: Int = LinearLayout.LayoutParams.MATCH_PARENT
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -32,6 +34,15 @@ class AdapterIklan(
                 Glide.with(itemView.context)
                     .load(urlGambar)
                     .into(mItemAdapterIklanBinding.coverImage)
+                if (width != LinearLayout.LayoutParams.MATCH_PARENT) {
+                    val lparams = LinearLayout.LayoutParams(
+                        width,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    lparams.setMargins(10,10,10,10)
+                    mItemAdapterIklanBinding.root.layoutParams = lparams
+                }
+
             }
 
             itemView.setOnClickListener {
@@ -138,7 +149,7 @@ class AdapterIklan(
     }
 
 
-    fun removeAllItems(){
+    fun removeAllItems() {
         mListIklan = mutableListOf()
         notifyDataSetChanged()
     }

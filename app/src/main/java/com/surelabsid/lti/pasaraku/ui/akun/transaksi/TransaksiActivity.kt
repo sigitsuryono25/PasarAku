@@ -1,11 +1,8 @@
 package com.surelabsid.lti.pasaraku.ui.akun.transaksi
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.webkit.WebView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pixplicity.easyprefs.library.Prefs
@@ -34,6 +31,11 @@ class TransaksiActivity : Baseapp() {
         }
         val userid = Prefs.getString(Constant.EMAIL)
         getTrans(userid)
+
+        binding.refresh.setOnRefreshListener {
+            binding.refresh.isRefreshing = false
+            getTrans(userid)
+        }
 
         mAdapterTransaksi = AdapterTransaksi {
             val premiumModel = PremiumModel()
@@ -86,6 +88,6 @@ class TransaksiActivity : Baseapp() {
     }
 
     private fun updateUI(resp: ResponseTransaksi) {
-        resp.dataTrans?.let { mAdapterTransaksi.addItem(it) }
+        resp.dataTrans?.let { mAdapterTransaksi.addItem(it, clearAll = true) }
     }
 }

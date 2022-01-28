@@ -11,8 +11,11 @@ import android.view.WindowInsets
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.pasaraku.databinding.ActivitySplashScreenBinding
+import com.surelabsid.lti.pasaraku.onboard.OnBoardActivity
 import com.surelabsid.lti.pasaraku.service.TokenService
+import com.surelabsid.lti.pasaraku.utils.Constant
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -90,7 +93,12 @@ class SplashScreenActivity : AppCompatActivity() {
         binding.dummyButton.setOnTouchListener(delayHideTouchListener)
 
         timerHandler.postDelayed({
-            startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+            if(Prefs.contains(Constant.FIRST_RUN) && !Prefs.getBoolean(Constant.FIRST_RUN)){
+                startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+
+            }else{
+                startActivity(Intent(this@SplashScreenActivity, OnBoardActivity::class.java))
+            }
             finish()
         }, 3000)
 

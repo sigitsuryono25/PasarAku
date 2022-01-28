@@ -21,11 +21,17 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
         <activity
-            android:name=".ui.messages.MessageActivity"
+            android:name=".onboard.OnBoardActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:theme="@style/Theme.PasarAku.NoActionBar"
-            android:exported="true" >
-
-        </activity>
+            android:exported="false"/>
+        <activity
+            android:name="com.surelabsid.lti.test.DeepLinkTest"
+            android:exported="true" />
+        <activity
+            android:name=".ui.messages.MessageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.PasarAku.NoActionBar" />
         <activity
             android:name=".ui.akun.transaksi.TransaksiActivity"
             android:exported="false" />
@@ -112,8 +118,32 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".ui.iklan.DetailIklanActivity"
-            android:exported="false"
-            android:theme="@style/Theme.PasarAku.NoActionBar" />
+            android:exported="true"
+            android:theme="@style/Theme.PasarAku.NoActionBar">
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <data
+                    android:host="pasaraku.com"
+                    android:pathPrefix="/mobile/detail"
+                    android:scheme="https" />
+                <!-- note that the leading "/" is required for pathPrefix -->
+
+            </intent-filter>
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data
+                    android:host="detail"
+                    android:scheme="pasaraku" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.kategori.KategoriActivity"
             android:exported="false"

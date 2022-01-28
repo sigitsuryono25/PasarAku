@@ -13,16 +13,17 @@ open class Baseapp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    fun showLoading() {
+    fun showLoading(isCancelable: Boolean = false) {
         pd = Dialog(this)
         pd.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         pd.setContentView(R.layout.progress_view)
+        pd.setCancelable(isCancelable)
         if (!pd.isShowing)
             pd.show()
     }
 
     fun dismissLoading() {
-        if (pd.isShowing)
+        if (pd != null && pd.isShowing)
             pd.dismiss()
     }
 }

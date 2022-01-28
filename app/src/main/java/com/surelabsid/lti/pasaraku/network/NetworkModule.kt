@@ -30,6 +30,14 @@ object NetworkModule {
             .build()
     }
 
+    private fun getRetrofitNoApi(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(getOkHttp())
+            .build()
+    }
+
     private fun getRetrofitFCM(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(FIREBASE_URL)
@@ -44,5 +52,9 @@ object NetworkModule {
 
     fun getService(): ApiService {
         return getRetrofit().create(ApiService::class.java)
+    }
+
+    fun getServiceNoApi(): ApiService {
+        return getRetrofitNoApi().create(ApiService::class.java)
     }
 }

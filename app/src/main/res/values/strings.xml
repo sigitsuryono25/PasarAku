@@ -129,6 +129,16 @@
     <string name="kirim_email">Kirim Email</string>
     <string name="transaction">Transaction</string>
     <string name="your_transaction_in_here">Your transaction in here</string>
+    <string name="iklan_terkait">Iklan Terkait</string>
+    <string name="masa_aktif_premium">Masa Aktif Premium</string>
+    <string name="fitur_premium_pakai_fitur_premium_supaya_iklan_kamu_selalu_muncul_dibagian_utama"><font size="22"><b>Fitur Premium</b></font>\nPakai fitur premium supaya iklan kamu selalu muncul dibagian utama</string>
+    <string name="jual_dan_beli_apapun_dari_aplikasi_pasar_aku"><font size="22"><b>Jual dan Beli Apa Aja</b></font>\nJual dan Beli apa aja dari Aplikasi Pasar Aku.\nBanyak pilihan kategori dan barangnya lho</string>
+    <string name="cari_berdasarkan_lokasi"><font size="22"><b>Cari Berdasarkan Lokasi</b></font>\nCari barang dan jasa impianmu di Aplikasi Pasar Aku</string>
+    <string name="ambil_foto_produk"><font size="22"><b>Ambil Foto Produk</b></font>\nAmbil foto produk dari penyimpanan telepon kamu. Kamu dapat edit dulu sebelum diposting di Aplikasi Pasar Aku</string>
+    <string name="selamat_datang_di_aplikasi_pasar_aku"><font size="22"><b>Selamat datang di Aplikasi Pasar Aku</b></font>\nSebuah aplikasi tempat jual beli barang dan jasa. Cari barang dan jasa impianmu</string>
+    <string name="attentions"><font size="22"><b>Perhatian</b></font>\nPenggunaan <b>Current Location</b> terkadang kurang Akurat.\nJika hal itu terjadi, silahkan gunakan pilihan\nPronvinsi, Kabupaten serta Kecamatan yang disediakan</string>
+    <string name="jangan_tampilkan_lagi_pesan_ini">Jangan Tampilkan Lagi Pesan ini?</string>
+    <string name="tutup">Tutup</string>
 
     <string-array name="kind">
         <item>Diterima</item>

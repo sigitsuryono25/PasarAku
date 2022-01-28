@@ -20,6 +20,7 @@ import com.surelabsid.lti.pasaraku.database.AppDatabase
 import com.surelabsid.lti.pasaraku.database.Notifications
 import com.surelabsid.lti.pasaraku.model.firebase.model.ChatHeader
 import com.surelabsid.lti.pasaraku.network.NetworkModule
+import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransaksiActivity
 import com.surelabsid.lti.pasaraku.ui.notification.NotificationActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.HourToMillis
@@ -48,19 +49,33 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
-        val db = Room.databaseBuilder(this@FCMService, AppDatabase::class.java, Constant.DB_NAME).build()
+        val db =
+            Room.databaseBuilder(this@FCMService, AppDatabase::class.java, Constant.DB_NAME).build()
 
         Log.d("message", p0.data.toString())
         if (p0.data.isNotEmpty()) {
             if (Prefs.contains(Constant.EMAIL)) {
                 val data = p0.data
                 val pengirim = data["nama"]
-                val chatHeader = ChatHeader()
-                chatHeader.nama = pengirim
-                chatHeader._id = HourToMillis.millis()
-                chatHeader.token = ""
-                chatHeader.user_id = data["user_id"]
-                NotificationHandle(this).makeNotificationStart(pengirim, chatHeader, db)
+                val isAdmin = data["is_admin"]
+                val message = data["message"]
+                if (isAdmin?.equals("false", true) == true) {
+                    val chatHeader = ChatHeader()
+                    chatHeader.nama = pengirim
+                    chatHeader._id = HourToMillis.millis()
+                    chatHeader.token = ""
+                    chatHeader.user_id = data["user_id"]
+                    NotificationHandle(this).makeNotificationStart(pengirim, chatHeader, db)
+                } else {
+                    NotificationHandle(this).makeNotificationStart(
+                        from = pengirim,
+                        chatHeader = null,
+                        db = db,
+                        message = "$message ",
+                        title = "Notifikasi Baru",
+                        transaksi = true
+                    )
+                }
             }
         }
     }
@@ -77,33 +92,50 @@ class NotificationHandle(
         createNotificationChannel()
     }
 
-    fun makeNotificationStart(from: String?, chatHeader: ChatHeader, db: AppDatabase) {
-        val intentChat = Intent(context, NotificationActivity::class.java)
-        intentChat.putExtra(Constant.CHAT_HEADER, chatHeader)
-        val pendingIntentChat =
+    fun makeNotificationStart(
+        from: String?,
+        chatHeader: ChatHeader?,
+        db: AppDatabase,
+        message: String? = "Chat Baru dari ",
+        title: String? = "Chat Baru",
+        transaksi: Boolean = false
+    ) {
+        val pendingIntentChat = if (transaksi) {
+            val intentTransaksi = Intent(context, TransaksiActivity::class.java)
+            PendingIntent.getActivity(
+                context,
+                1036,
+                intentTransaksi,
+                PendingIntent.FLAG_ONE_SHOT
+            )
+        } else {
+            val intentChat = Intent(context, NotificationActivity::class.java)
+            if (chatHeader != null)
+                intentChat.putExtra(Constant.CHAT_HEADER, chatHeader)
             PendingIntent.getActivity(context, 1025, intentChat, PendingIntent.FLAG_ONE_SHOT)
-
+        }
         val builder = NotificationCompat.Builder(context, cHANNELID)
             .setSmallIcon(android.R.drawable.ic_dialog_email)
             .setColor(context.resources.getColor(R.color.darkblue))
-            .setContentTitle(context.getString(R.string.app_name))
-            .setContentText("Pesan Masuk")
+            .setContentTitle(title)
+            .setContentText("$message$from")
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntentChat)
             .setAutoCancel(true)
 
 
         CoroutineScope(Dispatchers.IO).launch {
-            withContext(Dispatchers.IO){
-                try{
+            withContext(Dispatchers.IO) {
+                try {
                     val notifications = Notifications(
                         timestamp = HourToMillis.millisToDateHour(HourToMillis.millis()),
-                        message =  "Pesan baru dari $from",
-                        title =  "Pesan Masuk Baru"
+                        message = "$message$from",
+                        title = "$title",
+                        transaksi = transaksi.toString()
                     )
                     val d = db.notificationDao().insertAll(notifications)
                     Log.d("makeNotificationStart", "makeNotificationStart: $d")
-                }catch (e: Throwable){
+                } catch (e: Throwable) {
                     e.printStackTrace()
                 }
             }

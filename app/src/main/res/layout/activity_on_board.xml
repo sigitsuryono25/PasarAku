@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/flipper"
+    android:layout_height="match_parent"
+    tools:context=".onboard.OnBoardActivity">
+
+    <include android:id="@+id/board0" layout="@layout/on_board_0"/>
+    <include android:id="@+id/board1" layout="@layout/on_board_1"/>
+    <include android:id="@+id/board2" layout="@layout/on_board_2"/>
+    <include android:id="@+id/board3" layout="@layout/on_board_3"/>
+    <include android:id="@+id/board4" layout="@layout/on_board_4"/>
+</ViewFlipper>

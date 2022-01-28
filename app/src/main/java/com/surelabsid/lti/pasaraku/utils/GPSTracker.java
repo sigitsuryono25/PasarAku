@@ -210,7 +210,7 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public List<Address> geocoder(Location loc) {
-        Geocoder gcd = new Geocoder(mContext, Locale.getDefault());
+        Geocoder gcd = new Geocoder(mContext, new Locale("in_ID"));
         List<Address> addresses = new ArrayList<>();
         try {
             addresses = gcd.getFromLocation(

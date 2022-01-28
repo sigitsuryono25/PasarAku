@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.surelabsid.lti.pasaraku.database.Notifications
 import com.surelabsid.lti.pasaraku.databinding.ItemAdapterNotificationBinding
 
-class AdapterNotification : RecyclerView.Adapter<AdapterNotification.ViewHolder>() {
+class AdapterNotification(private val click: (Notifications) -> Unit) :
+    RecyclerView.Adapter<AdapterNotification.ViewHolder>() {
 
     private var mLisItem = mutableListOf<Notifications>()
 
@@ -17,6 +18,11 @@ class AdapterNotification : RecyclerView.Adapter<AdapterNotification.ViewHolder>
             mItemAdapterNotificationBinding.timestamp.text = notifications.timestamp
             mItemAdapterNotificationBinding.title.text = notifications.title
             mItemAdapterNotificationBinding.message.text = notifications.message
+            if(notifications.transaksi.equals("true", true)){
+                mItemAdapterNotificationBinding.root.setOnClickListener {
+                    click(notifications)
+                }
+            }
         }
 
     }

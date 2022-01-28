@@ -3,6 +3,8 @@ package com.surelabsid.lti.pasaraku.utils
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 
 object Constant {
+    const val DONT_SHOW_ATTENTION_CURRENT_LOCATION = "dontShowAgainAttentionCurrentLocation"
+    const val FIRST_RUN = "firstRun"
     const val TOKEN = "TOKEN"
     const val LOCATION_DATA = "locationData"
     const val DB_NAME = "db_notification"

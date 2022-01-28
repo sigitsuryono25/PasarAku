@@ -14,8 +14,8 @@ android {
         applicationId "com.surelabsid.lti.pasaraku"
         minSdk 23
         targetSdk 31
-        versionCode 8
-        versionName "1.2alpha2"
+        versionCode 9
+        versionName "1.2alpha4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

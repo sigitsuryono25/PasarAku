@@ -11,15 +11,20 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import com.stfalcon.imageviewer.StfalconImageViewer
+import com.surelabsid.lti.base.Baseapp
+import com.surelabsid.lti.pasaraku.MainActivity
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityDetailIklanBinding
 import com.surelabsid.lti.pasaraku.model.FavoriteRequest
@@ -27,25 +32,30 @@ import com.surelabsid.lti.pasaraku.model.firebase.model.ChatHeader
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.response.DataIklanItem
 import com.surelabsid.lti.pasaraku.response.GeneralResponse
+import com.surelabsid.lti.pasaraku.response.ResponseListIklan
 import com.surelabsid.lti.pasaraku.ui.chat.BottomSheetMessage
+import com.surelabsid.lti.pasaraku.ui.explore.ExploreViewModel
+import com.surelabsid.lti.pasaraku.ui.explore.adapter.AdapterIklan
 import com.surelabsid.lti.pasaraku.ui.iklan.report.ReportDialogFragment
 import com.surelabsid.lti.pasaraku.ui.profile.ProfileViewActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.Utils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.util.*
-import com.google.android.gms.maps.model.CircleOptions
-
-import com.google.android.gms.maps.model.Circle
-import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
+import kotlin.properties.Delegates
 
 
-class DetailIklanActivity : AppCompatActivity() {
+class DetailIklanActivity : Baseapp() {
     private lateinit var binding: ActivityDetailIklanBinding
     private var dataIklanItem: DataIklanItem? = null
+    private lateinit var adapterIklan: AdapterIklan
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    var countLoadMore by Delegates.notNull<Int>()
+    var isLoading by Delegates.notNull<Boolean>()
+    private lateinit var vm: ExploreViewModel
+    private var clearAll = true
+    private var position = 0
+    private var isNotFromScroll = true
 
 
     @SuppressLint("SetTextI18n")
@@ -54,7 +64,38 @@ class DetailIklanActivity : AppCompatActivity() {
         binding = ActivityDetailIklanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        dataIklanItem = intent.getParcelableExtra(DATA_IKLAN)
+        vm = ViewModelProvider(this)[ExploreViewModel::class.java]
+
+        vm.dataIklan.observe(this) {
+            setIklanToView(it)
+        }
+
+        isLoading = false
+        countLoadMore = 0
+
+        //from deeplink
+
+        binding.mapLokasi.onCreate(savedInstanceState)
+
+
+
+        initAdapter()
+
+        val deepLink: Uri? = intent?.data
+        if (deepLink != null) {
+            getDetailIklan(deepLink)
+            return
+        }
+
+        val iklanItem: DataIklanItem? = intent.getParcelableExtra(DATA_IKLAN)
+        setDetail(iklanItem)
+        binding.finish.setOnClickListener {
+            finish()
+        }
+
+    }
+
+    private fun setDetail(dataIklanItem: DataIklanItem?) {
         Log.d("onCreate", "onCreate: $dataIklanItem")
         val isMyAds = intent.getBooleanExtra(MY_ADS, false)
         if (isMyAds) {
@@ -65,18 +106,12 @@ class DetailIklanActivity : AppCompatActivity() {
             binding.noLokasi.visibility = View.VISIBLE
         } else {
             with(binding.mapLokasi) {
-                onCreate(savedInstanceState)
                 getMapAsync { p0 ->
                     MapsInitializer.initialize(this@DetailIklanActivity)
                     val latLng = LatLng(
                         dataIklanItem?.lat.toString().toDouble(),
                         dataIklanItem?.lon.toString().toDouble()
                     )
-//                    p0.addMarker(
-//                        MarkerOptions().position(
-//                            latLng
-//                        )
-//                    )
                     p0.uiSettings.isScrollGesturesEnabled = false
                     p0.addCircle(
                         CircleOptions()
@@ -97,8 +132,12 @@ class DetailIklanActivity : AppCompatActivity() {
                         try {
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                             context.startActivity(intent)
-                        }catch (e: ActivityNotFoundException){
-                            Toast.makeText(this@DetailIklanActivity, "No activity can handle this", Toast.LENGTH_SHORT).show()
+                        } catch (e: ActivityNotFoundException) {
+                            Toast.makeText(
+                                this@DetailIklanActivity,
+                                "No activity can handle this",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                     }
@@ -106,7 +145,6 @@ class DetailIklanActivity : AppCompatActivity() {
             }
         }
 
-        binding.carouselView.pageCount = dataIklanItem?.foto?.size ?: 0
         binding.carouselView.setImageListener { position, imageView ->
             Glide.with(this@DetailIklanActivity)
                 .load(
@@ -116,6 +154,8 @@ class DetailIklanActivity : AppCompatActivity() {
                 )
                 .into(imageView)
         }
+
+        binding.carouselView.pageCount = dataIklanItem?.foto?.size ?: 0
 
         binding.carouselView.setImageClickListener {
             StfalconImageViewer.Builder<String>(
@@ -128,7 +168,6 @@ class DetailIklanActivity : AppCompatActivity() {
             }.withStartPosition(it).show(true)
         }
 
-        binding.finish.setOnClickListener { finish() }
         binding.harga.text = dataIklanItem?.harga
         binding.detail.text = dataIklanItem?.detail
         binding.description.text = dataIklanItem?.deskripsiIklan
@@ -148,34 +187,38 @@ class DetailIklanActivity : AppCompatActivity() {
         val location = Location(getString(R.string.app_name))
         location.latitude = dataIklanItem?.lat.toString().toDouble()
         location.longitude = dataIklanItem?.lon.toString().toDouble()
-        if (dataIklanItem?.idProv?.isEmpty() == true && dataIklanItem?.idKab?.isEmpty() == true && dataIklanItem?.idKec?.isEmpty() == true) {
+        if (dataIklanItem?.idProv?.isEmpty() == true && dataIklanItem.idKab?.isEmpty() == true && dataIklanItem.idKec?.isEmpty() == true) {
             binding.lokasi.text = "Indonesia"
         } else {
             var lokasi = ""
             if (dataIklanItem?.kec?.isNotEmpty() == true) {
-                lokasi += "${dataIklanItem?.kec}, "
+                lokasi += "${dataIklanItem.kec}, "
             }
             if (dataIklanItem?.kab?.isNotEmpty() == true) {
-                lokasi += "${dataIklanItem?.kab}, "
+                lokasi += "${dataIklanItem.kab}, "
             }
             if (dataIklanItem?.prov?.isNotEmpty() == true) {
-                lokasi += "${dataIklanItem?.prov}"
+                lokasi += "${dataIklanItem.prov}"
             }
             binding.lokasi.text =
                 lokasi.trim()
 
         }
 
-//        val listAddress = GPSTracker(this).geocoder(location)
-//        if (listAddress.isNotEmpty()) {
-//            val kab = listAddress.iterator().next().subAdminArea
-//            val kec = listAddress.iterator().next().locality
-//            val prov = listAddress.iterator().next().adminArea
-//
-//            binding.lokasi.text = "$kec, $kab, $prov"
-//        } else {
-//            binding.lokasi.text = "Lokasi tidak diketahui"
-//        }
+        binding.share.setOnClickListener {
+            val url =
+                "https://pasaraku.com/mobile/product-detail/${dataIklanItem?.slug}?uuid=${dataIklanItem?.iklanId}"
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, url)
+                putExtra(Intent.EXTRA_TITLE, dataIklanItem?.judulIklan)
+                type = "text/plain"
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+        }
 
         binding.wa.setOnClickListener {
             val message = "Halo, saya mau tanya tentang iklan ${dataIklanItem?.judulIklan}"
@@ -185,7 +228,6 @@ class DetailIklanActivity : AppCompatActivity() {
         }
 
         binding.chat.setOnClickListener {
-
             val chatHeader = ChatHeader()
             chatHeader._id = System.currentTimeMillis()
             chatHeader.added_by = Prefs.getString(Constant.EMAIL)
@@ -252,6 +294,37 @@ class DetailIklanActivity : AppCompatActivity() {
             }
         }
 
+        binding.root.visibility = View.VISIBLE
+
+    }
+
+    private fun getDetailIklan(deepLink: Uri) {
+        showLoading()
+        val slug = deepLink.pathSegments[deepLink.pathSegments.size - 2]
+        val lastPath = deepLink.lastPathSegment
+
+        binding.finish.setOnClickListener {
+            finishAffinity()
+            Intent(this@DetailIklanActivity, MainActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    val data = NetworkModule.getServiceNoApi().getDetailIklan(
+                        slug = slug,
+                        uuid = lastPath
+                    )
+                    MainScope().launch {
+                        dismissLoading()
+                        setDetail(data.dataIklan?.first())
+                    }
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
 
     private fun updateUi(res: GeneralResponse, img: ImageView, favoriteRequest: FavoriteRequest) {
@@ -276,8 +349,115 @@ class DetailIklanActivity : AppCompatActivity() {
         }
     }
 
+    private fun initAdapter() {
+        adapterIklan = AdapterIklan(width = 500, onClick = {
+            Intent(this, DetailIklanActivity::class.java).apply {
+                putExtra(DATA_IKLAN, it)
+                startActivity(this)
+            }
+        }, onFavClick = { data, img ->
+            if (Prefs.contains(Constant.EMAIL)) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.IO) {
+                        try {
+                            val favoriteRequest = FavoriteRequest()
+                            favoriteRequest._id_ads = data?.iklanId
+                            favoriteRequest._user_id = Prefs.getString(Constant.EMAIL)
+                            favoriteRequest.is_add = data?.fav != true
+                            val res = NetworkModule.getService().addToFav(favoriteRequest)
+                            withContext(Dispatchers.Main) {
+                                updateUi(res, img, favoriteRequest)
+                            }
+                        } catch (e: Throwable) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            } else {
+                Utils.showDialogLogin((supportFragmentManager))
+            }
+
+        })
+
+        linearLayoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        binding.iklanTerkait.apply {
+            adapter = adapterIklan
+            layoutManager = linearLayoutManager
+        }
+
+        binding.iklanTerkait.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                isNotFromScroll = false
+                val lms = recyclerView.layoutManager
+                var lastVisiblePosition = 0
+                when (lms) {
+                    is LinearLayoutManager -> {
+                        lastVisiblePosition = lms.findLastCompletelyVisibleItemPosition()
+                        position = lms.findFirstVisibleItemPosition()
+                    }
+                    is GridLayoutManager -> {
+                        lastVisiblePosition = lms.findLastCompletelyVisibleItemPosition()
+                        position = lms.findFirstVisibleItemPosition()
+                    }
+                }
+                val countItem = lms?.itemCount
+
+                val isLastPosition = countItem?.minus(1) == lastVisiblePosition
+                if (!isLoading && isLastPosition) {
+                    isLoading = true
+                    countLoadMore += 1
+                    clearAll = false
+                    getIklanTerkait()
+                    isLoading = false
+                }
+            }
+        })
+    }
+
+    private fun getIklanTerkait() {
+        val lokasi =
+            if (Prefs.getString(Constant.KEC).isNotEmpty() || Prefs.contains(Constant.KEC)) {
+                "${Prefs.getString(Constant.KEC)}, ${Prefs.getString(Constant.KAB)}"
+            } else if (Prefs.getString(Constant.KAB).isNotEmpty() || Prefs.contains(Constant.KAB)) {
+                Prefs.getString(Constant.KAB)
+            } else {
+                Prefs.getString(Constant.PROV)
+            }
+        var user: String? = null
+        if (Prefs.contains(Constant.EMAIL)) {
+            user = Prefs.getString(Constant.EMAIL)
+        }
+        if (lokasi.isNotEmpty()) {
+            vm.getListIklan(
+                page = countLoadMore.toString(),
+                provinsi = Prefs.getString(Constant.PROV_ID),
+                kabupaten = Prefs.getString(Constant.KAB_ID),
+                kecamatan = Prefs.getString(Constant.LOKASI_ID),
+                kategori = dataIklanItem?.kategori,
+                userid = user
+            )
+        } else {
+            vm.getListIklan(
+                userid = user,
+                kategori = dataIklanItem?.kategori,
+                page = countLoadMore.toString()
+            )
+        }
+    }
+
+    private fun setIklanToView(responseListIklan: ResponseListIklan) {
+        val dataIklan = responseListIklan.dataIklan
+        binding.iklanTerkait.post {
+            dataIklan?.let { adapterIklan.addIklan(it, clearAll) }
+        }
+    }
+
     override fun onResume() {
         this.binding.mapLokasi.onResume()
+        countLoadMore = 0
+        adapterIklan.removeAllItems()
+        clearAll = true
+        getIklanTerkait()
         super.onResume()
     }
 

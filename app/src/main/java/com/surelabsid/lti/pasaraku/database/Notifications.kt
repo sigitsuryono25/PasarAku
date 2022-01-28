@@ -16,4 +16,6 @@ data class Notifications(
     val timestamp: String?,
     @ColumnInfo(name = "message")
     val message: String?,
+    @ColumnInfo(name = "is_transaksi")
+    val transaksi: String? = null
 )

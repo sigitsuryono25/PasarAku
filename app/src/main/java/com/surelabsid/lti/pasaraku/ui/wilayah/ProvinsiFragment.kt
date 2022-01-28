@@ -19,8 +19,10 @@ import com.surelabsid.lti.pasaraku.databinding.FragmentProvinsiBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.response.DataProvinsiItem
 import com.surelabsid.lti.pasaraku.response.ResponseProvinsi
+import com.surelabsid.lti.pasaraku.response.ResponseWilayahByPostalCode
 import com.surelabsid.lti.pasaraku.ui.wilayah.adapter.AdapterWilayah
 import com.surelabsid.lti.pasaraku.utils.Constant
+import com.surelabsid.lti.pasaraku.utils.CurrentLocationAttentions
 import com.surelabsid.lti.pasaraku.utils.GPSTracker
 import kotlinx.coroutines.*
 
@@ -60,9 +62,11 @@ class ProvinsiFragment : Fragment(R.layout.fragment_provinsi) {
         binding = FragmentProvinsiBinding.bind(view)
         vm = ViewModelProvider(this)[WilayahViewModel::class.java]
 
-        gpsTracker = GPSTracker(requireActivity())
-        location = gpsTracker.location
-        Log.d("onViewCreated", "onViewCreated: ${location.latitude}")
+        if(!Prefs.contains(Constant.DONT_SHOW_ATTENTION_CURRENT_LOCATION) || !Prefs.getBoolean(Constant.DONT_SHOW_ATTENTION_CURRENT_LOCATION)){
+            val d = CurrentLocationAttentions()
+            d.show(requireActivity().supportFragmentManager, "attentions")
+        }
+
 
         binding.allProv.setOnClickListener {
             Prefs.remove(Constant.PROV_ID)
@@ -82,13 +86,27 @@ class ProvinsiFragment : Fragment(R.layout.fragment_provinsi) {
         }
 
         binding.useLocation.setOnClickListener {
-            (requireActivity() as Baseapp).showLoading()
-            CoroutineScope(Dispatchers.IO).launch {
-                withContext(Dispatchers.IO) {
-                    val address = gpsTracker.geocoder(location)
-                    if (address.isNotEmpty()) {
-                        val a = address.first().postalCode
-                        getWilayah(a)
+            (requireActivity() as Baseapp).showLoading(true)
+            gpsTracker = GPSTracker(requireActivity())
+            val address = gpsTracker.geocoder(gpsTracker.location)
+            if (address.isNotEmpty()) {
+                Log.d("onViewCreated", "onViewCreated: ${address.first()}")
+                when {
+                    address.first().postalCode != null -> {
+                        getWilayah(postalCode = address.first().postalCode, admin = null)
+                    }
+                    address.first().adminArea != null -> {
+                        val adminArea = address.first().adminArea
+                        getWilayah(admin = adminArea, postalCode = null)
+                    }
+                    else -> {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Failed to get location. Indonesia selected",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        binding.allProv.performClick()
                     }
                 }
             }
@@ -138,7 +156,10 @@ class ProvinsiFragment : Fragment(R.layout.fragment_provinsi) {
             if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE) {
                 if (binding.search.text.toString().length >= 3) {
                     val filter = listProv?.filter {
-                        it?.nama?.contains(binding.search.text.toString(), ignoreCase = true) == true
+                        it?.nama?.contains(
+                            binding.search.text.toString(),
+                            ignoreCase = true
+                        ) == true
                     }
 
 //                    Log.d("onViewCreated", "onViewCreated: ${filter?.first()}")
@@ -176,11 +197,15 @@ class ProvinsiFragment : Fragment(R.layout.fragment_provinsi) {
         }
     }
 
-    private fun getWilayah(postalCode: String) {
+    private fun getWilayah(postalCode: String? = null, admin: String? = null) {
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
-                    val data = NetworkModule.getService().getWilayahByPostalCode(postalCode)
+                    val data: ResponseWilayahByPostalCode = if (postalCode != null) {
+                        NetworkModule.getService().getWilayahByPostalCode(postalCode)
+                    } else {
+                        NetworkModule.getService().getWilayahByName(admin)
+                    }
                     MainScope().launch {
                         (requireActivity() as Baseapp).dismissLoading()
                         Prefs.remove(Constant.LOKASI_ID)
