@@ -60,6 +60,9 @@ class AdapterIklan(
 
             if (dataIklanItem?.isPremium.equals("Y", true)) {
                 mItemAdapterIklanBinding.isPremium.visibility = View.VISIBLE
+            }else{
+                mItemAdapterIklanBinding.isPremium.visibility = View.GONE
+
             }
 
             mItemAdapterIklanBinding.judulIklan.text = dataIklanItem?.judulIklan
@@ -114,6 +117,13 @@ class AdapterIklan(
             }
             mItemAdapterIklanVerticalBinding.judulIklan.text = dataIklanItem?.judulIklan
             mItemAdapterIklanVerticalBinding.harga.text = dataIklanItem?.harga
+
+            if(dataIklanItem?.isPremium == "Y"){
+                mItemAdapterIklanVerticalBinding.isPremium.visibility = View.VISIBLE
+            }else{
+                mItemAdapterIklanVerticalBinding.isPremium.visibility = View.GONE
+            }
+
 
             val location = Location(itemView.context.getString(R.string.app_name))
             location.latitude = dataIklanItem?.lat.toString().toDouble()

@@ -116,22 +116,7 @@
                         android:id="@+id/rgAkun"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <RadioButton
-                            android:id="@+id/oneMonth"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginVertical="10dp"
-                            android:text="@string/_1_bulan_n50_rb" />
-
-                        <RadioButton
-                            android:id="@+id/sixMonth"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginVertical="10dp"
-                            android:text="@string/_6_bulan_n250_rb" />
-                    </RadioGroup>
+                        android:orientation="vertical"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

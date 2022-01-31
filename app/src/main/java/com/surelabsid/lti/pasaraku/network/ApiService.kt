@@ -111,6 +111,9 @@ interface ApiService {
     @GET("Apirekening/getListRekening")
     suspend fun getRekeningList(): ResponseRekening
 
+    @GET("Apirekening/getPaket")
+    suspend fun getPaket(): ResponsePaket
+
 
     @POST("Apimyads/proc_premium")
     suspend fun requestPremium(@Body premiumModel: PremiumModel): GeneralResponse

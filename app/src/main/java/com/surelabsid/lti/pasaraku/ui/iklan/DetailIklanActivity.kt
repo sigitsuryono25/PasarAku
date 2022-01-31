@@ -350,7 +350,7 @@ class DetailIklanActivity : Baseapp() {
     }
 
     private fun initAdapter() {
-        adapterIklan = AdapterIklan(width = 500, onClick = {
+        adapterIklan = AdapterIklan(width = 600, onClick = {
             Intent(this, DetailIklanActivity::class.java).apply {
                 putExtra(DATA_IKLAN, it)
                 startActivity(this)

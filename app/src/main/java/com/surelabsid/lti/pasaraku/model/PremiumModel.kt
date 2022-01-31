@@ -8,7 +8,7 @@ import java.math.BigInteger
 data class PremiumModel(
     var id: String? = null,
     var _id_ads: String? = null,
-    var nominal: BigInteger? = null,
+    var nominal: Int? = null,
     var paket: String? = null,
     var durasi: String? = null,
     var is_accepted: String? = null,

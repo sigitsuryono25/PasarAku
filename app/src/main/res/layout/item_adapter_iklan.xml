@@ -14,22 +14,29 @@
         android:layout_height="wrap_content">
 
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp">
 
-
-            <ImageView
-                android:id="@+id/coverImage"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginBottom="5dp"
-                android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
-                android:src="@drawable/logo_pasar_aku" />
+                app:cardCornerRadius="4dp"
+                android:elevation="0dp"
+                app:cardElevation="0dp"
+                android:layout_height="wrap_content"
+                android:clipToPadding="true">
+
+                <ImageView
+                    android:id="@+id/coverImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_marginBottom="5dp"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/logo_pasar_aku" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/harga"

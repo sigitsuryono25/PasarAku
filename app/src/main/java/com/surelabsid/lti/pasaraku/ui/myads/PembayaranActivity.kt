@@ -1,16 +1,17 @@
 package com.surelabsid.lti.pasaraku.ui.myads
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityPembayaranBinding
 import com.surelabsid.lti.pasaraku.model.PremiumModel
@@ -25,12 +26,11 @@ import com.surelabsid.lti.pasaraku.utils.HourToMillis
 import kotlinx.coroutines.*
 import java.util.*
 
-class PembayaranActivity : AppCompatActivity() {
-    private lateinit var pd: ProgressDialog
+class PembayaranActivity : Baseapp() {
     private lateinit var binding: ActivityPembayaranBinding
     private var premiumModel = PremiumModel()
     private var random: Random = Random()
-    private var rand = random.nextInt(999).toBigInteger()
+    private var rand = random.nextInt(999).toInt()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +42,8 @@ class PembayaranActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        pd = ProgressDialog.show(this, "", "memuat rekening...", true, false)
-
         getRekening()
+        getPaket()
 
         val dataIklanItem = intent.getParcelableExtra<DataIklanItem>(DetailIklanActivity.DATA_IKLAN)
 
@@ -84,7 +83,7 @@ class PembayaranActivity : AppCompatActivity() {
             val span = text.split("\n")
             premiumModel.durasi = span[0].replace("hari", "days", true)
             premiumModel.paket = span[0]
-            premiumModel.nominal = span[1].replace(".", "", true).toBigInteger().minus(rand)
+            premiumModel.nominal = span[1].replace("Rp", "", true).replace(".", "", true).trim().toInt().minus(rand)
         }
     }
 
@@ -104,7 +103,7 @@ class PembayaranActivity : AppCompatActivity() {
     }
 
     private fun sendData() {
-        pd = ProgressDialog.show(this, "", "mengirimkan data...", true, true)
+        showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -112,14 +111,16 @@ class PembayaranActivity : AppCompatActivity() {
                     if (sendData.code == 200) {
                         //showinvoice here
                         MainScope().launch {
-                            pd.dismiss()
+                            dismissLoading()
                             Intent(this@PembayaranActivity, WebViewActivity::class.java).apply {
                                 putExtra(WebViewActivity.REKG, premiumModel)
                                 startActivity(this)
                             }
+                            finish()
                         }
                     } else {
                         MainScope().launch {
+                            dismissLoading()
                             Toast.makeText(
                                 this@PembayaranActivity,
                                 sendData.message,
@@ -129,6 +130,44 @@ class PembayaranActivity : AppCompatActivity() {
                     }
                 } catch (e: Throwable) {
                     e.printStackTrace()
+                    MainScope().launch {
+                        dismissLoading()
+                        Toast.makeText(
+                            this@PembayaranActivity,
+                            e.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getPaket() {
+        showLoading()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val paket = NetworkModule.getService().getPaket()
+                if (paket.code == 200) {
+                    MainScope().launch {
+                        dismissLoading()
+                        binding.rgAkun.removeAllViews()
+                        paket.dataPaket?.forEach {
+                            val setHarga = "<b>${it?.durasi}</b><br>Rp. ${it?.harga}"
+                            val rb = RadioButton(this@PembayaranActivity)
+                            rb.text = Html.fromHtml(setHarga)
+                            val lParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                            lParams.setMargins(0, 15, 0, 0)
+                            rb.layoutParams = lParams
+                            binding.rgAkun.addView(rb, -1)
+                        }
+                    }
+                }
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                MainScope().launch {
+                    dismissLoading()
+                    Toast.makeText(this@PembayaranActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -150,12 +189,13 @@ class PembayaranActivity : AppCompatActivity() {
     }
 
     private fun updateUI(rekening: ResponseRekening) {
-        pd.dismiss()
+        dismissLoading()
         binding.rgRekening.removeAllViews()
         rekening.dataRekening.let { data ->
             data?.mapIndexed { _, it ->
                 val rb = RadioButton(this)
-                val bank = "<h4><b>${it?.bank}</b></h4><br>${it?.norek}"
+                val bank =
+                    "<span style='font-size=15px'><b>${it?.bank}<br>${it?.pemilik}</b></span><br>${it?.norek}"
                 rb.setPadding(10, 10, 10, 10)
                 rb.text = Html.fromHtml(bank)
                 binding.rgRekening.addView(rb, -1)
@@ -168,7 +208,8 @@ class PembayaranActivity : AppCompatActivity() {
             val text = radioButton.text
             val span = text.split("\n")
             premiumModel.bank = span[0]
-            premiumModel.rekening = span[3]
+            premiumModel.rekening = span[2]
+            Log.d("updateUI", "updateUI: $span")
         }
     }
 
