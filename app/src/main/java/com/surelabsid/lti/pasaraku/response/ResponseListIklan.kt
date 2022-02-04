@@ -32,6 +32,9 @@ data class DataIklanItem(
 	@field:SerializedName("nama_lengkap")
 	val namaLengkap: String? = null,
 
+	@field:SerializedName("nama_kategori")
+	val namaKategori: String? = null,
+
 	@field:SerializedName("kategori")
 	val kategori: String? = null,
 

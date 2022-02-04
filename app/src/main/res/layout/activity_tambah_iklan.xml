@@ -15,6 +15,18 @@
         tools:context=".ui.iklan.TambahIklanActivity">
 
         <TextView
+            android:id="@+id/kategori"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_edittext"
+            android:paddingHorizontal="15dp"
+            android:visibility="gone"
+            android:paddingVertical="14dp"
+            android:text="@string/kategori"
+            android:textSize="16sp" />
+
+        <TextView
             android:id="@+id/lokasi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,6 +37,8 @@
             android:paddingVertical="14dp"
             android:text="@string/lokasi"
             android:textSize="16sp" />
+
+
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"

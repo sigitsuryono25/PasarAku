@@ -25,12 +25,24 @@ object Constant {
     const val FROM_REGISTER = "fromRegister"
 
     const val KEC = "kec"
-    const val KAB = "kab"
-    const val PROV = "prov"
     const val LOKASI_ID = "idLokasi"
 
-    const val PROV_ID = "provid"
+    const val KAB = "kab"
     const val KAB_ID = "kabid"
+
+    const val PROV = "prov"
+    const val PROV_ID = "provid"
+
+    const val KEC_EDIT = "kecEdit"
+    const val LOKASI_ID_EDIT = "idLokasiEdit"
+
+    const val KAB_EDIT = "kabEdit"
+    const val KAB_ID_EDIT = "kabidEdit"
+
+    const val PROV_EDIT = "provEdit"
+    const val PROV_ID_EDIT = "providEdit"
+
+    const val IS_EDIT = "isEdit"
 
     const val ADS_PIC_URL = NetworkModule.BASE_URL + "assets/iklan/"
 }

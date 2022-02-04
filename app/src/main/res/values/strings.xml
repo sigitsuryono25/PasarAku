@@ -139,6 +139,7 @@
     <string name="attentions"><font size="22"><b>Perhatian</b></font>\nPenggunaan <b>Current Location</b> terkadang kurang Akurat.\nJika hal itu terjadi, silahkan gunakan pilihan\nPronvinsi, Kabupaten serta Kecamatan yang disediakan</string>
     <string name="jangan_tampilkan_lagi_pesan_ini">Jangan Tampilkan Lagi Pesan ini?</string>
     <string name="tutup">Tutup</string>
+    <string name="kategori">Kategori</string>
 
     <string-array name="kind">
         <item>Diterima</item>

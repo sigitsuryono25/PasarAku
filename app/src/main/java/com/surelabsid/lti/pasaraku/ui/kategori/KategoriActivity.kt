@@ -1,10 +1,10 @@
 package com.surelabsid.lti.pasaraku.ui.kategori
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.surelabsid.lti.base.Baseapp
@@ -35,6 +35,7 @@ class KategoriActivity : Baseapp() {
         vm = ViewModelProvider(this)[ExploreViewModel::class.java]
 
         val makeAds = intent.getBooleanExtra(MAKE_ADS, false)
+        val edit = intent.getStringExtra("edit")
 
         adapterKategori = AdapterKategoriVertical {
             if (makeAds) {
@@ -44,6 +45,11 @@ class KategoriActivity : Baseapp() {
                     startActivity(this)
                     finish()
                 }
+            } else if (edit?.isNotEmpty() == true) {
+                val i = Intent()
+                i.putExtra("kategoriItem", it)
+                setResult(Activity.RESULT_OK, i)
+                finish()
             } else {
                 Intent(this@KategoriActivity, IklanByCategoriActivity::class.java).apply {
                     putExtra(IklanByCategoriActivity.ITEM_KATEGORI, it)

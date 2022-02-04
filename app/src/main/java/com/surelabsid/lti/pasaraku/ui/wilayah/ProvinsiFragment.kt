@@ -62,19 +62,31 @@ class ProvinsiFragment : Fragment(R.layout.fragment_provinsi) {
         binding = FragmentProvinsiBinding.bind(view)
         vm = ViewModelProvider(this)[WilayahViewModel::class.java]
 
-        if(!Prefs.contains(Constant.DONT_SHOW_ATTENTION_CURRENT_LOCATION) || !Prefs.getBoolean(Constant.DONT_SHOW_ATTENTION_CURRENT_LOCATION)){
+        if (!Prefs.contains(Constant.DONT_SHOW_ATTENTION_CURRENT_LOCATION) || !Prefs.getBoolean(
+                Constant.DONT_SHOW_ATTENTION_CURRENT_LOCATION
+            )
+        ) {
             val d = CurrentLocationAttentions()
             d.show(requireActivity().supportFragmentManager, "attentions")
         }
 
 
         binding.allProv.setOnClickListener {
-            Prefs.remove(Constant.PROV_ID)
-            Prefs.remove(Constant.KAB_ID)
-            Prefs.remove(Constant.LOKASI_ID)
-            Prefs.remove(Constant.KAB)
-            Prefs.remove(Constant.KEC)
-            Prefs.remove(Constant.PROV)
+            if (Prefs.getBoolean(Constant.IS_EDIT) && Prefs.contains(Constant.IS_EDIT)) {
+                Prefs.remove(Constant.PROV_ID_EDIT)
+                Prefs.remove(Constant.KAB_ID_EDIT)
+                Prefs.remove(Constant.LOKASI_ID_EDIT)
+                Prefs.remove(Constant.KAB_EDIT)
+                Prefs.remove(Constant.KEC_EDIT)
+                Prefs.remove(Constant.PROV_EDIT)
+            } else {
+                Prefs.remove(Constant.PROV_ID)
+                Prefs.remove(Constant.KAB_ID)
+                Prefs.remove(Constant.LOKASI_ID)
+                Prefs.remove(Constant.KAB)
+                Prefs.remove(Constant.KEC)
+                Prefs.remove(Constant.PROV)
+            }
             requireActivity().finish()
         }
 
@@ -117,8 +129,13 @@ class ProvinsiFragment : Fragment(R.layout.fragment_provinsi) {
             AdapterWilayah(AdapterWilayah.PROVINSI_REQ, object : AdapterWilayah.OnItemClick {
                 override fun onProvSelected(dataItemProvinsiItem: DataProvinsiItem?) {
                     super.onProvSelected(dataItemProvinsiItem)
-                    Prefs.putString(Constant.PROV_ID, dataItemProvinsiItem?.id)
-                    Prefs.putString(Constant.PROV, dataItemProvinsiItem?.nama)
+                    if (Prefs.contains(Constant.IS_EDIT) && Prefs.getBoolean(Constant.IS_EDIT)) {
+                        Prefs.putString(Constant.PROV_EDIT, dataItemProvinsiItem?.nama)
+                        Prefs.putString(Constant.PROV_ID_EDIT, dataItemProvinsiItem?.id)
+                    } else {
+                        Prefs.putString(Constant.PROV_ID, dataItemProvinsiItem?.id)
+                        Prefs.putString(Constant.PROV, dataItemProvinsiItem?.nama)
+                    }
                     Intent(requireActivity(), WilayahActivity::class.java).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -208,16 +225,24 @@ class ProvinsiFragment : Fragment(R.layout.fragment_provinsi) {
                     }
                     MainScope().launch {
                         (requireActivity() as Baseapp).dismissLoading()
-                        Prefs.remove(Constant.LOKASI_ID)
-                        Prefs.remove(Constant.PROV_ID)
-                        Prefs.remove(Constant.PROV)
-                        Prefs.remove(Constant.KEC)
-                        Prefs.remove(Constant.KAB_ID)
-                        Prefs.remove(Constant.KAB)
-                        Prefs.putString(Constant.PROV_ID, data.dataWil?.prov?.id)
-                        Prefs.putString(Constant.PROV, data.dataWil?.prov?.nama)
-                        Prefs.putString(Constant.KAB_ID, data.dataWil?.kab?.id)
-                        Prefs.putString(Constant.KAB, data.dataWil?.kab?.nama)
+                        if (Prefs.getBoolean(Constant.IS_EDIT)) {
+                            Prefs.putString(Constant.PROV_ID_EDIT, data.dataWil?.prov?.id)
+                            Prefs.putString(Constant.PROV_EDIT, data.dataWil?.prov?.nama)
+                            Prefs.putString(Constant.KAB_ID_EDIT, data.dataWil?.kab?.id)
+                            Prefs.putString(Constant.KAB_EDIT, data.dataWil?.kab?.nama)
+                            Toast.makeText(requireActivity(), "edit", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Prefs.remove(Constant.LOKASI_ID)
+                            Prefs.remove(Constant.PROV_ID)
+                            Prefs.remove(Constant.PROV)
+                            Prefs.remove(Constant.KEC)
+                            Prefs.remove(Constant.KAB_ID)
+                            Prefs.remove(Constant.KAB)
+                            Prefs.putString(Constant.PROV_ID, data.dataWil?.prov?.id)
+                            Prefs.putString(Constant.PROV, data.dataWil?.prov?.nama)
+                            Prefs.putString(Constant.KAB_ID, data.dataWil?.kab?.id)
+                            Prefs.putString(Constant.KAB, data.dataWil?.kab?.nama)
+                        }
                         requireActivity().finish()
                     }
                 } catch (e: Throwable) {

@@ -19,6 +19,15 @@ class App : Application() {
 
         generateToken()
 
+
+        Prefs.remove(Constant.IS_EDIT)
+        Prefs.remove(Constant.PROV_ID_EDIT)
+        Prefs.remove(Constant.PROV_EDIT)
+        Prefs.remove(Constant.KAB_EDIT)
+        Prefs.remove(Constant.KAB_ID_EDIT)
+        Prefs.remove(Constant.KEC_EDIT)
+        Prefs.remove(Constant.LOKASI_ID_EDIT)
+
     }
 
 

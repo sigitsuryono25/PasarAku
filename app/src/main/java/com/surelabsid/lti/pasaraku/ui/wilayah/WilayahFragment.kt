@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pixplicity.easyprefs.library.Prefs
-import com.surelabsid.lti.pasaraku.MainActivity
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.FragmentWilayahBinding
 import com.surelabsid.lti.pasaraku.response.DataKabupatenItem
@@ -76,12 +75,21 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
 
     private fun setKabupaten(responseKabupaten: ResponseKabupaten) {
         binding.selectedLok.setOnClickListener {
-            Prefs.remove(Constant.KEC)
-            Prefs.remove(Constant.LOKASI_ID)
-            Prefs.putString(Constant.PROV, titleBar)
-            Prefs.putString(Constant.PROV_ID, id)
-            Prefs.remove(Constant.KAB)
-            Prefs.remove(Constant.KAB_ID)
+            if (Prefs.getBoolean(Constant.IS_EDIT) && Prefs.contains(Constant.IS_EDIT)) {
+                Prefs.remove(Constant.KEC_EDIT)
+                Prefs.remove(Constant.LOKASI_ID_EDIT)
+                Prefs.putString(Constant.PROV_EDIT, titleBar)
+                Prefs.putString(Constant.PROV_ID_EDIT, id)
+                Prefs.remove(Constant.KAB_EDIT)
+                Prefs.remove(Constant.KAB_ID_EDIT)
+            } else {
+                Prefs.remove(Constant.KEC)
+                Prefs.remove(Constant.LOKASI_ID)
+                Prefs.putString(Constant.PROV, titleBar)
+                Prefs.putString(Constant.PROV_ID, id)
+                Prefs.remove(Constant.KAB)
+                Prefs.remove(Constant.KAB_ID)
+            }
 //
 //            requireActivity().finishAffinity()
 //            startActivity(Intent(requireActivity(), MainActivity::class.java))
@@ -92,8 +100,13 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
             AdapterWilayah(AdapterWilayah.KABUPATEN_REQ, object : AdapterWilayah.OnItemClick {
                 override fun onKabSelected(dataItemKabupatenItem: DataKabupatenItem?) {
                     super.onKabSelected(dataItemKabupatenItem)
-                    Prefs.putString(Constant.KAB, dataItemKabupatenItem?.nama)
-                    Prefs.putString(Constant.KAB_ID, dataItemKabupatenItem?.id)
+                    if (Prefs.contains(Constant.IS_EDIT) && Prefs.getBoolean(Constant.IS_EDIT)) {
+                        Prefs.putString(Constant.KAB_EDIT, dataItemKabupatenItem?.nama)
+                        Prefs.putString(Constant.KAB_ID_EDIT, dataItemKabupatenItem?.id)
+                    } else {
+                        Prefs.putString(Constant.KAB, dataItemKabupatenItem?.nama)
+                        Prefs.putString(Constant.KAB_ID, dataItemKabupatenItem?.id)
+                    }
                     Intent(requireActivity(), WilayahActivity::class.java).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -133,11 +146,16 @@ class WilayahFragment : Fragment(R.layout.fragment_wilayah) {
             AdapterWilayah(AdapterWilayah.KECAMATAN_REQ, object : AdapterWilayah.OnItemClick {
                 override fun onKecSelected(dataKecamatanItem: DataKecamatanItem?) {
                     super.onKecSelected(dataKecamatanItem)
-                    Prefs.putString(Constant.KEC, dataKecamatanItem?.nama)
-                    Prefs.putString(Constant.LOKASI_ID, dataKecamatanItem?.id)
+                    if (Prefs.contains(Constant.IS_EDIT) && Prefs.getBoolean(Constant.IS_EDIT)) {
+                        Prefs.putString(Constant.KEC_EDIT, dataKecamatanItem?.nama)
+                        Prefs.putString(Constant.LOKASI_ID_EDIT, dataKecamatanItem?.id)
+                    } else {
+                        Prefs.putString(Constant.KEC, dataKecamatanItem?.nama)
+                        Prefs.putString(Constant.LOKASI_ID, dataKecamatanItem?.id)
+                    }
 
 //                    if (Prefs.getBoolean(Constant.FROM_SEARCH)) {
-                        requireActivity().finish()
+                    requireActivity().finish()
 //                    } else {
 //                        requireActivity().finishAffinity()
 //                        startActivity(Intent(requireActivity(), MainActivity::class.java))

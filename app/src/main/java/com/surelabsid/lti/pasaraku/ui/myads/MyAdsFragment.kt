@@ -56,6 +56,7 @@ class MyAdsFragment : Fragment(R.layout.fragment_my_ads) {
                 .create().show()
 
         }, editIklan = { dataIklanItem ->
+            Prefs.putBoolean(Constant.IS_EDIT, true)
             Intent(requireActivity(), TambahIklanActivity::class.java).apply {
                 putExtra("title", "Edit Iklan")
                 putExtra(TambahIklanActivity.ADS_DATA, dataIklanItem)
