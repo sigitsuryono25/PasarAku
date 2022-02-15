@@ -20,7 +20,7 @@ import com.surelabsid.lti.pasaraku.database.AppDatabase
 import com.surelabsid.lti.pasaraku.database.Notifications
 import com.surelabsid.lti.pasaraku.model.firebase.model.ChatHeader
 import com.surelabsid.lti.pasaraku.network.NetworkModule
-import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransaksiActivity
+import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransaksiFragment
 import com.surelabsid.lti.pasaraku.ui.notification.NotificationActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.HourToMillis
@@ -101,7 +101,7 @@ class NotificationHandle(
         transaksi: Boolean = false
     ) {
         val pendingIntentChat = if (transaksi) {
-            val intentTransaksi = Intent(context, TransaksiActivity::class.java)
+            val intentTransaksi = Intent(context, TransaksiFragment::class.java)
             PendingIntent.getActivity(
                 context,
                 1036,

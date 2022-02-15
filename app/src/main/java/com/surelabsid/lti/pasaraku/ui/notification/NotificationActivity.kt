@@ -9,7 +9,7 @@ import androidx.room.Room
 import com.surelabsid.lti.pasaraku.database.AppDatabase
 import com.surelabsid.lti.pasaraku.database.Notifications
 import com.surelabsid.lti.pasaraku.databinding.ActivityNotificationBinding
-import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransaksiActivity
+import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransaksiFragment
 import com.surelabsid.lti.pasaraku.ui.notification.adapter.AdapterNotification
 import com.surelabsid.lti.pasaraku.utils.Constant
 import kotlinx.coroutines.*
@@ -31,7 +31,7 @@ class NotificationActivity : AppCompatActivity() {
         val db = Room.databaseBuilder(this, AppDatabase::class.java, Constant.DB_NAME).build()
 
         adapterNotification = AdapterNotification {
-            Intent(this@NotificationActivity, TransaksiActivity::class.java).apply {
+            Intent(this@NotificationActivity, TransaksiFragment::class.java).apply {
                 startActivity(this)
             }
             finish()

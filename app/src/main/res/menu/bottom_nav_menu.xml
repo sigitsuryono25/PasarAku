@@ -6,9 +6,9 @@
         android:title="EXPLORE" />
 
     <item
-        android:icon="@drawable/ic_chat"
+        android:icon="@drawable/swap_horizontal"
         android:id="@+id/chat"
-        android:title="CHAT" />
+        android:title="TRANSACTION" />
 
 
     <item

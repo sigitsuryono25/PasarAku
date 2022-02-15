@@ -33,8 +33,9 @@
             app:menu="@menu/bottom_nav_menu" />
     </com.google.android.material.bottomappbar.BottomAppBar>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.robertlevonyan.views.customfloatingactionbutton.FloatingActionButton
         android:id="@+id/sellBtn"
+        app:layout_anchorGravity="center_horizontal"
         android:layout_width="wrap_content"
         android:src="@drawable/plus_thick"
         android:layout_height="wrap_content"
@@ -43,6 +44,7 @@
         app:tint="@android:color/white"
         android:elevation="0dp"
         app:fabSize="normal"
+        app:shapeAppearance="@style/fab_square"
         app:elevation="0dp"
         app:layout_anchor="@id/bottomBar" />
 

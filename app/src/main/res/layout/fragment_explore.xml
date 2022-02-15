@@ -15,49 +15,79 @@
         android:padding="10dp"
         app:elevation="4dp">
 
-        <TextView
-            android:id="@+id/wilayah"
-            android:layout_width="wrap_content"
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_toStartOf="@id/notif"
+            android:background="@drawable/bg_edittext"
+            android:drawableStart="@drawable/ic_search"
             android:drawablePadding="8dp"
-            android:gravity="center"
-            android:paddingVertical="8dp"
-            android:text="Indonesia"
-            android:textColor="@color/darkblue"
-            android:textSize="18sp"
-            app:drawableEndCompat="@drawable/ic_keyboard_arrow_down"
-            app:drawableStartCompat="@drawable/ic_map_marker" />
+            android:hint="Find Cars, Mobile Phones and more..."
+            android:imeOptions="actionGo"
+            android:inputType="text"
+            android:padding="8dp"
+            android:singleLine="true"
+            tools:ignore="Autofill" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
 
-            <EditText
-                android:id="@+id/search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_toStartOf="@id/notif"
-                android:background="@drawable/bg_edittext"
-                android:drawableStart="@drawable/ic_search"
-                android:drawablePadding="8dp"
-                android:hint="Find Cars, Mobile Phones and more..."
-                android:inputType="text"
-                android:imeOptions="actionGo"
-                android:padding="8dp"
-                android:singleLine="true"
-                tools:ignore="Autofill" />
 
-            <ImageView
-                android:id="@+id/notif"
+            <TextView
+                android:id="@+id/wilayah"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@id/actionContainer"
+                android:drawablePadding="8dp"
+                android:paddingVertical="8dp"
+                android:text="Indonesia"
+                android:textColor="@color/darkblue"
+                android:textSize="18sp"
+                app:drawableEndCompat="@drawable/ic_keyboard_arrow_down"
+                app:drawableStartCompat="@drawable/ic_map_marker" />
+
+            <LinearLayout
+                android:id="@+id/actionContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_bell_outline"
-                app:tint="@color/darkblue" />
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:id="@+id/chat"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/app_name"
+                    android:layout_marginHorizontal="4dp"
+                    android:src="@drawable/ic_chat"
+                    app:tint="@color/darkblue" />
+
+                <ImageView
+                    android:id="@+id/notif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_bell_outline"
+                    app:tint="@color/darkblue" />
+
+                <ImageView
+                    android:id="@+id/help"
+                    android:layout_width="24dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/help_circle_outline"
+                    app:tint="@color/darkblue" />
+            </LinearLayout>
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -98,8 +128,8 @@
                         android:layout_marginBottom="5dp"
                         android:visibility="gone"
                         app:fillColor="#FFFFFFFF"
-                        app:indicatorVisibility="visible"
                         app:indicatorGravity="start|bottom"
+                        app:indicatorVisibility="visible"
                         app:radius="4dp"
                         app:slideInterval="3500"
                         app:strokeColor="@android:color/transparent"
@@ -156,8 +186,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/fresh_recommendations"
                     android:layout_marginBottom="8dp"
+                    android:text="@string/fresh_recommendations"
                     android:textColor="@color/darkblue"
                     android:textSize="18sp" />
 

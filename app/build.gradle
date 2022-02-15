@@ -14,8 +14,8 @@ android {
         applicationId "com.surelabsid.lti.pasaraku"
         minSdk 23
         targetSdk 31
-        versionCode 10
-        versionName "1.2alpha10"
+        versionCode 11
+        versionName "1.5alpha15"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -91,6 +91,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
+
+    //custom fab
+    implementation 'com.robertlevonyan.view:CustomFloatingActionButton:3.0.1'
 
 
     //richLink Preview

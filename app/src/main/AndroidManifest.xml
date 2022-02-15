@@ -21,10 +21,16 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
         <activity
+            android:name=".FaqActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.akun.transaksi.TransactionActivity"
+            android:exported="false" />
+        <activity
             android:name=".onboard.OnBoardActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            android:exported="false"
             android:theme="@style/Theme.PasarAku.NoActionBar"
-            android:exported="false"/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name="com.surelabsid.lti.test.DeepLinkTest"
             android:exported="true" />
@@ -33,7 +39,7 @@
             android:exported="true"
             android:theme="@style/Theme.PasarAku.NoActionBar" />
         <activity
-            android:name=".ui.akun.transaksi.TransaksiActivity"
+            android:name=".ui.akun.transaksi.TransaksiFragment"
             android:exported="false" />
         <activity
             android:name=".ui.WebBrowserActivity"

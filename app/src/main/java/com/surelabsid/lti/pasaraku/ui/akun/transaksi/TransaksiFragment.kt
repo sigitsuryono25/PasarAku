@@ -2,11 +2,13 @@ package com.surelabsid.lti.pasaraku.ui.akun.transaksi
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pixplicity.easyprefs.library.Prefs
 import com.surelabsid.lti.base.Baseapp
+import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityTransaksiBinding
 import com.surelabsid.lti.pasaraku.model.PremiumModel
 import com.surelabsid.lti.pasaraku.network.NetworkModule
@@ -17,18 +19,29 @@ import com.surelabsid.lti.pasaraku.utils.Constant
 import com.vanillaplacepicker.utils.ToastUtils
 import kotlinx.coroutines.*
 
-class TransaksiActivity : Baseapp() {
+
+private const val REQ_TOOLBAR = "param1"
+
+class TransaksiFragment : Fragment(R.layout.activity_transaksi) {
     private lateinit var binding: ActivityTransaksiBinding
     private lateinit var mAdapterTransaksi: AdapterTransaksi
+    private var reqToolbar: Boolean? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityTransaksiBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            title = "Transaksi Kamu"
+        arguments?.let {
+            reqToolbar = it.getBoolean(REQ_TOOLBAR)
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = ActivityTransaksiBinding.bind(view)
+
+        if (reqToolbar == false) {
+            binding.toolbarTransaksi.visibility = View.GONE
+        }
+
         val userid = Prefs.getString(Constant.EMAIL)
         getTrans(userid)
 
@@ -40,7 +53,7 @@ class TransaksiActivity : Baseapp() {
         mAdapterTransaksi = AdapterTransaksi {
             val premiumModel = PremiumModel()
             premiumModel.id = it?.id
-            Intent(this@TransaksiActivity, WebViewActivity::class.java).apply {
+            Intent(requireActivity(), WebViewActivity::class.java).apply {
                 putExtra(WebViewActivity.REKG, premiumModel)
                 startActivity(this)
             }
@@ -50,36 +63,30 @@ class TransaksiActivity : Baseapp() {
             adapter = mAdapterTransaksi
             addItemDecoration(
                 DividerItemDecoration(
-                    this@TransaksiActivity,
+                    requireActivity(),
                     LinearLayoutManager.VERTICAL
                 )
             )
             layoutManager =
-                LinearLayoutManager(this@TransaksiActivity, LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> finish()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun getTrans(userid: String?) {
-        showLoading()
+        (requireActivity() as Baseapp).showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
                     val resp = NetworkModule.getService().getTransaksi(userid)
                     MainScope().launch {
-                        dismissLoading()
+                        (requireActivity() as Baseapp).dismissLoading()
                         updateUI(resp)
                     }
                 } catch (e: Throwable) {
                     MainScope().launch {
-                        dismissLoading()
-                        ToastUtils.showToast(this@TransaksiActivity, e.message)
+                        (requireActivity() as Baseapp).dismissLoading()
+                        ToastUtils.showToast(requireActivity(), e.message)
                     }
                     e.printStackTrace()
                 }
@@ -89,5 +96,16 @@ class TransaksiActivity : Baseapp() {
 
     private fun updateUI(resp: ResponseTransaksi) {
         resp.dataTrans?.let { mAdapterTransaksi.addItem(it, clearAll = true) }
+    }
+
+    companion object {
+        fun newInstance(
+            reqToolbar: Boolean
+        ) =
+            TransaksiFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(REQ_TOOLBAR, reqToolbar)
+                }
+            }
     }
 }

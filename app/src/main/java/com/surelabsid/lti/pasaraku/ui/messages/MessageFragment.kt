@@ -30,23 +30,18 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
     }
 
     private fun getRecentChat(incomingId: String?) {
-        (requireActivity() as Baseapp).showLoading()
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO){
                 try {
                     val res = NetworkModule.getService().getMessageList(incomingId = incomingId)
                     if(res.code == 200){
                         MainScope().launch {
-                            (requireActivity() as Baseapp).dismissLoading()
                             initAdapter()
                             res.dataMessage?.let { mAdapterListMessages.addData(it) }
                         }
                     }
                 }catch (e: Throwable){
                     e.printStackTrace()
-                    MainScope().launch {
-                        (requireActivity() as Baseapp).dismissLoading()
-                    }
                 }
             }
         }

@@ -5,15 +5,20 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.pixplicity.easyprefs.library.Prefs
+import com.robertlevonyan.views.customfloatingactionbutton.FabSize
+import com.robertlevonyan.views.customfloatingactionbutton.FabType
 import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.databinding.ActivityMainBinding
 import com.surelabsid.lti.pasaraku.ui.akun.LandingAkunFragment
+import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransaksiFragment
 import com.surelabsid.lti.pasaraku.ui.chat.ChatFragment
 import com.surelabsid.lti.pasaraku.ui.explore.ExploreFragment
 import com.surelabsid.lti.pasaraku.ui.kategori.KategoriActivity
 import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
+import com.surelabsid.lti.pasaraku.ui.messages.MessageBottomSheets
 import com.surelabsid.lti.pasaraku.ui.messages.MessageFragment
 import com.surelabsid.lti.pasaraku.ui.myads.MyAdsFragment
 import com.surelabsid.lti.pasaraku.utils.Constant
@@ -28,6 +33,10 @@ class MainActivity : Baseapp() {
         setContentView(binding.root)
 
         changeFragment(ExploreFragment())
+
+        binding.sellBtn.fabType = FabType.FAB_TYPE_SQUARE
+        binding.sellBtn.fabIcon = ResourcesCompat.getDrawable(resources, R.drawable.plus_thick, null)
+        binding.sellBtn.fabSize = FabSize.FAB_SIZE_MINI
 
         binding.sellBtn.setOnClickListener {
             if (!Prefs.contains(Constant.EMAIL)) {
@@ -51,7 +60,7 @@ class MainActivity : Baseapp() {
                         Utils.showDialogLogin(supportFragmentManager)
                         return@setOnItemSelectedListener false
                     }
-                    changeFragment(MessageFragment())
+                    changeFragment(TransaksiFragment.newInstance(true))
                     return@setOnItemSelectedListener true
                 }
                 R.id.ads -> {

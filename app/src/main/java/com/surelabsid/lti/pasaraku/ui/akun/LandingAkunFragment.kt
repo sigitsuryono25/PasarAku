@@ -12,7 +12,8 @@ import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.FragmentLandingAkunBinding
 import com.surelabsid.lti.pasaraku.network.NetworkModule
 import com.surelabsid.lti.pasaraku.ui.akun.settings.SettingsActivity
-import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransaksiActivity
+import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransactionActivity
+import com.surelabsid.lti.pasaraku.ui.akun.transaksi.TransaksiFragment
 import com.surelabsid.lti.pasaraku.ui.favorite.FavoriteActivity
 import com.surelabsid.lti.pasaraku.ui.help.HelpActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
@@ -20,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 
 class LandingAkunFragment : Fragment(R.layout.fragment_landing_akun) {
     private lateinit var binding: FragmentLandingAkunBinding
@@ -57,7 +57,7 @@ class LandingAkunFragment : Fragment(R.layout.fragment_landing_akun) {
         }
 
         binding.transaksi.setOnClickListener {
-            Intent(requireActivity(), TransaksiActivity::class.java).apply {
+            Intent(requireActivity(), TransactionActivity::class.java).apply {
                 startActivity(this)
             }
         }

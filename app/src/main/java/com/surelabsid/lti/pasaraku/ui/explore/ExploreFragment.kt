@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.lti.pasaraku.FaqActivity
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.FragmentExploreBinding
 import com.surelabsid.lti.pasaraku.model.FavoriteRequest
@@ -33,6 +34,7 @@ import com.surelabsid.lti.pasaraku.ui.iklan.IklanByCategoriActivity
 import com.surelabsid.lti.pasaraku.ui.iklan.PencarianActivity
 import com.surelabsid.lti.pasaraku.ui.kategori.KategoriActivity
 import com.surelabsid.lti.pasaraku.ui.login.LoginBottomSheet
+import com.surelabsid.lti.pasaraku.ui.messages.MessageBottomSheets
 import com.surelabsid.lti.pasaraku.ui.notification.NotificationActivity
 import com.surelabsid.lti.pasaraku.ui.wilayah.WilayahActivity
 import com.surelabsid.lti.pasaraku.utils.Constant
@@ -114,6 +116,21 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
 
+        }
+
+        binding.help.setOnClickListener {
+            Intent(requireActivity(), FaqActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
+
+        binding.chat.setOnClickListener {
+            if (!Prefs.contains(Constant.EMAIL)) {
+                Utils.showDialogLogin(requireActivity().supportFragmentManager)
+                return@setOnClickListener
+            }
+            val messageBottomSheets = MessageBottomSheets()
+            messageBottomSheets.show(requireActivity().supportFragmentManager, "messages")
         }
 
         adapterIklan = AdapterIklan(onClick = {
