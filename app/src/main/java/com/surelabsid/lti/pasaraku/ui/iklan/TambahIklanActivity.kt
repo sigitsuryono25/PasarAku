@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.kroegerama.imgpicker.BottomSheetImagePicker
 import com.kroegerama.imgpicker.ButtonType
 import com.pixplicity.easyprefs.library.Prefs
+import com.surelabsid.currencyformatedittext.CurrencyEdittext
 import com.surelabsid.lti.base.Baseapp
 import com.surelabsid.lti.pasaraku.R
 import com.surelabsid.lti.pasaraku.databinding.ActivityTambahIklanBinding
@@ -39,7 +40,6 @@ import com.surelabsid.lti.pasaraku.utils.Constant
 import com.surelabsid.lti.pasaraku.utils.FileUtils
 import com.surelabsid.lti.pasaraku.utils.GPSTracker
 import kotlinx.coroutines.*
-import me.abhinay.input.CurrencySymbols
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -81,9 +81,11 @@ class TambahIklanActivity : Baseapp(), BottomSheetImagePicker.OnImagesSelectedLi
         kategori = datakategori?.idKategori
         mode = "add".toRequestBody("text/plain".toMediaTypeOrNull())
 
-        binding.harga.setCurrency(CurrencySymbols.INDONESIA)
-        binding.harga.setDecimals(false)
-        binding.harga.setDelimiter(false)
+//        binding.harga.setCurrency(CurrencySymbols.INDONESIA)
+//        binding.harga.setDecimals(false)
+//        binding.harga.setDelimiter(false)
+        binding.harga.setSeparator(".")
+        binding.harga.setCurrencySymbol(CurrencyEdittext.INDONESIA)
 
         mTitleEdit = intent.getStringExtra("title")
 
@@ -249,7 +251,7 @@ class TambahIklanActivity : Baseapp(), BottomSheetImagePicker.OnImagesSelectedLi
         val deskripsi =
             binding.deskripsiIklan.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val harga =
-            binding.harga.cleanIntValue.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            binding.harga.getCleanInt().toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
         val gps = GPSTracker(this)
         val lat = gps.latitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
@@ -299,7 +301,7 @@ class TambahIklanActivity : Baseapp(), BottomSheetImagePicker.OnImagesSelectedLi
         vm.data.observe(this) {
             showMessage(it)
         }
-        vm.error.observe(this){
+        vm.error.observe(this) {
             dismissLoading()
             Toast.makeText(this@TambahIklanActivity, it.message, Toast.LENGTH_SHORT).show()
         }

@@ -39,9 +39,6 @@
             android:exported="true"
             android:theme="@style/Theme.PasarAku.NoActionBar" />
         <activity
-            android:name=".ui.akun.transaksi.TransaksiFragment"
-            android:exported="false" />
-        <activity
             android:name=".ui.WebBrowserActivity"
             android:exported="false"
             android:theme="@style/Theme.PasarAku.NoActionBar" />
